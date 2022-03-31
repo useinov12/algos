@@ -15,7 +15,6 @@ import {
     Link,
     NavLink
 } from "react-router-dom";
-import { findAllByDisplayValue } from '@testing-library/dom'
 
 
 const randomizer = (n) => Math.floor(Math.random()*n)
@@ -35,31 +34,65 @@ const generateRandomArray = () => {
   
 
 function MainSection({handleChangeMode, compareMode, handleAddToCompareList, handleRemoveFromCompareList, compareList}) {
-
+    //SyncMode switch
     const [ syncMode, setSyncMode ] = useState(false)
+    const handleSyncModeChange = () => setSyncMode(prev => !prev)
 
-    //SYNC STATES - refactor into single useReducer?
-    const [ isRunning, setIsRunning ] = useState(false)
-    const [ array, setArray ] = useState(createArray(50))
-    
-    //SYNC INPUTS
-    const [inputIsOn, setInputIsOn ] = useState(true) 
-    const [length, setLength ] = useState(array.length)
-    const [speed, setSpeed ] = useState(10)
-    //handlers
-    const handleInputIsOn = (bool) => setInputIsOn(bool) 
-    const handleChangeLength = n => setLength(parseInt(n))
-    const handleChangeArray = async (arr) => {
-        let holder = [...arr]
-        setArray(holder)
+    //SyncInput states
+    let InitSyncInputState = {
+        speed:50,
+        length:50,
+        array:(length)=>createArray(length)
     }
-    const handleChangeSpeed = n => setSpeed(parseInt(n))
+    function reducer(input, action){
+        switch (action.type){
+            case 'changeSpeed':
+                return {...input, speed:action.playload}
+            case 'changeLength':
+                return {...input, length:action.playload}
+        }
+        return input
+    }
+    const [ inputState, dispatch ] = useReducer(reducer, InitSyncInputState)
 
-    //SYNC MODE HANDLERS    
-    const handleIsRunningChange = () => setIsRunning(prev => !prev) //set false when all algos in sync is done
-    const handleChangeSyncMode = () =>{
-        setSyncMode((prev)=> !prev)
-        // setIsRunning(prev => !prev)
+
+
+    //ALGOS FUNCTIONS
+    const [sortIsRunningLocal, setSortIsRunningLocal ] = useState(false) //used inside Algo to turn off inputs
+    const Bubble = async (arr, i,  j, t,) => {
+/*         setSortIsRunningLocal(true);      
+        const swap = (arr, i) => {
+            let holder = arr[i]
+            arr[i] = arr[i+1]
+            arr[i+1] = holder
+            setSwaps(prev => prev+=1)
+        }
+        const delay = async ( t ) => await new Promise((resolve)=>setTimeout(resolve, t))
+        let  i1 = i
+        let j1 = j
+        let t1= t
+
+        await delay(t)
+        setSorted(i1)
+        const innerLoop = async (arr, i, j) =>{
+            if(j>=arr.length-1-i)Bubble(arr, i+1, 0, t1);
+            else {
+                await delay(t)
+                setComparingIdx(j)
+                if(arr[j]>arr[j+1]){
+                    await delay(t)
+                    swap(arr, j)
+                    innerLoop(arr, i, j+1)
+                } 
+                else innerLoop(arr, i, j+1)
+            }
+        } 
+        
+        if(i>=arr.length-1){
+            setSortIsRunningLocal(false)
+            return
+        } 
+        else innerLoop(arr, i1, j1) */
     }
 
     return (
@@ -73,37 +106,33 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                 </NavLink>
 
                 <span>SYNC Mode is</span>
-                <button onClick={()=>handleChangeSyncMode()}>
+                <button disabled={compareMode ? false : true} 
+                    onClick={()=>handleSyncModeChange()}>
                     {syncMode ? 'on' : 'off'}
                 </button>
                 <span>   </span>
                 <span>
                     <button
                         disabled={syncMode ? false : true} 
-                        disabled={isRunning ? true : false} 
-                        onClick={()=>handleIsRunningChange()}>
+                        onClick={()=>(true)}>
                         RUN SYNC
                     </button> 
                     <button
-                        disabled={isRunning ? false : true} 
+                        disabled={syncMode ? false : true} 
                         onClick={()=>(console.log('stop'))}>
                         PAUSE
                     </button> 
                 </span>
             </div>
-
             {/* COLLAPSE SYNC INPUTS HERE */}
-            <Inputs             
-                length={length} 
-                handleChangeLength={handleChangeLength} 
-                handleChangeArray={handleChangeArray}
-                array={array}
-                handleChangeSpeed={handleChangeSpeed}
-                speed={speed}
-                className={'inputs-container inputs-grid grid'}
-                inputIsOn={isRunning}
-            /> 
-            {/* COLLAPSE/MUTE SYNC MODE HERE */}
+            {   
+                syncMode &&
+                <Inputs
+                    inputState={inputState}
+                    dispatch={dispatch}
+                    className={'inputs-container inputs-grid grid'}
+                />
+            } 
 
             {/* ALL ROUTES */}
             <div>
@@ -112,33 +141,15 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                         compareList.map((algo, i)=>
                             <CompareBlock
                                 key={i}
-                                syncMode={syncMode}
-                                array={array}
-                                handleChangeLength={handleChangeLength} 
-                                handleChangeArray={handleChangeArray}
-                                handleChangeSpeed={handleChangeSpeed}
-                                handleRemoveFromCompareList={handleRemoveFromCompareList}
-                                // handleChangeSortIsRunningSYNC={handleChangeSortIsRunningSYNC}
-                                isRunning={isRunning}
-                                compareList={compareList} 
-                                length={length}
-                                speed={speed}
                                 typeOfAlgo={algo}
+                                syncMode={syncMode}
+                                inputStateSync={inputState}
+                                compareList={compareList}
+                                handleRemoveFromCompareList={handleRemoveFromCompareList}
                             />
                         )
                     }/>
-                    <Route path="/bubblesort" exact element={
-                        <BubbleSort array={array} handleChangeArray={handleChangeArray} length={length} speed={speed}/>}
-                    />
-                    <Route path="/quicksort" exact element={
-                        <QuickSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-                    />
-                    <Route path="/mergesort" exact element={
-                        <MergeSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-                    />
-                    <Route path="/selectionsort" exact element={
-                        <SelectionSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-                    />
+
                 </Routes>
             </div>
         </div>
@@ -146,3 +157,16 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 }
 
 export default MainSection
+
+/* <Route path="/bubblesort" exact element={
+    <BubbleSort array={array} handleChangeArray={handleChangeArray} length={length} speed={speed}/>}
+/>
+<Route path="/quicksort" exact element={
+    <QuickSort array={array} handleChangeArray={handleChangeArray} length={length} />}
+/>
+<Route path="/mergesort" exact element={
+    <MergeSort array={array} handleChangeArray={handleChangeArray} length={length} />}
+/>
+<Route path="/selectionsort" exact element={
+    <SelectionSort array={array} handleChangeArray={handleChangeArray} length={length} />}
+/> */

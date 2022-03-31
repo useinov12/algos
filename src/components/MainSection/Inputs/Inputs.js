@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './inputs.css'
 
 
-function Inputs({length, handleChangeLength, array, handleChangeArray, handleChangeSpeed, speed, className, sortIsRunning, inputIsOn}) {
+function Inputs({syncMode, inputState, dispatch, className}) {
+
+    const [disableLocal, setDisableLocal ] = useState(false)
 
     /* IMPLEMENT POSITIVE NUMBERS ONLY */
     /* CREATE PROMT FOR WRONG INPUT */
@@ -14,13 +16,23 @@ function Inputs({length, handleChangeLength, array, handleChangeArray, handleCha
         for(let i=length; i>0; i--){
             arr.push(randomizer(length))
         }
-        handleChangeArray(arr)
+        // handleChangeArray(arr)
     }
     const generateRandomArray = () => {
         let length =  randomizer(300)
-        handleChangeLength(length)
+        // handleChangeLength(length)
         createArray(length)
     }
+
+    useEffect(() => {
+        console.log('re-renrered', inputState)
+    }, [inputState])
+    useEffect(() => {
+        if(syncMode && className=='local-inputs')  setDisableLocal(true)
+        if(!syncMode || className !=='local-inputs')  setDisableLocal(false)
+        return
+    }, [syncMode])
+
 
     return (
         <div className={className}>
@@ -31,8 +43,8 @@ function Inputs({length, handleChangeLength, array, handleChangeArray, handleCha
                         <input 
                             className="number-input" 
                             type="number" 
-                            value={length} 
-                            onChange={ e => handleChangeLength(e.target.value)} 
+                            value={inputState.length} 
+                            onChange={ e => dispatch({type: 'changeLength', playload: e.target.value})} 
                         />
                     </div>
                     <div className="range-input-container">
@@ -41,8 +53,8 @@ function Inputs({length, handleChangeLength, array, handleChangeArray, handleCha
                             className="slider" 
                             step="1" 
                             min={20} max={300} 
-                            value={length} 
-                            onChange={ e => handleChangeLength(e.target.value)} 
+                            value={inputState.length} 
+                            onChange={ e => dispatch({type: 'changeLength', playload: e.target.value})}
                         />
                     </div>
                 </label>
@@ -54,25 +66,23 @@ function Inputs({length, handleChangeLength, array, handleChangeArray, handleCha
                             className="slider speed-slider" 
                             step="1" 
                             min={10} max={100} 
-                            value={speed} 
-                            onChange={ e => handleChangeSpeed(e.target.value)} 
+                            value={inputState.speed} 
+                            onChange={ e => dispatch({type: 'changeSpeed', playload: e.target.value})}
                         />
                     </div>
                 </label>
             </div>
             <div className="create-btn-container">
                 <button
-                    // disabled={sortIsRunning? true : false} 
-                    // disabled={inputIsOn ? false : true} 
+                    disabled={disableLocal}
                     className="create-arr-btn" 
                     id="draw" 
-                    onClick={()=>createArray(length)}>
+                    onClick={()=>createArray(50)}>
                     Create array
                 </button>
                 <div>or</div>
                 <button
-                    // disabled={sortIsRunning? true : false} 
-                    // disabled={inputIsOn ? false : true} 
+                    disabled={disableLocal}
                     className="create-arr-btn" 
                     id="draw" 
                     onClick={()=>generateRandomArray()}>
