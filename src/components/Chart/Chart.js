@@ -4,7 +4,7 @@ import useD3 from '../useD3'
 import './chart.css'
 
 function Chart({data, comparingIdx, sorted, local, type, localStop}) {
-
+    console.log(data)
     const ref = useD3(
         (svg)=>{
             //Dimensions

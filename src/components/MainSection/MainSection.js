@@ -39,23 +39,33 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
     const handleSyncModeChange = () => setSyncMode(prev => !prev)
 
     //SyncInput states
+    let initArr = createArray(50)
     let InitSyncInputState = {
         speed:50,
         length:50,
-        array:(length)=>createArray(length)
+        array:[...initArr]
     }
-    function reducer(input, action){
+    function  reducer(input, action){
         switch (action.type){
             case 'changeSpeed':
                 return {...input, speed:action.playload}
             case 'changeLength':
                 return {...input, length:action.playload}
+            case 'changeArray':
+                let array = createArray(input.length)
+                return {...input, array:array}
+            case 'changeArrayRandom':
+                let l =  randomizer(300)
+                let arr = createArray(l)
+                return {...input, array:arr}
         }
-        return input
     }
     const [ inputState, dispatch ] = useReducer(reducer, InitSyncInputState)
 
+    useEffect(() => {
+        // console.log(inputState)
 
+    }, [inputState])
 
     //ALGOS FUNCTIONS
     const [sortIsRunningLocal, setSortIsRunningLocal ] = useState(false) //used inside Algo to turn off inputs

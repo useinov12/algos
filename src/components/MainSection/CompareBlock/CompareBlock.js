@@ -31,10 +31,11 @@ function CompareBlock(props) {
     } = props 
 
     // Local inputs
+    let arrInit = createArray(50)
     let InitSyncInputState = {
         speed:50,
         length:50,
-        array:(length)=>createArray(length)
+        array:[...arrInit]
     }
     function reducer(input, action){
         switch (action.type){
@@ -42,6 +43,13 @@ function CompareBlock(props) {
                 return {...input, speed:action.playload}
             case 'changeLength':
                 return {...input, length:action.playload}
+            case 'changeArray':
+                let array = createArray(input.length)
+                return {...input, array:array}
+            case 'changeArrayRandom':
+                let l =  randomizer(300)
+                let arr = createArray(l)
+                return {...input, array:arr}
         }
         return input
     }
@@ -53,13 +61,11 @@ function CompareBlock(props) {
     const [sorted, setSorted ] = useState(0)
 
 
-    // Effects
-    let inputStateHolder = inputState
-    useEffect(() => {
-        console.log(syncMode)
-        if(syncMode)return inputStateHolder = inputStateSync;
-        return inputStateHolder = inputState;
-    }, [syncMode])
+    // Effects and rules
+    let inputStateHolder 
+    if(syncMode)inputStateHolder = inputStateSync
+    if(!syncMode)inputStateHolder = inputState
+
     return (
         <div className="compare-mode-block">
             <button
@@ -69,12 +75,21 @@ function CompareBlock(props) {
                 }>
                 X
             </button>
-            <Inputs
-                syncMode={syncMode}
-                inputState={inputStateHolder}
-                dispatch={dispatch}
-                className={'local-inputs'}
-             />
+            {
+                syncMode ? 
+                (<Inputs
+                    syncMode={syncMode}
+                    inputState={inputState}
+                    dispatch={dispatch}
+                    className={'local-inputs'}
+                />) : 
+                (<Inputs
+                    syncMode={syncMode}
+                    inputState={inputStateHolder}
+                    dispatch={dispatch}
+                    className={'local-inputs'}
+                />)
+            }
 
             <div className="compare-mode-algo">
                 <div className="compare-mode-algo-info">
@@ -99,9 +114,8 @@ function CompareBlock(props) {
                         </button>
                     </div>
                 </div>
-
                 <Chart 
-                    data={[5,4,3,2,1]} 
+                    data={inputStateHolder.array} 
                     comparingIdx={comparingIdx}
                     sorted={sorted}
                     local={true}
@@ -112,29 +126,6 @@ function CompareBlock(props) {
     )
 }
 export default CompareBlock
-
-
-
-/*     //RULES
-    let lengthHolder
-    let arrayHolder
-    let speedHolder
-    if(syncMode){
-        //if sync is on -> recieve data from <Main Section/> Sync Input
-        //SYNC MODE GLOBAL STATES
-        lengthHolder = length
-        arrayHolder = array
-        speedHolder = speed
-        // handleInputIsOn(true)
-    } else {
-        //if sync is off -> recieve data  from <CompareBlock/> Input
-        //LOCAL STATES
-        lengthHolder = localLength
-        arrayHolder = localArray
-        speedHolder = localSpeed
-        // handleInputIsOn(false)
-    }
- */
 
 
 /*     const stop = (idFunc, arr, swaps) => { 

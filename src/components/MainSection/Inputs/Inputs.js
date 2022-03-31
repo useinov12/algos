@@ -24,9 +24,8 @@ function Inputs({syncMode, inputState, dispatch, className}) {
         createArray(length)
     }
 
-    useEffect(() => {
-        console.log('re-renrered', inputState)
-    }, [inputState])
+
+    // Effects
     useEffect(() => {
         if(syncMode && className=='local-inputs')  setDisableLocal(true)
         if(!syncMode || className !=='local-inputs')  setDisableLocal(false)
@@ -41,10 +40,14 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                     <div className="number-input-container">
                         <span>Length:</span>  
                         <input 
+                            disabled={disableLocal}
                             className="number-input" 
                             type="number" 
                             value={inputState.length} 
-                            onChange={ e => dispatch({type: 'changeLength', playload: e.target.value})} 
+                            onChange={ e => 
+                                syncMode && className=='local-inputs' ?  ()=>{} :
+                                dispatch({type: 'changeLength', playload: e.target.value})
+                            } 
                         />
                     </div>
                     <div className="range-input-container">
@@ -54,7 +57,10 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                             step="1" 
                             min={20} max={300} 
                             value={inputState.length} 
-                            onChange={ e => dispatch({type: 'changeLength', playload: e.target.value})}
+                            onChange={ e => 
+                                syncMode && className=='local-inputs' ?  ()=>{} :
+                                dispatch({type: 'changeLength', playload: e.target.value})
+                            }
                         />
                     </div>
                 </label>
@@ -62,6 +68,7 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                     <span>Sort speed:</span>  
                     <div className="range-input-container">
                         <input 
+                            disabled={disableLocal}
                             type="range" 
                             className="slider speed-slider" 
                             step="1" 
@@ -77,7 +84,7 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                     disabled={disableLocal}
                     className="create-arr-btn" 
                     id="draw" 
-                    onClick={()=>createArray(50)}>
+                    onClick={()=>dispatch({type: 'changeArray'})}>
                     Create array
                 </button>
                 <div>or</div>
@@ -85,7 +92,7 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                     disabled={disableLocal}
                     className="create-arr-btn" 
                     id="draw" 
-                    onClick={()=>generateRandomArray()}>
+                    onClick={()=>dispatch({type: 'changeArrayRandom'})}>
                     RANDOM
                 </button>
             </div>
