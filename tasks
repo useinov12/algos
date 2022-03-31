@@ -1,0 +1,44 @@
+Ways to resolve problems:
+1. Way:
+Start with muting/separating functionality
+    (example:when sort happening, only stop button working, etc) 
+Deal with Stop function
+    When sort is happening, only stop button working -> when stop button clicked, state of array is updated
+Understand how array state or passed array and stats states interact with Chart and animations
+See how to simplify sort function so clearTimeout can work within a single scope
+
+2. Way: 
+Start with understanding how to interact with Chart component animations 
+See if need to implement states and holders while sort is running/or stop btn clicked 
+
+
+
+LOCAL
+SortHappening state local
+    mute all local buttons, accept STOP
+    create sync sort stop buttons trhu useEffect
+    mute list switch in side-menu
+Create array, random array buttons must reset CompareIDX, Sorted states, SortHappening
+SortStop state local
+    SORT button change to continue
+
+
+sync mode is On 
+    global state is watching
+sync algo start onClick -> start local function once
+    if sync algo start clicked -> local function started
+    sync 
+
+REVISIT TASKS:
+ - Line up existing funcitonality, 
+    debug all state falws
+    add appropriate mutes in CSS
+ - Implement usereducer for array states
+ only after:
+ - Proceed to Stop functionality
+    solution: elevate timeout in innerLoop so clearTimeout can remove it on demand
+
+
+Drive all functionality from inputs to parents
+
+HOW TO TURN OFF SYNC IS RUNNING?
