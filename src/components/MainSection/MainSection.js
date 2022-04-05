@@ -36,16 +36,18 @@ const generateRandomArray = () => {
 function MainSection({handleChangeMode, compareMode, handleAddToCompareList, handleRemoveFromCompareList, compareList}) {
     //SyncMode switch
     const [ syncMode, setSyncMode ] = useState(false)
-    const handleSyncModeChange = () => setSyncMode(prev => !prev)
+    const handleSyncModeChange = () =>{
+        setSyncMode(prev => !prev)
+    } 
 
     //SyncInput states
     let initArr = createArray(50)
     let InitSyncInputState = {
-        speed:50,
+        speed:5,
         length:50,
         array:[...initArr]
     }
-    function  reducer(input, action){
+    function  reducerArrayState(input, action){
         switch (action.type){
             case 'changeSpeed':
                 return {...input, speed:action.playload}
@@ -60,86 +62,127 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                 return {...input, array:arr}
         }
     }
-    const [ inputState, dispatch ] = useReducer(reducer, InitSyncInputState)
-
+    const [ inputState, dispatchArray ] = useReducer(reducerArrayState, InitSyncInputState)
+    
+    //SyncInput Test
     useEffect(() => {
         // console.log(inputState)
-
+        return () => {
+            
+        }
     }, [inputState])
 
-    //ALGOS FUNCTIONS
-    const [sortIsRunningLocal, setSortIsRunningLocal ] = useState(false) //used inside Algo to turn off inputs
-    const Bubble = async (arr, i,  j, t,) => {
-/*         setSortIsRunningLocal(true);      
-        const swap = (arr, i) => {
-            let holder = arr[i]
-            arr[i] = arr[i+1]
-            arr[i+1] = holder
-            setSwaps(prev => prev+=1)
-        }
-        const delay = async ( t ) => await new Promise((resolve)=>setTimeout(resolve, t))
-        let  i1 = i
-        let j1 = j
-        let t1= t
 
-        await delay(t)
-        setSorted(i1)
-        const innerLoop = async (arr, i, j) =>{
-            if(j>=arr.length-1-i)Bubble(arr, i+1, 0, t1);
-            else {
-                await delay(t)
-                setComparingIdx(j)
-                if(arr[j]>arr[j+1]){
-                    await delay(t)
-                    swap(arr, j)
-                    innerLoop(arr, i, j+1)
-                } 
-                else innerLoop(arr, i, j+1)
-            }
-        } 
-        
-        if(i>=arr.length-1){
-            setSortIsRunningLocal(false)
-            return
-        } 
-        else innerLoop(arr, i1, j1) */
+
+    let initRunState = 'initial' 
+    function runSyncReducer(runState, action){
+        switch(action.type){
+            case 'run':
+                return 'run'
+            case 'pause':
+                return 'pause'
+            case 'reset':
+                return 'reset'
+            case 'initial':
+                return 'initial'
+            case 'continue':
+                return 'continue'
+        }
+    }  
+    const [ runState, dispatchRun ] = useReducer(runSyncReducer, initRunState)
+
+    useEffect(() => {
+        // console.log(runState)
+        // console.log(compareList)
+
+    }, [runState])
+
+    useEffect(() => {
+        if(syncMode)return dispatchArray({type:'changeArray'})
+        else return
+    }, [syncMode])
+
+
+    //buttons disable handlers
+    const handleDisableCompareBtn = () => {
+        if(runState == 'run' ) return true;
+        if(runState == 'pause' ) return true;
+        else return false;
     }
+    const handleDisableSyncBtn = () =>{
+        if(!compareMode) return true;
+        if(runState == 'run' ) return true;
+        if(runState == 'pause' ) return true;
+        else return false;
+    }
+    const handleDisableRunSyncBtn = () =>{
+        if(!syncMode || !compareMode) return true;
+        if(runState === 'run' ) return true;
+        else return false;
+    }
+    const handleDisablePauseBtn = () =>{
+        if(!syncMode || !compareMode) return true;
+        if(runState !== 'run') return true;
+        else return false;
+    }
+    const handleDisableResetBtn = () =>{
+        if(!syncMode || !compareMode) return true;
+        if(runState !== 'pause') return true;
+        else return false;
+    }
+
 
     return (
         <div className="content-container content-grid grid">
             <div>
                 <span>Compare Mode is</span> 
                 <NavLink to={compareMode ? "/bubblesort" : "/compare-mode"}>
-                    <button onClick={()=>handleChangeMode()}>
+                    <button 
+                        disabled={handleDisableCompareBtn()} 
+                        onClick={()=>handleChangeMode()}>
                         {compareMode ? 'on' : 'off'}
                     </button>
                 </NavLink>
 
                 <span>SYNC Mode is</span>
-                <button disabled={compareMode ? false : true} 
+                <button 
+                    disabled={handleDisableSyncBtn()} 
                     onClick={()=>handleSyncModeChange()}>
                     {syncMode ? 'on' : 'off'}
                 </button>
                 <span>   </span>
                 <span>
                     <button
-                        disabled={syncMode ? false : true} 
-                        onClick={()=>(true)}>
-                        RUN SYNC
+                        disabled={handleDisableRunSyncBtn()} 
+                        onClick={()=>{
+                            if(compareList.length===0) return prompt(' Add Algo before compare ');
+                            if(runState === 'pause'){
+                                console.log(runState)
+                                dispatchRun({type:'continue'})
+                            }
+                            else dispatchRun({type:'run'});
+                        }}>
+                        {runState === 'pause' ? 'CONTINUE' : 'RUN SYNC'}
                     </button> 
                     <button
-                        disabled={syncMode ? false : true} 
-                        onClick={()=>(console.log('stop'))}>
+                        disabled={handleDisablePauseBtn()}
+                        onClick={()=>dispatchRun({type:'pause'})}>
                         PAUSE
+                    </button> 
+                    <button
+                        disabled={handleDisableResetBtn()}
+                        onClick={()=>dispatchRun({type:'reset'})}>
+                        RESET
                     </button> 
                 </span>
             </div>
             {/* COLLAPSE SYNC INPUTS HERE */}
             {   
-                syncMode &&
+                (syncMode && compareMode) &&
                 <Inputs
                     inputState={inputState}
-                    dispatch={dispatch}
+                    dispatch={dispatchArray}
+                    runState={runState}
                     className={'inputs-container inputs-grid grid'}
                 />
             } 
@@ -154,12 +197,12 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                                 typeOfAlgo={algo}
                                 syncMode={syncMode}
                                 inputStateSync={inputState}
+                                runState={runState}
                                 compareList={compareList}
                                 handleRemoveFromCompareList={handleRemoveFromCompareList}
                             />
                         )
                     }/>
-
                 </Routes>
             </div>
         </div>

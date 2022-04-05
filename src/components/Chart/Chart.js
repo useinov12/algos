@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as d3 from 'd3'
 import useD3 from '../useD3'
 import './chart.css'
 
 function Chart({data, comparingIdx, sorted, local, type, localStop}) {
-    console.log(data)
+    // console.log(data)
+    useEffect(() => {
+        console.log('mounted')
+        return () => {
+            console.log('unmounted')
+        }
+    }, [])
     const ref = useD3(
         (svg)=>{
             //Dimensions
@@ -102,13 +108,20 @@ function Chart({data, comparingIdx, sorted, local, type, localStop}) {
     )
 
     return (
-        <svg 
-            ref={ref}
-            style={{
-            padding:"3px",
-        }}>
-            <g className="plot-area"/> /*  */
-        </svg>
+        <div>
+        {
+            data &&
+                <svg 
+                    ref={ref}
+                    style={{
+                    padding:"3px",
+                }}>
+                <g className="plot-area"/> /*  */
+            </svg>
+        }
+
+        
+        </div>
     )
 }
 

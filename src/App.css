@@ -4,6 +4,9 @@
     --color-light:#f0f8ff;
     --color-primary:#0084ff;
 }
+body{
+  background-color: var(--bg-dark);
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

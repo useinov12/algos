@@ -44,3 +44,21 @@ Drive all functionality from inputs to parents
 HOW TO TURN OFF SYNC IS RUNNING?
 
 
+Dispatch Run Algos in local
+maybee save array in state on each change
+
+create whole cycle
+    1.create start conditions and functionality
+    2.create exit condition
+    3.create pause
+    4.create reset conditions
+
+
+
+
+TASKS:
+clean snapshot states: leave useState or UseReducer only
+    if useReducer
+    change setLocalData in Algo to dispatch({parameter:data})
+    turn local state into reducer
+    

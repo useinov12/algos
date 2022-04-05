@@ -3,44 +3,44 @@ import React, { useEffect, useState } from 'react'
 import './inputs.css'
 
 
-function Inputs({syncMode, inputState, dispatch, className}) {
+function Inputs({syncMode, inputState, runState, dispatch, className}) {
 
-    const [disableLocal, setDisableLocal ] = useState(false)
-
-    /* IMPLEMENT POSITIVE NUMBERS ONLY */
-    /* CREATE PROMT FOR WRONG INPUT */
-    //FUNCTIONS
-    const randomizer = (n) => Math.floor(Math.random()*n)
-    const createArray = (length) => {
-        let arr = []
-        for(let i=length; i>0; i--){
-            arr.push(randomizer(length))
+    const checkIfNeedDisable = () => {
+        //if local inputs
+        if(className === 'local-inputs'){
+            if(syncMode) return true;
+            else return false
         }
-        // handleChangeArray(arr)
+        //if sync input
+        else {
+            if(runState === 'run') return true
+            if(runState === 'pause') return true
+            else return false
+        }
     }
-    const generateRandomArray = () => {
-        let length =  randomizer(300)
-        // handleChangeLength(length)
-        createArray(length)
-    }
-
-
     // Effects
-    useEffect(() => {
+/*     useEffect(() => {
         if(syncMode && className=='local-inputs')  setDisableLocal(true)
         if(!syncMode || className !=='local-inputs')  setDisableLocal(false)
         return
     }, [syncMode])
+ */
+
+
+    useEffect(() => {
+        if(runState !== 'reset') return; //reset array onClick RESET
+        dispatch({type: 'changeArray'})
+    }, [runState])
 
 
     return (
-        <div className={className}>
+        <div className={className} >
             <div className="input-section">
                 <label>
                     <div className="number-input-container">
                         <span>Length:</span>  
                         <input 
-                            disabled={disableLocal}
+                            disabled={checkIfNeedDisable()} 
                             className="number-input" 
                             type="number" 
                             value={inputState.length} 
@@ -52,13 +52,13 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                     </div>
                     <div className="range-input-container">
                         <input 
+                            disabled={checkIfNeedDisable()} 
                             type="range" 
                             className="slider" 
                             step="1" 
                             min={20} max={300} 
                             value={inputState.length} 
-                            onChange={ e => 
-                                syncMode && className=='local-inputs' ?  ()=>{} :
+                            onChange={ e => //what is happening here in Local?
                                 dispatch({type: 'changeLength', playload: e.target.value})
                             }
                         />
@@ -68,7 +68,7 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                     <span>Sort speed:</span>  
                     <div className="range-input-container">
                         <input 
-                            disabled={disableLocal}
+                            disabled={checkIfNeedDisable()} 
                             type="range" 
                             className="slider speed-slider" 
                             step="1" 
@@ -81,7 +81,7 @@ function Inputs({syncMode, inputState, dispatch, className}) {
             </div>
             <div className="create-btn-container">
                 <button
-                    disabled={disableLocal}
+                    disabled={checkIfNeedDisable()} 
                     className="create-arr-btn" 
                     id="draw" 
                     onClick={()=>dispatch({type: 'changeArray'})}>
@@ -89,7 +89,7 @@ function Inputs({syncMode, inputState, dispatch, className}) {
                 </button>
                 <div>or</div>
                 <button
-                    disabled={disableLocal}
+                    disabled={checkIfNeedDisable()}
                     className="create-arr-btn" 
                     id="draw" 
                     onClick={()=>dispatch({type: 'changeArrayRandom'})}>
@@ -101,3 +101,20 @@ function Inputs({syncMode, inputState, dispatch, className}) {
 }
 
 export default Inputs
+
+
+/* IMPLEMENT POSITIVE NUMBERS ONLY */
+/* CREATE PROMT FOR WRONG INPUT */
+//FUNCTIONS
+const randomizer = (n) => Math.floor(Math.random()*n)
+const createArray = (length) => {
+    let arr = []
+    for(let i=length; i>0; i--){
+        arr.push(randomizer(length))
+    }
+}
+const generateRandomArray = () => {
+    let length =  randomizer(300)
+    createArray(length)
+}
+
