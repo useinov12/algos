@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from '../Inputs/Inputs'
 import Chart from '../../Chart/Chart'
 import './compare-block.css'
+import BubbleSort from '../../Algos/BubbleSort'
 
 
 const randomizer = (n) => Math.floor(Math.random()*n)
@@ -66,7 +67,7 @@ function CompareBlock(props) {
         useEffect(() => { 
             if(syncMode) return algoInputStateHolder = inputStateSync 
             else algoInputStateHolder = inputState
-        }, []) //switch on Mode Change
+        }, []) //switch on Sync mode Change
 
 
     
@@ -81,56 +82,31 @@ function CompareBlock(props) {
             switch(action.type){
                 case 'update':
                     return { ...localStates, ...action.playload }
-                case 'clear' :
-                    return {...localStates, ...{ array:[],compareIdx:0,sorted:0,speed:algoInputStateHolder.speed }}
             }
         }  
         const [ localData, dispatchLocal ] = useReducer(reducerLocalStates, initLocal)
 
         //Update LocalData on Input change
-        useEffect(() => {
+        useEffect( () => {
             if(syncMode){
-                dispatchLocal({type:'update', playload:inputStateSync})
+                dispatchLocal( {type:'update', playload:inputStateSync} )
                 return
             }
-            dispatchLocal({type:'update', playload:inputState})
+            dispatchLocal( {type:'update', playload:inputState} )
             return () => {}
         }, [ inputStateSync, inputState ])
-
         //Test localData 
         useEffect(() => {
-            console.log(`LocalData: `, localData)
+            // console.log(`LocalData: `, localData)
             return
-        }, [localData])
+        }, [ localData ])
 
 
 
-    //State for Pause/SnapShot
-        let initStatic = {
-            array:[],
-            compareIdx:0,
-            sorted:0
-        }
-        function reducerStaticData(state, action){
-            switch(action.type){
-                case 'snapshot':
-                    return {...state, ...action.playload} 
-            }
-        } 
-        const [ snapshot, dispatchSnapshot ] = useReducer(reducerStaticData, initStatic)
-
-        //Snapshot test
-        useEffect(() => {
-            console.log(`Snapshot: `, snapshot)
-            return
-        }, [snapshot])
-
-
-
-    //ALGOS
+    //ALGORITHMS
         let delay = async ( t ) => await new Promise((resolve)=>setTimeout(resolve, t))
         const swap = async (arr, i, t) => {
-            await delay(t)
+            // await delay(t)
             let holder = arr[i]
             arr[i] = arr[i+1]
             arr[i+1] = holder
@@ -138,88 +114,66 @@ function CompareBlock(props) {
         }
 
         const Bubble = async (arr, i,  j, t,) => {
-            await delay(t)
+            // await delay(t)
             dispatchLocal({type:'update', playload:{sorted:i}})
             let innerLoop = async (arr, i, j) => {
                 if(j>=arr.length-1-i)Bubble(arr, i+1, 0, t);
                 else {
-                    await delay(t)
+                    // await delay(t)
                     dispatchLocal({type:'update', playload:{compareIdx:j}})
                     if(arr[j]>arr[j+1]){
-                        await delay(t)
+                        // await delay(t)
                         swap(arr, j, t)
                         innerLoop(arr, i, j+1)
                     } 
                     else innerLoop(arr, i, j+1)
                 }
             } 
-            await delay(t)
-            
+            // await delay(t)
             if(i>=arr.length-1)return
             else innerLoop(arr, i, j)
         }
 
-        //Choose algo
-        function runAlgo(action, array, compareIdx, sorted, speed){
-            switch(action){
-                case 'Bubble' :
-                    Bubble(array, compareIdx, sorted, speed)
-                break
-            }
-        }
 
-        //Switch action
+
+    //Switch SyncState actions 
         useEffect( () => {
             switch(runState){
                 case 'initial' :
-                    console.log({runState:'initial'})
+                    // console.log({runState:'initial'})
                     return () => {} //do nothing default
 
                 case 'run' :
-                    //Run algorithm
                     //updating LocalData in algorithm function
                     console.log({runState:'run'})
                     runAlgo( typeOfAlgo, localData.array, localData.sorted, localData.compareIdx, localData.speed ) //run algo with initial props
                     return () => {} //do nothing 
-
                 case 'pause' :
-                    //Taking Snapshot from current LocalData
-                    //Clear LocalData
-                    //ClearTimeout state change call
+                    //Algo.NextMove = PAUSE
+                    //ClearTimeout stateChange
                     console.log({runState:'pause'})
-                    dispatchSnapshot({type:'snapshot', playload:localData})
                     return () => {
                         //clear Local here
                     }
-
                 case 'continue':
-                    //Assign SnapshotData to LocalData
-                    //Clear Snapshot Data
-                    //Switch runState to 'run'
-                    console.log({runState:'continue'}) //run with snapshot props
-                    // runAlgo(typeOfAlgo, arraySnapshot, comparingIdxSnapshot, sortedSnapshot, inputStateHolder.speed)
+                     //setTimeout State
+                    //runAlgo
+                    console.log({runState:'continue'}) 
                     return () => {
                         //clear snapshot here
-                        dispatchSnapshot({type:'snapshot'}) //cnahge to type:clearSnapshot
                     } 
 
                 case 'reset' : 
-                    //ClearTimeout state change call
-                    //Clear LocalData
-                    //Clear Snapshot Data
-                    //Dispatch new array
-                    //Switch runState to 'initial'
                     console.log({runState:'reset'})
                     
                     return  () =>{
                         //clear all here
-                        dispatchLocal({type:'clear'})
                     }
             }
             
         }, [runState])
 
-        //Timeout, clearTimeout set up
+    //Timeout, clearTimeout set up
         useEffect(() => {
             
             return () => {
@@ -228,36 +182,78 @@ function CompareBlock(props) {
         }, [runState])
 
 
-    //Render chart based on current data stream
-        const renderChart = (state) =>{
-            switch(state){
-                case 'initial':
-                    return (
-                        <Chart />
-                    )
-                case 'run':
-                    return (
-                        <Chart />
-                    )
-                case 'pause':
-                    return (
-                        <Chart />
-                    )
-                case 'continue':
-                    return (
-                        <Chart />
-                    )
-                case 'reset':
-                    return
+    //Algo Section
+        //Bubble
+        let initBubbleState = {
+            isSorted:false,
+            array:[],
+            compareIdx:0,
+            sorted:0,
+            nextMove: 'check' 
+        }
+
+        function reducerBubble(state, action){
+            switch(action.type){
+                case 'init' :
+                    //asign array here
+                    return {...state, array:[...localData.array]}
+                case 'check' :
+                    //if comparing function return false -> return isSorted:true
+                    //if sorted === array.lengtn return isSorted:true
+                    //else compare
+                    return {...state, nextMove:'compare'}
+                case 'compare' :
+                    //if compare idx === state.array.length-state.sorted
+                    //return {...state, compareIdx:0, sorted:state.sorted+1, nextMove:'compare'} 
+                    //if left > right swap
+                    return {...state, nextMove:'swap'}  
+                    //else 
+                    //return {...state, compareIdx:state.compareIdx+1, nextMove:'compare'}
+                case 'swap' :
+                    let arrHolder = []
+                    //perform swap
+                    return {...state, array:arrHolder, nextMove:'compare'}
+                case 'pause' :
+                    //clear intervals here
+                    return {...state, nextMove: null}
+                case 'continue' :
+                    //clear intervals here
+                    return {...state, nextMove: 'check'}
+                case 'update' :
+                    return 
             }
         }
+        const [ bubbleState, dispatchNextMove ] = useReducer( reducerBubble, initBubbleState )
+        
+        //Initial assign
+        useEffect(() => {
+            dispatchNextMove({type:'init'})
+        }, [])
+        useEffect(() => {
+            console.log({nextMove:bubbleState.nextMove})
+            return () => {}
+        }, [bubbleState.nextMove])
+
+
+    //Choose algo to run
+        function runAlgo(action, array, compareIdx, sorted, speed){
+            switch(action){
+                case 'Bubble' :
+                    //CHANGE TO reducerBubble HERE
+                    Bubble(array, compareIdx, sorted, speed)
+                break
+            }
+        }
+
+
     return (
         <div className="compare-mode-block">
+        <button onClick={()=>dispatchNextMove({type:bubbleState.nextMove})}>Next</button>
+
             <button
                 onClick={()=>
                     handleRemoveFromCompareList(compareList, typeOfAlgo)
-                }>
-                X
+                }> X
             </button>
 
             <Inputs
@@ -288,6 +284,7 @@ function CompareBlock(props) {
                     </div>
                 </div>
 
+                
 
                 {/* CHART */}
                 <Chart 

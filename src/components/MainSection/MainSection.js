@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from './Inputs/Inputs'
 import CompareBlock from './CompareBlock/CompareBlock'
-import BubbleSort from '../Algos/BubbleSort'
-import QuickSort from '../Algos/QuickSort'
-import MergeSort from '../Algos/MergeSort'
-import SelectionSort from '../Algos/SelectionSort'
-
 import './main-section.css'
-
 import {
     BrowserRouter as Router,
     Routes,
@@ -15,6 +9,10 @@ import {
     Link,
     NavLink
 } from "react-router-dom";
+// import BubbleSort from '../Algos/BubbleSort'
+// import QuickSort from '../Algos/QuickSort'
+// import MergeSort from '../Algos/MergeSort'
+// import SelectionSort from '../Algos/SelectionSort'
 
 
 const randomizer = (n) => Math.floor(Math.random()*n)
@@ -24,112 +22,103 @@ const createArray = (length) => {
         arr.push(randomizer(length))
     }
     return arr
-    // handleChangeArray(arr)
 }
 const generateRandomArray = () => {
     let length =  randomizer(300)
-    // handleChangeLength(length)
     createArray(length)
 }
   
 
 function MainSection({handleChangeMode, compareMode, handleAddToCompareList, handleRemoveFromCompareList, compareList}) {
     //SyncMode switch
-    const [ syncMode, setSyncMode ] = useState(false)
-    const handleSyncModeChange = () =>{
-        setSyncMode(prev => !prev)
-    } 
+        const [ syncMode, setSyncMode ] = useState(false)
+        const handleSyncModeChange = () =>{
+            setSyncMode(prev => !prev)
+        } 
 
     //SyncInput states
-    let initArr = createArray(50)
-    let InitSyncInputState = {
-        speed:5,
-        length:50,
-        array:[...initArr]
-    }
-    function  reducerArrayState(input, action){
-        switch (action.type){
-            case 'changeSpeed':
-                return {...input, speed:action.playload}
-            case 'changeLength':
-                return {...input, length:action.playload}
-            case 'changeArray':
-                let array = createArray(input.length)
-                return {...input, array:array}
-            case 'changeArrayRandom':
-                let l =  randomizer(300)
-                let arr = createArray(l)
-                return {...input, array:arr}
+        let initArr = createArray(50)
+        let InitSyncInputState = {
+            speed:5,
+            length:50,
+            array:[...initArr]
         }
-    }
-    const [ inputState, dispatchArray ] = useReducer(reducerArrayState, InitSyncInputState)
-    
-    //SyncInput Test
-    useEffect(() => {
-        // console.log(inputState)
-        return () => {
-            
+        function  reducerArrayState(input, action){
+            switch (action.type){
+                case 'changeSpeed':
+                    return {...input, speed:action.playload}
+                case 'changeLength':
+                    return {...input, length:action.playload}
+                case 'changeArray':
+                    let array = createArray(input.length)
+                    return {...input, array:array}
+                case 'changeArrayRandom':
+                    let l =  randomizer(300)
+                    let arr = createArray(l)
+                    return {...input, array:arr}
+            }
         }
-    }, [inputState])
+        const [ inputState, dispatchArray ] = useReducer(reducerArrayState, InitSyncInputState)
+
+        //Reset SyncArray if SyncMode is on
+        useEffect(() => {
+            if(syncMode)return dispatchArray({type:'changeArray'});
+            else return
+        }, [syncMode])
+
+        //SyncInput Test
+        useEffect(() => {
+            // console.log(inputState)
+            return
+        }, [inputState])
 
 
+    //RunAlgo State
+        let initRunState = 'initial' 
+        function runSyncReducer(runState, action){
+            switch(action.type){
+                case 'initial': return 'initial'
+                case 'run': return 'run'
+                case 'pause': return 'pause'
+                case 'continue': return 'continue'
+                case 'reset': return 'reset'
+            }
+        }  
+        const [ runState, dispatchRun ] = useReducer(runSyncReducer, initRunState)
 
-    let initRunState = 'initial' 
-    function runSyncReducer(runState, action){
-        switch(action.type){
-            case 'run':
-                return 'run'
-            case 'pause':
-                return 'pause'
-            case 'reset':
-                return 'reset'
-            case 'initial':
-                return 'initial'
-            case 'continue':
-                return 'continue'
+        useEffect(() => {
+            if(runState==='reset')return dispatchArray({type:'changeArray'});
+            else return
+        }, [runState])
+
+
+    //Buttons disable handlers
+        const handleDisableCompareBtn = () => {
+            if(runState == 'run' ) return true;
+            if(runState == 'pause' ) return true;
+            else return false;
         }
-    }  
-    const [ runState, dispatchRun ] = useReducer(runSyncReducer, initRunState)
-
-    useEffect(() => {
-        // console.log(runState)
-        // console.log(compareList)
-
-    }, [runState])
-
-    useEffect(() => {
-        if(syncMode)return dispatchArray({type:'changeArray'})
-        else return
-    }, [syncMode])
-
-
-    //buttons disable handlers
-    const handleDisableCompareBtn = () => {
-        if(runState == 'run' ) return true;
-        if(runState == 'pause' ) return true;
-        else return false;
-    }
-    const handleDisableSyncBtn = () =>{
-        if(!compareMode) return true;
-        if(runState == 'run' ) return true;
-        if(runState == 'pause' ) return true;
-        else return false;
-    }
-    const handleDisableRunSyncBtn = () =>{
-        if(!syncMode || !compareMode) return true;
-        if(runState === 'run' ) return true;
-        else return false;
-    }
-    const handleDisablePauseBtn = () =>{
-        if(!syncMode || !compareMode) return true;
-        if(runState !== 'run') return true;
-        else return false;
-    }
-    const handleDisableResetBtn = () =>{
-        if(!syncMode || !compareMode) return true;
-        if(runState !== 'pause') return true;
-        else return false;
-    }
+        const handleDisableSyncBtn = () =>{
+            if(!compareMode) return true;
+            if(runState == 'run' ) return true;
+            if(runState == 'pause' ) return true;
+            else return false;
+        }
+        const handleDisableRunSyncBtn = () =>{
+            if(!syncMode || !compareMode) return true;
+            if(runState === 'run' ) return true;
+            else return false;
+        }
+        const handleDisablePauseBtn = () =>{
+            if(!syncMode || !compareMode) return true;
+            if(runState !== 'run') return true;
+            else return false;
+        }
+        const handleDisableResetBtn = () =>{
+            if(!syncMode || !compareMode) return true;
+            if(runState !== 'pause') return true;
+            else return false;
+        }
 
 
     return (
