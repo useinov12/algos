@@ -3,29 +3,45 @@
     height:145px;
     /* padding: .2rem; */
     display: flex;
-    justify-content: space-between;
-    /* align-items: center; */
+    justify-content: flex-start;
+    align-items: center;
     /* flex-wrap: wrap; */
-    border-bottom:1px solid rgb(109, 108, 108);
+    /* border-bottom:1px solid rgb(109, 108, 108); */
+    margin: 1rem;
+
+    overflow: hidden;
+    border-radius: 40px;
+    box-shadow: 6px 6px 3px 0 rgba(0, 0, 0, 0.35),
+    -3px -1px 1px 0 rgba(108,108,108, 0.45);
 }
 
-.compare-mode-algo{
+.algo-compnent{
     /* background-color:darkgreen; */
-    /* height: 160px; */
-    width: 75%;
+    margin: .3rem;
+    height: 100%;
+    width: 100%;
     display: flex;
     /* flex-direction: column; */
     /* padding: .2rem; */
-    align-items: center;
-    justify-content: space-between;
+    /* align-items: center; */
+    justify-content: space-around;
 }
 .compare-mode-algo-info{
     /* background-color: coral; */
-    height: 100%;
-    padding: 1rem 0 0;
+    /* height: 100%; */
+    /* padding: 1rem 0 0; */
 }
 .compare-mode-algo-btn-container{
-    display: flex;
+    /* display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: center; */
+}
+
+
+.remove-compare-block-btn{
+    /* background-color: brown; */
+    /* margin-left: 15px; */
+    /* border-radius: 35px; */
+    padding: 0 10px;
+    height:100%;
 }

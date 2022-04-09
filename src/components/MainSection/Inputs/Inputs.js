@@ -18,14 +18,6 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
             else return false
         }
     }
-    // Effects
-/*     useEffect(() => {
-        if(syncMode && className=='local-inputs')  setDisableLocal(true)
-        if(!syncMode || className !=='local-inputs')  setDisableLocal(false)
-        return
-    }, [syncMode])
- */
-
 
     useEffect(() => {
         if(runState !== 'reset') return; //reset array onClick RESET
@@ -43,7 +35,7 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
                             disabled={checkIfNeedDisable()} 
                             className="number-input" 
                             type="number" 
-                            value={inputState.length} 
+                            value={syncMode ? '' : inputState.length} 
                             onChange={ e => 
                                 syncMode && className=='local-inputs' ?  ()=>{} :
                                 dispatch({type: 'changeLength', playload: e.target.value})
@@ -52,12 +44,12 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
                     </div>
                     <div className="range-input-container">
                         <input 
-                            disabled={checkIfNeedDisable()} 
+                            disabled={checkIfNeedDisable()}  //implement additional checkihng
                             type="range" 
                             className="slider" 
                             step="1" 
                             min={20} max={300} 
-                            value={inputState.length} 
+                            value={syncMode ? '' : inputState.length} 
                             onChange={ e => //what is happening here in Local?
                                 dispatch({type: 'changeLength', playload: e.target.value})
                             }
@@ -73,7 +65,7 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
                             className="slider speed-slider" 
                             step="1" 
                             min={10} max={100} 
-                            value={inputState.speed} 
+                            value={syncMode ? '' : inputState.speed} 
                             onChange={ e => dispatch({type: 'changeSpeed', playload: e.target.value})}
                         />
                     </div>

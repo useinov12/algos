@@ -19,5 +19,11 @@ input[type=number] {
   }
 
 .App{
-    background-color: #111;
+    background-color: var(--bg-dark);
+}
+
+button{
+  /* border: none;
+  border-radius: 5px;
+  padding: 2px 15px; */
 }

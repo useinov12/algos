@@ -8,10 +8,11 @@ import {
 
 
 function AlgoList({list, state, compareMode, handleAddToCompareList, compareList}) {
-
+    // <ul className={state ? "algoritms-list search-list" : "algoritms-list sort-list" }>
     // console.log([handleAddToCompareList, compareList])
     return (
-        <ul className={state ? "algoritms-list search-list" : "algoritms-list sort-list" }>
+
+        <ul className={state ? "algoritms-list" : "algoritms-list" }>
             {
                 list.map( (algo, idx) => 
                     <li className="list-item" key={idx} >

@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import useD3 from '../useD3'
 import './chart.css'
 
-function Chart({data, comparingIdx, sorted, local, type, localStop}) {
+function Chart({data, comparingIdx, sorted, local, type}) {
     // console.log(data)
     useEffect(() => {
         console.log('mounted')
@@ -11,6 +11,8 @@ function Chart({data, comparingIdx, sorted, local, type, localStop}) {
             console.log('unmounted')
         }
     }, [])
+
+    
     const ref = useD3(
         (svg)=>{
             //Dimensions
@@ -87,40 +89,33 @@ function Chart({data, comparingIdx, sorted, local, type, localStop}) {
             let rightBar
             let sortedBars
 
-            if(localStop){
-                leftBar = null
-                rightBar = null
-                sorted = null
-            } else {
-                leftBar = plotArea.selectAll('rect')
-                    .filter((d,i)=> i===comparingIdx)
-                    .attr('fill', 'red')
-                rightBar = plotArea.selectAll('rect')
-                    .filter((d,i)=> i===comparingIdx+1)
-                    .attr('fill', 'red')
+            //if target data is array then ...  
+            //else ...  
+            leftBar = plotArea.selectAll('rect')
+                .filter((d,i)=> i===comparingIdx)
+                .attr('fill', 'red')
+            rightBar = plotArea.selectAll('rect')
+                .filter((d,i)=> i===comparingIdx+1)
+                .attr('fill', 'red')
 
-                sortedBars = plotArea.selectAll('rect')
-                    .filter((d, i)=> i>=data.length-sorted)
-                    .attr('fill', 'green')
-            }
+            sortedBars = plotArea.selectAll('rect')
+                .filter((d, i)=> i>=data.length-sorted)
+                .attr('fill', 'green')
         },
         [data]
     )
 
     return (
-        <div>
-        {
-            data &&
-                <svg 
-                    ref={ref}
-                    style={{
-                    padding:"3px",
-                }}>
-                <g className="plot-area"/> /*  */
-            </svg>
-        }
-
-        
+        <div className='chart'>
+            {
+                data &&
+                    <svg 
+                        ref={ref}
+                        style={{padding:"3px",}}
+                    >
+                    <g className="plot-area"/> /*  */
+                </svg>
+            }
         </div>
     )
 }

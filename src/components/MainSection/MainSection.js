@@ -45,6 +45,8 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
         }
         function  reducerArrayState(input, action){
             switch (action.type){
+                case 'update':
+                    return { ...input, ...action.playload }
                 case 'changeSpeed':
                     return {...input, speed:action.playload}
                 case 'changeLength':
@@ -68,7 +70,7 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 
         //SyncInput Test
         useEffect(() => {
-            // console.log(inputState)
+            console.log(inputState)
             return
         }, [inputState])
 
@@ -123,7 +125,7 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 
     return (
         <div className="content-container content-grid grid">
-            <div>
+            <div className='sync-menu'>
                 <span>Compare Mode is</span> 
                 <NavLink to={compareMode ? "/bubblesort" : "/compare-mode"}>
                     <button 
@@ -172,7 +174,7 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                     inputState={inputState}
                     dispatch={dispatchArray}
                     runState={runState}
-                    className={'inputs-container inputs-grid grid'}
+                    className={'inputs-container'}
                 />
             } 
 
