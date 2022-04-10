@@ -1,2 +1,4 @@
 1.Is there a way to abctract creating InputData functionality for both sync Comp and  Local?
 2.How to define variabels for each Algo type and pass them to Chart without individual approach
+        data checkers in Chart Component
+3.CSS syncInput disabled functionality

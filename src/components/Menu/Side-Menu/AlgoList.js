@@ -12,10 +12,10 @@ function AlgoList({list, state, compareMode, handleAddToCompareList, compareList
     // console.log([handleAddToCompareList, compareList])
     return (
 
-        <ul className={state ? "algoritms-list" : "algoritms-list" }>
+        <div className={state ? "algoritms-list " : "algoritms-li" }>
             {
                 list.map( (algo, idx) => 
-                    <li className="list-item" key={idx} >
+                    <div className="list-item" key={idx} >
                         <NavLink to={compareMode ? false : algo.path} className="list-link">
                             <span>{algo.name}</span>
                             {
@@ -25,10 +25,10 @@ function AlgoList({list, state, compareMode, handleAddToCompareList, compareList
                                 </button>
                             }
                         </NavLink>
-                    </li>
+                    </div>
                 )
             }
-        </ul>
+        </div>
     )
 }
 

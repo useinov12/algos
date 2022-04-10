@@ -10,9 +10,9 @@
     margin: 1rem;
 
     overflow: hidden;
-    border-radius: 40px;
-    box-shadow: 6px 6px 3px 0 rgba(0, 0, 0, 0.35),
-    -3px -1px 1px 0 rgba(108,108,108, 0.45);
+    border-radius: 30px;
+    box-shadow: 6px 6px 3px 0 rgba(0, 0, 0, 0.55),
+    -3px -3px 3px 0 rgba(70, 70, 70, 0.7);  
 }
 
 .algo-compnent{

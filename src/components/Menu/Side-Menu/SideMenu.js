@@ -52,24 +52,25 @@ function SideMenu({list, handleChangeList, compareMode, handleAddToCompareList, 
             <h2 className="side-menu-header">
                 Algoritms
             </h2>
-
+        
+            <div className="list-content">
             <div className="list-switch">  
-                <span className={!state ? "list-option sort-list" : "list-option sort-option" } 
-                    onClick={()=>{
-                        handleChangeList(sortList)
-                        setState(false)
-                    }}>
-                    <h3>SORT</h3>
-                </span>
-                <span className={state ? "list-option search-list" : "list-option search-option" } 
-                    onClick={()=>{
-                        handleChangeList(searchList)
-                        setState(true)
-                    }}>
-                    <h3>SEARCH</h3>
-                </span>
+                    <span className={!state ? "list-option sort-list" : "list-option sort-option" } 
+                        onClick={()=>{
+                            handleChangeList(sortList)
+                            setState(false)
+                        }}>
+                        <h3>SORT</h3>
+                    </span>
+                    <span className={state ? "list-option search-list" : "list-option search-option" } 
+                        onClick={()=>{
+                            handleChangeList(searchList)
+                            setState(true)
+                        }}>
+                        <h3>SEARCH</h3>
+                    </span>
+                </div>
             </div>
-
             <AlgoList 
                 list={list} 
                 state={state} 

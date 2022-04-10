@@ -166,17 +166,17 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                         RESET
                     </button> 
                 </span>
-            </div>
-            {/* COLLAPSE SYNC INPUTS HERE */}
-            {   
-                (syncMode && compareMode) &&
+                
                 <Inputs
+                    syncMode={syncMode}
                     inputState={inputState}
                     dispatch={dispatchArray}
                     runState={runState}
                     className={'inputs-container'}
                 />
-            } 
+            </div>
+            {/* COLLAPSE SYNC INPUTS HERE */}
+            
 
             {/* ALL ROUTES */}
             <div>
@@ -214,3 +214,14 @@ export default MainSection
 <Route path="/selectionsort" exact element={
     <SelectionSort array={array} handleChangeArray={handleChangeArray} length={length} />}
 /> */
+
+
+{   
+    /*                 (syncMode && compareMode) &&
+                    <Inputs
+                        inputState={inputState}
+                        dispatch={dispatchArray}
+                        runState={runState}
+                        className={'inputs-container'}
+                    /> */
+                } 
