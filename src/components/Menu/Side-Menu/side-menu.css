@@ -14,8 +14,8 @@
 .list-content{
     /* background-color: darkolivegreen; */
     border-radius: 10px;
-    box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.7),
-    -2px -2px 3px 0 rgba(70, 70, 70, 0.2); 
+    box-shadow: 3px 3px 4px 0 var(--shadow-outer-dark),
+    -2px -2px 3px 0 var(--shadow-outer-light); 
     margin-bottom: 1rem;
 }
 
@@ -29,7 +29,7 @@
     height: 4rem;
     padding: .1rem;
     border-radius:10px;
-    position: relative;
+    /* position: relative; */
 }
 
 .list-option{
@@ -44,18 +44,20 @@
 
 }
 .search-list{
-    /* transition: all .1s linear; */
     border-radius: 10px;
-    box-shadow: inset 3px 3px 7px 0 rgba(0, 0, 0, 0.6),
-    inset -2px -2px 2px 0 rgba(70, 70, 70, 0.6);
+    box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
+    inset -2px -2px 2px 0 var(--shadow-inner-light);
     padding: .9rem; 
+    /* color: #0084ff; */
+    /* text-shadow: 0 0 5px rgba(71, 207, 115, 0.6); */
 }
 .sort-list{
-   /* transition: all .1s linear; */
    border-radius: 10px;
-   box-shadow: inset 3px 3px 7px 0 rgba(0, 0, 0, 0.5),
-   inset -2px -2px 2px 0 rgba(70, 70, 70, 0.6);
+   box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
+   inset -2px -2px 2px 0 var(--shadow-inner-light);
    padding: .9rem; 
+   /* color: rgba(71, 207, 115, 1); */
+   /* text-shadow: 0 0 5px rgba(71, 207, 115, 0.6); */
 }
 
 
@@ -65,12 +67,14 @@
     transition: all .2s ease;
     height: 3rem;
     border-radius: 10px;
-    box-shadow: inset 3px 3px 7px 0 rgba(0, 0, 0, 0.6),
-    inset -2px -2px 2px 0 rgba(70, 70, 70, 0.6);
+    box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
+    inset -2px -2px 4px 0 var(--shadow-inner-light);
+
 }
 .active span{
     transition: all .2s ease;
     margin-left: .5rem;
+
 }
 
 
@@ -81,8 +85,8 @@
     cursor: pointer;
     width:100%;
     border-radius: 10px;
-    /* box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.7),
-    -2px -2px 3px 0 rgba(70, 70, 70, 0.2);  */
+    /* box-shadow: 3px 3px 4px 0 var(--shadow-outer-dark-1),
+    -2px -2px 3px 0 var(--shadow-outer-dark-1);  */
 }
 
 .list-link{

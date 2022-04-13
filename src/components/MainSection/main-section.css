@@ -1,9 +1,16 @@
 .content-section{
-    display: flex;
-    flex-direction: column;
+    padding: .5rem;
     /* background-color: blue; */
 }
 
 .sync-menu{
     /* background-color: cadetblue; */
+
+    /* width:99%; */
+    width:max-content;
+    /* height: max-content; */
+    padding: .5rem;
+    border-radius: 10px;
+    box-shadow: 3px 3px 4px 0 var(--shadow-outer-dark),
+    -2px -2px 3px 0 var(--shadow-outer-light); 
 }

@@ -43,7 +43,7 @@ const searchList = [
 ]
 
 
-function Layout() {
+function Layout({theme, handleThemeSwitch}) {
 
     //STATES CONNECTED WITH SIDE-MENU
     const [compareMode, setCompareMode] = useState(false)
@@ -69,7 +69,7 @@ function Layout() {
 
     return (
         <div className="layout">
-            <Menu/>
+            <Menu theme={theme} handleThemeSwitch={handleThemeSwitch} />
             <SideMenu 
                 list={menuList} 
                 handleChangeList={handleChangeList}

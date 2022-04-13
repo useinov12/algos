@@ -28,61 +28,64 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
     return (
         <div className={className} >
             <div className="input-section">
-                <label>
-                    <div className="number-input-container">
-                        <span>Length:</span>  
-                        <input 
-                            disabled={checkIfNeedDisable()} 
-                            className="number-input" 
-                            type="number" 
-                            value={syncMode ? '' : inputState.length} 
-                            onChange={ e => 
-                                syncMode && className=='local-inputs' ?  ()=>{} :
-                                dispatch({type: 'changeLength', playload: e.target.value})
-                            } 
-                        />
-                    </div>
-                    <div className="range-input-container">
-                        <input 
-                            disabled={checkIfNeedDisable()}  //implement additional checkihng
-                            type="range" 
-                            className="slider" 
-                            step="1" 
-                            min={20} max={300} 
-                            value={syncMode ? '' : inputState.length} 
-                            onChange={ e => //what is happening here in Local?
-                                dispatch({type: 'changeLength', playload: e.target.value})
-                            }
-                        />
-                    </div>
-                </label>
-                <label>
-                    <span>Sort speed:</span>  
-                    <div className="range-input-container">
-                        <input 
-                            disabled={checkIfNeedDisable()} 
-                            type="range" 
-                            className="slider speed-slider" 
-                            step="1" 
-                            min={10} max={100} 
-                            value={syncMode ? '' : inputState.speed} 
-                            onChange={ e => dispatch({type: 'changeSpeed', playload: e.target.value})}
-                        />
-                    </div>
-                </label>
-            </div>
-            <div className="create-btn-container">
+                <div className="inputs-wrap">
+                    <label>
+                        <div className="number-input-container">
+                            <h3>Length:</h3>  
+                            <input 
+                                disabled={checkIfNeedDisable()} 
+                                className="number-input" 
+                                type="number" 
+                                // value={ syncMode ? '' : inputState.length} 
+                                value={inputState.array.length} 
+                                onChange={ e => 
+                                    syncMode && className=='local-inputs' ?  ()=>{} :
+                                    dispatch({type: 'changeLength', playload: e.target.value})
+                                } 
+                            />
+                        </div>
+                        <div className="range-input-container">
+                            <input 
+                                disabled={checkIfNeedDisable()}  //implement additional checkihng
+                                type="range" 
+                                className="slider" 
+                                step="1" 
+                                min={20} max={300} 
+                                value={inputState.array.length} 
+                                onChange={ e => //what is happening here in Local?
+                                    dispatch({type: 'changeLength', playload: e.target.value})
+                                }
+                            />
+                        </div>
+                    </label>
+                    <label>
+                        <span>Sort speed:</span>  
+                        <div className="range-input-container">
+                            <input 
+                                disabled={checkIfNeedDisable()} 
+                                type="range" 
+                                className="slider speed-slider" 
+                                step="1" 
+                                min={10} max={100} 
+                                value={syncMode ? '' : inputState.speed} 
+                                onChange={ e => dispatch({type: 'changeSpeed', playload: e.target.value})}
+                            />
+                        </div>
+                    </label>
+                </div>
                 <button
                     disabled={checkIfNeedDisable()} 
-                    className="create-arr-btn" 
+                    // className="create-btn" 
                     id="draw" 
                     onClick={()=>dispatch({type: 'changeArray'})}>
                     Create array
                 </button>
+            </div>
+            <div className="create-btn-container">
                 <div>or</div>
                 <button
                     disabled={checkIfNeedDisable()}
-                    className="create-arr-btn" 
+                    // className="create-btn" 
                     id="draw" 
                     onClick={()=>dispatch({type: 'changeArrayRandom'})}>
                     RANDOM

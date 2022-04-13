@@ -54,7 +54,7 @@ function SideMenu({list, handleChangeList, compareMode, handleAddToCompareList, 
             </h2>
         
             <div className="list-content">
-            <div className="list-switch">  
+                <div className="list-switch">  
                     <span className={!state ? "list-option sort-list" : "list-option sort-option" } 
                         onClick={()=>{
                             handleChangeList(sortList)

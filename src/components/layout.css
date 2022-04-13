@@ -19,7 +19,7 @@
 }
 
 .menu-grid{
-    grid-column: 1/19;
+    grid-column: 4/19;
     grid-row: 1/2;
     /* border-radius: 1rem; */
     /* border-bottom:1px solid var(--color-accent-light); */
@@ -27,7 +27,7 @@
 
 .side-menu-grid{
     grid-column: 1/4;
-    grid-row: 2/19;
+    grid-row: 1/19;
     /* border-radius: 1rem; */
     /* border-right:1px solid var(--color-accent-light); */
 }
@@ -35,7 +35,7 @@
 .content-grid{
     grid-column: 4/19;
     grid-row: 2/19;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     /* border-radius: 1rem; */
 }
 

@@ -53,11 +53,11 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                     return {...input, length:action.playload}
                 case 'changeArray':
                     let array = createArray(input.length)
-                    return {...input, array:array}
+                    return {...input,  array:array}
                 case 'changeArrayRandom':
                     let l =  randomizer(300)
                     let arr = createArray(l)
-                    return {...input, array:arr}
+                    return {...input, length:arr.length, array:arr}
             }
         }
         const [ inputState, dispatchArray ] = useReducer(reducerArrayState, InitSyncInputState)
@@ -82,14 +82,14 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                 case 'initial': return 'initial'
                 case 'run': return 'run'
                 case 'pause': return 'pause'
-                case 'continue': return 'continue'
+                // case 'continue': return 'continue'
                 case 'reset': return 'reset'
             }
         }  
         const [ runState, dispatchRun ] = useReducer(runSyncReducer, initRunState)
 
         useEffect(() => {
-            if(runState==='reset')return dispatchArray({type:'changeArray'});
+            if(runState==='reset') return dispatchArray({type:'changeArray'});
             else return
         }, [runState])
 
@@ -124,9 +124,9 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 
 
     return (
-        <div className="content-container content-grid grid">
+        <div className="content-section content-grid grid" style={syncMode ? {display:'flex'} : {display:'unset'}}>
             <div className='sync-menu'>
-                <span>Compare Mode is</span> 
+                <span>Compare Mode</span> 
                 <NavLink to={compareMode ? "/bubblesort" : "/compare-mode"}>
                     <button 
                         disabled={handleDisableCompareBtn()} 
@@ -135,45 +135,53 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                     </button>
                 </NavLink>
 
-                <span>SYNC Mode is</span>
+                <span>SYNC Mode</span>
                 <button 
                     disabled={handleDisableSyncBtn()} 
                     onClick={()=>handleSyncModeChange()}>
                     {syncMode ? 'on' : 'off'}
                 </button>
-                <span>   </span>
-                <span>
-                    <button
-                        disabled={handleDisableRunSyncBtn()} 
-                        onClick={()=>{
-                            if(compareList.length===0) return prompt(' Add Algo before compare ');
-                            if(runState === 'pause'){
-                                console.log(runState)
-                                dispatchRun({type:'continue'})
-                            }
-                            else dispatchRun({type:'run'});
-                        }}>
-                        {runState === 'pause' ? 'CONTINUE' : 'RUN SYNC'}
-                    </button> 
-                    <button
-                        disabled={handleDisablePauseBtn()}
-                        onClick={()=>dispatchRun({type:'pause'})}>
-                        PAUSE
-                    </button> 
-                    <button
-                        disabled={handleDisableResetBtn()}
-                        onClick={()=>dispatchRun({type:'reset'})}>
-                        RESET
-                    </button> 
-                </span>
                 
-                <Inputs
-                    syncMode={syncMode}
-                    inputState={inputState}
-                    dispatch={dispatchArray}
-                    runState={runState}
-                    className={'inputs-container'}
-                />
+                {
+                    syncMode && 
+                    <Inputs
+                        syncMode={syncMode}
+                        inputState={inputState}
+                        dispatch={dispatchArray}
+                        runState={runState}
+                        className={'inputs-container'}
+                    />
+                }
+                
+                {
+                    syncMode && 
+                    <div>
+                        <button
+                            disabled={handleDisableRunSyncBtn()} 
+                            onClick={()=>{
+                                if(compareList.length===0) return prompt(' Add Algo before compare ');
+                                // if(runState === 'pause'){
+                                //     console.log(runState)
+                                //     dispatchRun({type:'continue'})
+                                // }
+                                else
+                                 dispatchRun({type:'run'});
+                            }}>
+                            {runState === 'pause' ? 'CONTINUE' : 'RUN SYNC'}
+                        </button> 
+                        <button
+                            disabled={handleDisablePauseBtn()}
+                            onClick={()=>dispatchRun({type:'pause'})}>
+                            PAUSE
+                        </button> 
+                        <button
+                            disabled={handleDisableResetBtn()}
+                            onClick={()=>dispatchRun({type:'reset'})}>
+                            RESET
+                        </button> 
+                    </div>
+                }
+                
             </div>
             {/* COLLAPSE SYNC INPUTS HERE */}
             

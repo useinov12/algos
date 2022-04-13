@@ -1,18 +1,17 @@
 .compare-mode-block{
     /* background-color: rgb(1, 156, 104); */
     height:145px;
-    /* padding: .2rem; */
+    width:max-content;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    /* flex-wrap: wrap; */
-    /* border-bottom:1px solid rgb(109, 108, 108); */
     margin: 1rem;
+    transition: all .3s ease;
 
     overflow: hidden;
-    border-radius: 30px;
-    box-shadow: 6px 6px 3px 0 rgba(0, 0, 0, 0.55),
-    -3px -3px 3px 0 rgba(70, 70, 70, 0.7);  
+    border-radius: 25px;
+    box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.87),
+    -2px -2px 3px 0 rgba(70, 70, 70, 0.2);  
 }
 
 .algo-compnent{
@@ -21,9 +20,6 @@
     height: 100%;
     width: 100%;
     display: flex;
-    /* flex-direction: column; */
-    /* padding: .2rem; */
-    /* align-items: center; */
     justify-content: space-around;
 }
 .compare-mode-algo-info{

@@ -61,7 +61,6 @@ function CompareBlock(props) {
         const [ inputState, dispatchInput ] = useReducer(reducerInput, initInputState)
 
 
-
     //DATA STREAM SWITCH: Sync/Local
         //Assign initial data stream 
         useEffect(() => {
@@ -79,32 +78,30 @@ function CompareBlock(props) {
         }, [ inputStateSync ])
 
 
-    //Interval State 
-        const [interval, setInterval ] = useState(false)
-
-
 
     return (
         <div className="compare-mode-block">
-            <button className="remove-compare-block-btn"
+            <button className="remove-compare-block-btn btn-regular"
                 onClick={()=>
                     handleRemoveFromCompareList(compareList, typeOfAlgo)
                 }> X
             </button>
-
-            <Inputs
-                syncMode={syncMode}
-                inputState={inputState}
-                dispatch={dispatchInput}
-                className={'local-inputs'}
-            />
+            
+            {
+                !syncMode && 
+                <Inputs
+                    syncMode={syncMode}
+                    inputState={inputState}
+                    dispatch={dispatchInput}
+                    className={'local-inputs'}
+                />
+            }
 
             <AlgoComp
                 syncMode={syncMode}
                 typeOfAlgo={typeOfAlgo}
                 inputData={inputState}
                 runState={runState}
-                intervalState={interval}
             />
         </div>
     )
