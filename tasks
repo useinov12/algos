@@ -1,36 +1,3 @@
-1.Is there a way to abctract creating InputData functionality for both sync Comp and  Local?
-2.How to define variabels for each Algo type and pass them to Chart without individual approach
-        data checkers in Chart Component
-3.CSS syncInput disabled functionality
-4. If Compare Mode is Off -> turno off Sync Mode too
-
-
-Bubble Algo State:
-initBubbleState = {
-
-        isSorted:false,
-        array:[],
-        compareIdx:0,
-        sorted:0,
-        nextMove: 'check' //store next move here
-}
-
-BubbleAlgo Cycle:
-
-1. check whole arr
-        if ( arr.length !== state.sorted ) return { ...state, nextMove : compare }
-
-        else  return { ...state, nextMove : null, isSorted: true }
-
-2. compare
-        if(state.sorted === state.array.length ) return { ...state, nextMove : check }
-
-        if( arr[compareIdx] === arr.length && !isSorted ) 
-                return { ...state, compareIdx : 0, sorted:sorted+1,  nextMove : compare }
-
-        if (arr[left] > arr[right]) return { ...state, nextMove : swap }
-        else  return { ...state, compareIdx : compareIdx+1, nextMove : compare  }
-3. swap
-        perform swap
-        let arr =[]
-        return { ...state, array:arr, compareIdx : compareIdx+1,  nextMove: compare } 
+0.5. Simplify and clean Bubble algo 
+1. Start new Algo implementation
+2. Abstarct Chart Data for differenr components

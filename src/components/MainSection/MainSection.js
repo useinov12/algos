@@ -70,8 +70,7 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 
         //SyncInput Test
         useEffect(() => {
-            console.log(inputState)
-            return
+            // console.log(inputState)
         }, [inputState])
 
 

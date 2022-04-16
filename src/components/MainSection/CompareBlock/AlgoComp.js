@@ -2,50 +2,38 @@ import React, { useState, useEffect, useReducer } from 'react'
 import Chart from '../../Chart/Chart'
 
 
-const swap = (arr, i) => {
-    let holder = arr[i]
-    arr[i] = arr[i+1]
-    arr[i+1] = holder 
-}
-
 
 function AlgoComp(props) {
     const {
         syncMode, 
         typeOfAlgo, 
         inputData, 
-        runState
-    } = props
+        runState } = props
 
     const [ isRunningLocal, setIsRunningLocal ] = useState(false)
-    const [ isSortedLocal, setIsSortedLocal ] = useState(false)
+    const [pointer, setPointer ] = useState(0)//update when algoObjects is changing
 
     //Algo Section
         //Bubble
-        let initBubbleState = {
+        let initBubbleState = {  
             isSorted:false,
             array:[],
             compareIdx:0,
             sorted:0,
-            nextMove: 'check' //store next move here
+            nextMove: '' //store next move here
         }
         function reducerBubble(state, action){
+            setPointer(p => p+1) //update pointer to trigger state update in UseEffect
             switch(action.type){
                 case 'init' :
-                    //asign array here
-                    return {  isSorted:false, array:[...inputData.array], compareIdx:0, sorted:0, nextMove: 'check' }
-
-                case 'check' :
-                    console.log('checked')
-                    if ( state.array.length !== state.sorted ) return { ...state, nextMove : 'compare' }
-                    else  return { ...state, nextMove : 'sorted', isSorted: true };
+                    return {  isSorted:false, array:[...inputData.array], compareIdx:0, sorted:0, nextMove: 'compare' }
 
                 case 'compare' :
-                    console.log( {stateArray:state.array} )
-                    if( state.compareIdx === state.array.length && !state.isSorted ) 
-                    return { ...state, compareIdx : 0, sorted:state.sorted+1,  nextMove:'compare'};
+                    if( state.compareIdx === state.array.length && !state.isSorted )
+                    return { ...state, compareIdx : 0, sorted:state.sorted+1,  nextMove:'compare' };
 
-                    if(state.sorted === state.array.length ) return { ...state, nextMove:'check'};
+                    if( state.sorted === state.array.length )
+                    return { ...state, nextMove : 'sorted', isSorted: true }; //exit
 
                     if (state.array[state.compareIdx] > state.array[state.compareIdx+1]) return { ...state, nextMove : 'swap' };
                     else  return { ...state, compareIdx:state.compareIdx+1, nextMove:'compare'};
@@ -59,105 +47,71 @@ function AlgoComp(props) {
                         arrHolderInner[i+1] = holder 
                         arrHolder = [...arrHolderInner]
                     }
-                    //perform swap
-                    console.log('swapped')
                     swap(state.array, state.compareIdx)
-                    console.log({Holder:arrHolder})
-                    return { ...state, array : [...arrHolder], compareIdx : state.compareIdx+1,  nextMove:'compare'} 
-
-
+                    return { ...state, array : [...arrHolder], compareIdx : state.compareIdx+1,  nextMove:'compare'} ;
 
                 case 'sorted' :
-                    //clear intervals here
+                    //clear local intervals here if any ?
                     return state
-                case 'pause' :
-                    //clear intervals here
-                    return {...state, nextMove: null}
             }
         }
         const [ bubbleState, dispatchNextMoveBubble ] = useReducer( reducerBubble, initBubbleState )
-        //Initial assign
-        // useEffect(() => {
-        //     dispatchNextMoveBubble({type:'init'})
-        // }, [])
-        //update on InputData Change
-        useEffect(() => {
-            dispatchNextMoveBubble({type:'init'})
-        }, [ inputData ])
 
+
+
+
+
+    //Update on InputData Change
+    useEffect(() => {   //ABCTRACT THAT COMMAND FOR ALL ALGOS
+        setPointer(p => 0)
+        switch(typeOfAlgo){
+            case 'Bubble': 
+            return dispatchNextMoveBubble( {type:'init'} )
+        }
+    }, [ inputData ])
 
     //Timeout, clearTimeout set up
-    useEffect(() => {
-        console.log({runsState:runState})
-        return () => {
-            
-        }
-    }, [runState])
-        //if SyncMode
         useEffect(() => {
-            if(runState === 'run'){
-                //let id = window.setInterval with dispatchNextMoveBubble
-                console.log({SyncState:'running syncroniously'})
-                return
-            }
-            if(runState === 'pause'){
-                //window.clearInterval(id)
-                console.log({SyncState:'pause syncroniously'})
-                return
-            }
-            return () => {
-                //window.clearInterval(id)
-                console.log('eject')
-            }
+            if(runState === 'run')return setIsRunningLocal(true)
+            if(runState === 'pause')return setIsRunningLocal(false)
         }, [runState])
 
-
-        //if Single Algo run
+        //If Single Algo run
         useEffect(() => {
             if(isRunningLocal){
-                //let id = window.setInterval with dispatchNextMoveBubble
+                let id = window.setInterval(()=>{
+                    runAlgo(typeOfAlgo)
+                }, inputData.speed )
+                return () => window.clearInterval(id)
             }
-            return () => {
-                //window.clearInterval(id)
-            }
-        }, [isRunningLocal])
-
-    
+        }, [isRunningLocal, pointer]) //pointer is abstraction for algoObjects
+ 
     //Choose algo to run
-    function runAlgo(action){
-        switch(action){
-            case 'Bubble' :
-                //CHANGE TO reducerBubble HERE
-                // dispatchNextMoveBubble(array, compareIdx, sorted, speed) ??
-                dispatchNextMoveBubble({type:`${bubbleState.nextMove}`}) //dynamicaly dispatch next move
-            break 
+        function runAlgo(action){
+            switch(action){
+                case 'Bubble' : return dispatchNextMoveBubble({type:bubbleState.nextMove});
+            }
         }
-    }
 
-    
     return (
-        <div className="algo-compnent">
+        <div className="algo-compnent" style={{padding:'1rem'}}>
         
             <div className="compare-mode-algo-info">
                 <div>Some stats: ...</div>
                 <div>Complexity: O(n)</div>
-
                 <div className="compare-mode-algo-btn-container">
-
                     <button id="sort"
                         disabled={syncMode ? true : false} 
                         onClick={
-                            ()=>true
+                            ()=>setIsRunningLocal(true)
                         }> SORT!
                     </button>
-
                     <button id="stop" 
                         disabled={syncMode ? true : false} 
                         onClick={
-                            ()=>true
+                            ()=>setIsRunningLocal(false)
                         }> STOP
                     </button>
-
                 </div>
 
                 <div>
@@ -171,32 +125,16 @@ function AlgoComp(props) {
                 </div>
             </div>
 
-            {/* <Chart 
-                data={inputData.array} 
-                type={typeOfAlgo}
-                local={true}
-            /> */}
-
-            <Chart 
+            <Chart                       /* ABSTRACT DATA FOR CHARTS */
                 data={bubbleState.array} 
                 comparingIdx={bubbleState.compareIdx}
                 sorted={bubbleState.sorted}
                 local={true}
                 type={typeOfAlgo}
             />
-
         </div>
     )
 
 }
 
 export default AlgoComp
-
-
-// <Chart 
-// data={localData.array} 
-// comparingIdx={localData.compareIdx}
-// sorted={localData.sorted}
-// local={true}
-// type={typeOfAlgo}
-// />
