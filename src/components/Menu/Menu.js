@@ -6,7 +6,6 @@ export default function Menu({theme, handleThemeSwitch}) {
 
     return (
         <div className="menu menu-grid grid">
-        
             <h2>MENU</h2> 
             <div className='theme-toggle-container'>
                 <div className='theme-switch'>

@@ -20,11 +20,11 @@ function Chart({data, comparingIdx, sorted, local, type}) {
             let height 
             let margin
             if(local){
-                width = 700
+                width = 650
                 height = 135
                 margin = 10
             } else {
-                width = 800
+                width = 750
                 height = 200
                 margin = 30
             }

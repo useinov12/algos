@@ -4,46 +4,46 @@ import BubbleSort from '../../Algos/BubbleSort'
 import AlgoList from './AlgoList';
 import './side-menu.css'
 
+const sortList = [
+    {
+        name:"Bubble",
+        path:'/bubblesort',
+    },
+    {
+        name:"Quick",
+        path:"/quicksort" 
+    },
+    {
+        name:"Merge",
+        path:"/mergesort"
+    },
+    {
+        name:"Selection",
+        path:"/selectionsort"
+    }
+]
+const searchList = [
+    {
+        name:"Linear",
+        path:"/linear-search"
+    },
+    {
+        name:"Binary",
+        path:"/binary-search"
+    },
+    {
+        name:"Jump",
+        path:"/jump-search"
+    },
+    {
+        name:"Interpolation",
+        path:"/Interpolation-search"
+    }
+]
 
 
 function SideMenu({list, handleChangeList, compareMode, handleAddToCompareList, compareList}) {
     const [ state, setState ] = useState(false)
-    const sortList = [
-        {
-            name:"Bubble",
-            path:'/bubblesort',
-        },
-        {
-            name:"Quick",
-            path:"/quicksort" 
-        },
-        {
-            name:"Merge",
-            path:"/mergesort"
-        },
-        {
-            name:"Selection",
-            path:"/selectionsort"
-        }
-    ]
-    const searchList = [
-        {
-            name:"Linear",
-            path:"/linear-search"
-        },
-        {
-            name:"Binary",
-            path:"/binary-search"
-        },
-        {
-            name:"Jump",
-            path:"/jump-search"
-        },
-        {
-            name:"Interpolation",
-            path:"/Interpolation-search"
-        }
-    ]
 
 
     //SWITCH BETWEEN SEARCH AND SORT Lists
@@ -71,6 +71,7 @@ function SideMenu({list, handleChangeList, compareMode, handleAddToCompareList, 
                     </span>
                 </div>
             </div>
+            
             <AlgoList 
                 list={list} 
                 state={state} 

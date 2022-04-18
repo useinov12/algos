@@ -3,16 +3,10 @@ import Inputs from './Inputs/Inputs'
 import CompareBlock from './CompareBlock/CompareBlock'
 import './main-section.css'
 import {
-    BrowserRouter as Router,
     Routes,
     Route,
-    Link,
     NavLink
 } from "react-router-dom";
-// import BubbleSort from '../Algos/BubbleSort'
-// import QuickSort from '../Algos/QuickSort'
-// import MergeSort from '../Algos/MergeSort'
-// import SelectionSort from '../Algos/SelectionSort'
 
 
 const randomizer = (n) => Math.floor(Math.random()*n)
@@ -23,11 +17,6 @@ const createArray = (length) => {
     }
     return arr
 }
-const generateRandomArray = () => {
-    let length =  randomizer(300)
-    createArray(length)
-}
-  
 
 function MainSection({handleChangeMode, compareMode, handleAddToCompareList, handleRemoveFromCompareList, compareList}) {
     //SyncMode switch
@@ -61,17 +50,11 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
             }
         }
         const [ inputState, dispatchArray ] = useReducer(reducerArrayState, InitSyncInputState)
-
         //Reset SyncArray if SyncMode is on
         useEffect(() => {
             if(syncMode)return dispatchArray({type:'changeArray'});
             else return
         }, [syncMode])
-
-        //SyncInput Test
-        useEffect(() => {
-            // console.log(inputState)
-        }, [inputState])
 
 
     //RunAlgo State
@@ -81,7 +64,6 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                 case 'initial': return 'initial'
                 case 'run': return 'run'
                 case 'pause': return 'pause'
-                // case 'continue': return 'continue'
                 case 'reset': return 'reset'
             }
         }  
@@ -143,46 +125,39 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                 
                 {
                     syncMode && 
-                    <Inputs
-                        syncMode={syncMode}
-                        inputState={inputState}
-                        dispatch={dispatchArray}
-                        runState={runState}
-                        className={'inputs-container'}
-                    />
-                }
-                
-                {
-                    syncMode && 
-                    <div>
-                        <button
-                            disabled={handleDisableRunSyncBtn()} 
-                            onClick={()=>{
-                                if(compareList.length===0) return prompt(' Add Algo before compare ');
-                                // if(runState === 'pause'){
-                                //     console.log(runState)
-                                //     dispatchRun({type:'continue'})
-                                // }
-                                else
-                                 dispatchRun({type:'run'});
-                            }}>
-                            {runState === 'pause' ? 'CONTINUE' : 'RUN SYNC'}
-                        </button> 
-                        <button
-                            disabled={handleDisablePauseBtn()}
-                            onClick={()=>dispatchRun({type:'pause'})}>
-                            PAUSE
-                        </button> 
-                        <button
-                            disabled={handleDisableResetBtn()}
-                            onClick={()=>dispatchRun({type:'reset'})}>
-                            RESET
-                        </button> 
-                    </div>
+                    (<>
+                        <Inputs
+                            syncMode={syncMode}
+                            inputState={inputState}
+                            dispatch={dispatchArray}
+                            runState={runState}
+                            className={'inputs-container'}
+                        />
+                    
+                        <div>
+                            <button
+                                disabled={handleDisableRunSyncBtn()} 
+                                onClick={()=>{
+                                    if(compareList.length===0) return prompt(' Add Algo before compare ');
+                                    else dispatchRun({type:'run'});
+                                }}>
+                                {runState === 'pause' ? 'CONTINUE' : 'RUN SYNC'}
+                            </button> 
+                            <button
+                                disabled={handleDisablePauseBtn()}
+                                onClick={()=>dispatchRun({type:'pause'})}>
+                                PAUSE
+                            </button> 
+                            <button
+                                disabled={handleDisableResetBtn()}
+                                onClick={()=>dispatchRun({type:'reset'})}>
+                                RESET
+                            </button> 
+                        </div>
+                    </>)
                 }
                 
             </div>
-            {/* COLLAPSE SYNC INPUTS HERE */}
             
 
             {/* ALL ROUTES */}
@@ -221,14 +196,3 @@ export default MainSection
 <Route path="/selectionsort" exact element={
     <SelectionSort array={array} handleChangeArray={handleChangeArray} length={length} />}
 /> */
-
-
-{   
-    /*                 (syncMode && compareMode) &&
-                    <Inputs
-                        inputState={inputState}
-                        dispatch={dispatchArray}
-                        runState={runState}
-                        className={'inputs-container'}
-                    /> */
-                } 

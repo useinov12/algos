@@ -20,7 +20,7 @@ function TestComponent( {dispatchTest, testAction, testState} ){
 
 
 
-function AlgoComp(props) {
+function AlgoCompTest(props) {
     const {
         syncMode, 
         typeOfAlgo, 
@@ -134,7 +134,6 @@ function AlgoComp(props) {
                     <button 
                         // disabled={}
                         onClick={
-                            // ()=>runAlgo(typeOfAlgo)
                             ()=>runAlgo('Test')
                         }>
                         Next Move
@@ -147,90 +146,9 @@ function AlgoComp(props) {
                 testAction={testAction}
                 testState={testState}
             />
-
-            {/* <Chart 
-                data={inputData.array} 
-                type={typeOfAlgo}
-                local={true}
-            /> */}
-
-            {/* <Chart 
-                data={bubbleState.array} 
-                comparingIdx={bubbleState.compareIdx}
-                sorted={bubbleState.sorted}
-                local={true}
-                type={typeOfAlgo}
-            /> */}
-
         </div>
     )
 
 }
 
-export default AlgoComp
-
-
-// <Chart 
-// data={localData.array} 
-// comparingIdx={localData.compareIdx}
-// sorted={localData.sorted}
-// local={true}
-// type={typeOfAlgo}
-// />
-
-
-
-        
-        //Bubble
-/*         let initBubbleState = {
-            isSorted:false,
-            array:[],
-            compareIdx:0,
-            sorted:0,
-            nextMove: '' //store next move here
-        }
-        function reducerBubble(state, action){
-            switch(action.type){
-                case 'init' :
-                    //asign array here
-                    return {  isSorted:false, array:[...inputData.array], compareIdx:0, sorted:0, nextMove: 'compare' }
-
-                case 'compare' :
-                    if( state.compareIdx === state.array.length && !state.isSorted )
-                    return { ...state, compareIdx : 0, sorted:state.sorted+1,  nextMove:'compare' };
-
-                    if( state.sorted === state.array.length )
-                    return { ...state, nextMove : 'sorted', isSorted: true }; //exit
-
-                    if (state.array[state.compareIdx] > state.array[state.compareIdx+1]) return { ...state, nextMove : 'swap' };
-                    else  return { ...state, compareIdx:state.compareIdx+1, nextMove:'compare'};
-
-                case 'swap' :
-                    // console.log('swapping')
-
-                    let arrHolder = []
-                    const swap = (arr, i) => {
-                        let arrHolderInner = [...arr]
-                        let holder = arrHolderInner[i]
-                        arrHolderInner[i] = arrHolderInner[i+1]
-                        arrHolderInner[i+1] = holder 
-                        arrHolder = [...arrHolderInner]
-                    }
-                    swap(state.array, state.compareIdx)
-                    return { ...state, array : [...arrHolder], compareIdx : state.compareIdx+1,  nextMove:'compare'} ;
-
-                case 'sorted' :
-                    //clear local intervals here if any ?
-                    return state
-            }
-        }
-        const [ bubbleState, dispatchNextMoveBubble ] = useReducer( reducerBubble, initBubbleState )
-        //Update on InputData Change
-        useEffect(() => {
-            dispatchNextMoveBubble( {type:'init'} )
-        }, [ inputData ])
-        useEffect(() => {
-            // console.log(bubbleState.nextMove)
-            // console.log(bubbleState)
-        }, [ bubbleState ])
- */
+export default AlgoCompTest

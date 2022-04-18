@@ -23,7 +23,6 @@ const generateRandomArray = () => {
 
 
 function CompareBlock(props) {
-
     // Global SYNC states
         const {
             syncMode,
@@ -56,7 +55,6 @@ function CompareBlock(props) {
                     let arr = createArray(l)
                     return {...input, array:arr}
             }
-            return input
         }
         const [ inputState, dispatchInput ] = useReducer(reducerInput, initInputState)
 
@@ -64,30 +62,28 @@ function CompareBlock(props) {
     //DATA STREAM SWITCH: Sync/Local
         //Assign initial data stream 
         useEffect(() => {
-            if(syncMode)return dispatchInput( { type:'update', playload:inputStateSync } )
+            if(syncMode) return dispatchInput({ type:'update', playload:inputStateSync });
             else return dispatchInput( {type:'update', playload:inputState} )
         }, [])
 
         //Update InputState on input data change:  sync/local
         useEffect( () => {
-            if(syncMode){
-                dispatchInput( {type:'update', playload:inputStateSync} )
-                return
-            }
-           return dispatchInput( {type:'update', playload:inputState} )
+            if(syncMode)return dispatchInput({type:'update', playload:inputStateSync});
+            else return dispatchInput( {type:'update', playload:inputState} )
         }, [ inputStateSync ])
 
 
 
     return (
         <div className="compare-mode-block">
-            <button className="remove-compare-block-btn btn-regular"
-                onClick={()=>
-                    handleRemoveFromCompareList(compareList, typeOfAlgo)
-                }> X
+
+            <button 
+                className="remove-compare-block-btn btn-regular"
+                onClick={ ()=> handleRemoveFromCompareList(compareList, typeOfAlgo) }> 
+                X
             </button>
             
-            {
+            { 
                 !syncMode && 
                 <Inputs
                     syncMode={syncMode}

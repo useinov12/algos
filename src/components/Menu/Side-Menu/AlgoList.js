@@ -8,10 +8,8 @@ import {
 
 
 function AlgoList({list, state, compareMode, handleAddToCompareList, compareList}) {
-    // <ul className={state ? "algoritms-list search-list" : "algoritms-list sort-list" }>
-    // console.log([handleAddToCompareList, compareList])
-    return (
 
+    return (
         <div className={state ? "algoritms-list " : "algoritms-li" }>
             {
                 list.map( (algo, idx) => 
@@ -21,7 +19,7 @@ function AlgoList({list, state, compareMode, handleAddToCompareList, compareList
                             {
                                 compareMode && 
                                 <button onClick={()=>handleAddToCompareList(compareList, algo.name)}>
-                                    add
+                                    Add
                                 </button>
                             }
                         </NavLink>
