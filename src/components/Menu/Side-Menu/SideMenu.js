@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import BubbleSort from '../../Algos/BubbleSort'
 
 import AlgoList from './AlgoList';
 import './side-menu.css'

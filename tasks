@@ -1,6 +1,9 @@
-0.5. Simplify and clean Bubble algo 
-0.6 Refactor Inputs
-0.7 Refactor runState from useReducer to useState
+    0.5. Simplify and clean Bubble algo - DONE -    
+    0.6 Refactor Inputs  - DONE -
+0.65 Re-visit input Reducer functionality. Can I leave 'update' case only?
+    0.7 Refactor runState from useReducer to useState - DONE -
+
+
 1. Start new Algo implementation
-2. Abstarct Chart Data for differenr components using pointer?
+2. Abstarct Chart Data for different components. using pointer?
     check perfomance cost in React

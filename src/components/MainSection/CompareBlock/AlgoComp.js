@@ -30,7 +30,7 @@ function bubbleSort(state){
 }
 
 
-function AlgoComp( {syncMode, typeOfAlgo, inputData, runState} ) {
+function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
     const [ isRunningLocal, setIsRunningLocal ] = useState(false)
 
     //Algo Section
@@ -64,9 +64,9 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, runState} ) {
 
     //Sync state switches localRunning state
         useEffect(() => {
-            if(runState === 'run')return setIsRunningLocal(true)
-            if(runState === 'pause')return setIsRunningLocal(false)
-        }, [runState])
+            if(isRunningSync === 'run')return setIsRunningLocal(true)
+            if(isRunningSync === 'pause')return setIsRunningLocal(false)
+        }, [isRunningSync])
         //turn of running algo if switched from local to sync
         useEffect(() => {
             if(syncMode)return setIsRunningLocal(false) 
@@ -85,7 +85,7 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, runState} ) {
     return (
         <div className="algo-compnent" style={{padding:'1rem'}}>
             <div className="compare-mode-algo-info">
-                <div>Some stats: ...</div>
+                <div>Length: {inputData.array.length}</div>
                 <div>Complexity: O(n)</div>
                 <div className="compare-mode-algo-btn-container">
                     <button id="sort"

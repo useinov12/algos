@@ -28,15 +28,15 @@ function CompareBlock(props) {
             syncMode,
             typeOfAlgo,
             inputStateSync,
-            runState,
+            isRunningSync,
             compareList,
             handleRemoveFromCompareList } = props 
 
     // LOCAL INPUTS
-        let arrInit = createArray(50)
+        let arrInit = createArray(20)
         let initInputState = {
             speed:5,
-            length:50,
+            length:20,
             array:[...arrInit]
         }
         function reducerInput(input, action){
@@ -97,7 +97,7 @@ function CompareBlock(props) {
                 syncMode={syncMode}
                 typeOfAlgo={typeOfAlgo}
                 inputData={inputState}
-                runState={runState}
+                isRunningSync={isRunningSync}
             />
         </div>
     )

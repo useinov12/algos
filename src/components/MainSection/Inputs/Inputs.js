@@ -21,7 +21,19 @@ const generateRandomArray = () => {
 
 
 
-function Inputs({syncMode, inputState, runState, dispatch, className}) {
+function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
+
+    const [length, setLength ] = useState(20)
+    const handleLengthChange = (l) =>{
+        dispatch({type: 'changeLength', playload: l})
+        dispatch({type: 'changeArray', playload: l})
+        return setLength(l)
+    }
+    const [speed, setSpeed ] = useState(5)
+    const handleSpeedChange = (s) =>{
+        dispatch({type: 'changeSpeed', playload: s})
+        return setSpeed(s)
+    }
 
     const checkIfNeedDisable = () => {
         //if local inputs
@@ -31,16 +43,17 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
         }
         //if sync input
         else {
-            if(runState === 'run') return true
-            if(runState === 'pause') return true
+            if(isRunningSync === 'run') return true
+            if(isRunningSync === 'pause') return true
             else return false
         }
     }
 
-    useEffect(() => {
-        if(runState !== 'reset') return; //reset array onClick RESET
-        dispatch({type: 'changeArray'})
-    }, [runState])
+    //reset array onClick RESET
+        useEffect(() => {
+            if(isRunningSync !== 'reset') return; 
+            dispatch({type: 'changeArray'})
+        }, [isRunningSync])
 
 
     return(
@@ -49,8 +62,10 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
                 <div className="length-input-container">
                     <label>
                         <div className="number-input-container">
-                            <h3>Length:</h3>  
-                            <input 
+                            <h3>Length: {length} </h3>  
+                            <span>   </span>
+                            
+                            {/* <input 
                                 disabled={checkIfNeedDisable()} 
                                 className="number-input" 
                                 type="number" 
@@ -60,7 +75,7 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
                                     syncMode && className=='local-inputs' ?  ()=>{} :
                                     dispatch({type: 'changeLength', playload: e.target.value})
                                 } 
-                            />
+                            /> */}
                         </div>
                         <div className="range-input-container">
                             <input 
@@ -69,9 +84,9 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
                                 className="slider" 
                                 step="1" 
                                 min={20} max={300} 
-                                value={inputState.array.length} 
-                                onChange={ e => //what is happening here in Local?
-                                    dispatch({type: 'changeLength', playload: e.target.value})
+                                value={length} 
+                                onChange={ e => handleLengthChange(e.target.value)
+                                    // dispatch({type: 'changeLength', playload: e.target.value})
                                 }
                             />
                         </div>
@@ -96,16 +111,17 @@ function Inputs({syncMode, inputState, runState, dispatch, className}) {
             </div>
             <div className="speed-input-container">
             
-                <span>Sort speed</span>  
+                <h3>Speed: {speed}  ms</h3> 
                 <div className="range-input-container">
                     <input 
                         disabled={checkIfNeedDisable()} 
                         type="range" 
                         className="slider speed-slider" 
                         step="1" 
-                        min={10} max={100} 
-                        value={syncMode ? '' : inputState.speed} 
-                        onChange={ e => dispatch({type: 'changeSpeed', playload: e.target.value})}
+                        min={5} max={100} 
+                        // value={syncMode ? '' : inputState.speed} 
+                        value={speed} 
+                        onChange={ e => handleSpeedChange(e.target.value)}
                     />
                 </div>
             
