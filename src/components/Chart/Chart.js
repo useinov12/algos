@@ -30,7 +30,7 @@ function Chart({data, pivots, local, type}) {
                     .attr('fill', '#47cf73')
                     leftBar 
                         .filter((d,i)=> i===pivots.leftIdx)
-                        .attr('fill', 'white')
+                        .attr('fill', 'firebrick')
                     rightBar 
                         .filter((d,i)=> i===pivots.rightIdx)
                         .attr('fill', 'firebrick')

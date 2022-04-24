@@ -54,19 +54,26 @@ function quickSort(state){
         
         case 'checkCollection': //1
             // console.log('been in checkCollection')
-            // console.log(listOfSubArrays)
+            console.log(listOfSubArrays)
             //exit condition
             if(!listOfSubArrays[0])return {...state, isSorted:true, nextMove:'sorted' } 
             else {
                 let prevRange = listOfSubArrays.pop()
+                // let prevRange = listOfSubArrays.shift()
+                // let prevRange = listOfSubArrays[listOfSubArrays.length-1]
+                
                 console.log(prevRange, pivotIdx)
                 let leftEdge = prevRange[0]
                 let rightEdge = prevRange[1]
-
+                if(rightEdge-leftEdge<=1) return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
+                //if at the bottom
                 if(pivotIdx<=leftEdge){ //change this condition 
-                    if(pivotIdx>=rightEdge) return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
+                    console.log('left hit')
+                    if(pivotIdx>=rightEdge)return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
+                    
                     else {
-                        if(rightEdge-leftEdge>1)listOfSubArrays.push([pivotIdx, rightEdge]);
+                        // listOfSubArrays.push([leftEdge, pivotIdx])
+                        if(rightEdge-leftEdge>=1)listOfSubArrays.push([pivotIdx, rightEdge]);
                         return {...state, 
                             pivots:{leftIdx:pivotIdx, pivotIdx:Math.floor((rightEdge+pivotIdx)/2), rightIdx:rightEdge}, 
                             listOfSubArrays:listOfSubArrays,
@@ -75,7 +82,9 @@ function quickSort(state){
                     }
                     
                 } 
+                //if not at the bottom yet
                 else {
+                    console.log('right hit')
                     if(pivotIdx>=rightEdge){
                         listOfSubArrays.push([leftEdge, pivotIdx])
                         return {...state, 
@@ -84,9 +93,8 @@ function quickSort(state){
                             nextMove:'sort'};
                     }
                     else {
+                        if(rightEdge-leftEdge>=1)listOfSubArrays.push([pivotIdx, rightEdge]);
                         listOfSubArrays.push([leftEdge, pivotIdx])
-                        // listOfSubArrays.push([pivotIdx, rightEdge])
-                        if(rightEdge-leftEdge>1)listOfSubArrays.push([pivotIdx, rightEdge]);
                         return {...state, 
                             pivots:{ leftIdx:leftEdge, pivotIdx:Math.floor((leftEdge+pivotIdx/2)), rightIdx:pivotIdx}, 
                             listOfSubArrays:listOfSubArrays,
@@ -115,14 +123,26 @@ function quickSort(state){
         case 'pivotSwap':
             let arrHolder = [...array] 
             console.log('SWAPIN PIVOT')
+
+
             if(rightIdx>pivotIdx && array[pivotIdx]>array[rightIdx]){
                 swap(arrHolder, pivotIdx, rightIdx )
-                return { ...state, array:[...arrHolder], pivots:{leftIdx:leftIdx, pivotIdx:rightIdx, rightIdx:rightIdx}, nextMove:'checkCollection' };
+                let updatedPivots = {leftIdx:leftIdx, pivotIdx:rightIdx, rightIdx:rightIdx}
+
+
+                return { ...state, array:[...arrHolder], pivots:updatedPivots, nextMove:'checkCollection' };
             }
+
+
             else if(leftIdx<pivotIdx && array[pivotIdx]<array[leftIdx]){
                 swap(arrHolder, leftIdx, pivotIdx )
-                return { ...state, array:[...arrHolder], pivots:{leftIdx:leftIdx, pivotIdx:leftIdx, rightIdx:rightIdx}, nextMove:'checkCollection' };
+                let updatedPivots = {leftIdx:leftIdx, pivotIdx:leftIdx, rightIdx:rightIdx}
+                // let updatedListOfSubArrays = [...listOfSubArrays, [leftIdx, pivotIdx]]
+
+                return { ...state, array:[...arrHolder], pivots:updatedPivots, nextMove:'checkCollection' };
             }
+
+            
             else return { ...state, nextMove:'checkCollection' };
 
         case 'swap': 
@@ -133,8 +153,10 @@ function quickSort(state){
             
         case 'sorted': {
             console.log('DONE', listOfSubArrays)
+            console.log(array)
             return state;
         }
+
     }
 }
 
