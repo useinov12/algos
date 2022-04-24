@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from './Inputs/Inputs'
-import CompareBlock from './CompareBlock/CompareBlock'
+import AlgoSection from './AlgoSection/AlgoSection'
 import './main-section.css'
 import {
     Routes,
@@ -9,18 +9,28 @@ import {
 } from "react-router-dom";
 
 
-const randomizer = (n) =>{
-   let randomN =  Math.floor(Math.random()*n)
-   
-    return randomN
-} 
-const createArray = (length) => {
-    let arr = []
-    for(let i=length; i>0; i--){
-        arr.push(randomizer(length))
+const randomizer = (n) => Math.floor(Math.random()*n)
+const randomizeArray = (array) =>{
+    let n = array.length
+    let t; let i;
+    while(n){
+        i = Math.floor(Math.random()* n--);
+        t = array[n]
+        array[n] = array[i]
+        array[i] = t
     }
-    return arr
+    return array
 }
+const createArray = (length) => {
+    let array = []
+    for(let i=0; i<length; i++){
+        array.push(i)
+    }
+    randomizeArray(array)
+    return array
+}
+
+
 
 function MainSection({handleChangeMode, compareMode, handleAddToCompareList, handleRemoveFromCompareList, compareList}) {
     //SyncMode switch
@@ -35,25 +45,26 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
             length:20,
             array:[...initArr]
         }
-        function  reducerArrayState(input, action){
+        function  reducerInputSync(input, action){
             switch (action.type){
                 case 'update':  return { ...input, ...action.playload }
-                case 'changeSpeed': return {...input, speed:action.playload}
-                case 'changeLength': return {...input, length:action.playload}
+                case 'changeSpeed': return {...input, speed : action.playload}
+                case 'changeLength': return {...input, length : action.playload}
+                
                 case 'changeArray':
                     let array = createArray(input.length)
-                    return {...input,  array:array}
+                    return { ...input,  array : array }
                 case 'changeArrayRandom':
-                    let l =  randomizer(300)
-                    let arr = createArray(l)
-                    return {...input, length:arr.length, array:arr}
+                    let randomLength =  randomizer(200)
+                    let randomArr = createArray(randomLength)
+                    return {...input, length : randomLength, array : randomArr}
+                default : console.log('Throw Error from reducerInputSync')
             }
         }
-        const [ inputState, dispatchArray ] = useReducer(reducerArrayState, InitSyncInputState)
+        const [ inputState, dispatchArray ] = useReducer(reducerInputSync, InitSyncInputState)
         //Reset SyncArray if SyncMode is on
         useEffect(() => {
             if(syncMode)return dispatchArray({type:'changeArray'});
-            else return
         }, [syncMode])
 
 
@@ -61,21 +72,20 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
         const [isRunningSync, setIsRunningSync ] = useState('initial')
 
         useEffect(() => {
-            if(isRunningSync==='reset') return dispatchArray({type:'changeArray'});
-            else return
+            if(isRunningSync === 'reset') return dispatchArray( {type:'changeArray'} );
         }, [isRunningSync])
 
 
     //Buttons disable handlers
         const handleDisableCompareBtn = () => {
-            if(isRunningSync == 'run' ) return true;
-            if(isRunningSync == 'pause' ) return true;
+            if(isRunningSync === 'run' ) return true;
+            if(isRunningSync === 'pause' ) return true;
             else return false;
         }
         const handleDisableSyncBtn = () =>{
             if(!compareMode) return true;
-            if(isRunningSync == 'run' ) return true;
-            if(isRunningSync == 'pause' ) return true;
+            if(isRunningSync === 'run' ) return true;
+            if(isRunningSync === 'pause' ) return true;
             else return false;
         }
         const handleDisableRunSyncBtn = () =>{
@@ -159,8 +169,8 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
             <div>
                 <Routes>
                     <Route path="/compare-mode" exact element={
-                        compareList.map((algo, i)=>
-                            <CompareBlock
+                        compareList.map((algo, i) =>
+                            <AlgoSection
                                 key={i}
                                 typeOfAlgo={algo}
                                 syncMode={syncMode}
@@ -168,8 +178,49 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                                 isRunningSync={isRunningSync}
                                 compareList={compareList}
                                 handleRemoveFromCompareList={handleRemoveFromCompareList}
-                            />
+                            >
+                            </AlgoSection>
                         )
+                    }/>
+                    <Route path="/bubble-sort" exact element={
+                        <AlgoSection
+                            typeOfAlgo={'Bubble'}
+                            syncMode={null}
+                            inputStateSync={null}
+                            isRunningSync={null}
+                            compareList={compareList}
+                            handleRemoveFromCompareList={null}
+                        />
+                    }/>
+                    <Route path="/quick-sort" exact element={
+                        <AlgoSection
+                            typeOfAlgo={'Quick'}
+                            syncMode={null}
+                            inputStateSync={null}
+                            isRunningSync={null}
+                            compareList={compareList}
+                            handleRemoveFromCompareList={null}
+                        />
+                    }/>
+                    <Route path="/merge-sort" exact element={
+                        <AlgoSection
+                            typeOfAlgo={'Merge'}
+                            syncMode={null}
+                            inputStateSync={null}
+                            isRunningSync={null}
+                            compareList={compareList}
+                            handleRemoveFromCompareList={null}
+                        />
+                    }/>
+                    <Route path="/selection-sort" exact element={
+                        <AlgoSection
+                            typeOfAlgo={'Selection'}
+                            syncMode={null}
+                            inputStateSync={null}
+                            isRunningSync={null}
+                            compareList={compareList}
+                            handleRemoveFromCompareList={null}
+                        />
                     }/>
                 </Routes>
             </div>
@@ -180,7 +231,7 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 export default MainSection
 
 /* <Route path="/bubblesort" exact element={
-    <BubbleSort array={array} handleChangeArray={handleChangeArray} length={length} speed={speed}/>}
+    
 />
 <Route path="/quicksort" exact element={
     <QuickSort array={array} handleChangeArray={handleChangeArray} length={length} />}
@@ -190,4 +241,5 @@ export default MainSection
 />
 <Route path="/selectionsort" exact element={
     <SelectionSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-/> */
+/>
+ */

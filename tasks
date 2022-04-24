@@ -2,8 +2,19 @@
     0.6 Refactor Inputs  - DONE -
 0.65 Re-visit input Reducer functionality. Can I leave 'update' case only?
     0.7 Refactor runState from useReducer to useState - DONE -
+0.8 ?Create Input functions provider? 
+    OR MAKE INPUTS A CHILDREN PROP IN AlgoSection COMPONENT
+0.9 ?Map Routes dynamically?
+
+Bugs:
+After turning OF Sync Switch -> local sort run is slow. where it is taking it's speed from?
+When speed is chnage after algo runned and stopped -> wierd things are happening
+
+    
 
 
 1. Start new Algo implementation
 2. Abstarct Chart Data for different components. using pointer?
     check perfomance cost in React
+3.Suspense/Loading implementation
+4. Deploy, then add rest

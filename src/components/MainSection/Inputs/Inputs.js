@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react'
-
 import './inputs.css'
 
 
-
-/* IMPLEMENT POSITIVE NUMBERS ONLY */
-/* CREATE PROMT FOR WRONG INPUT */
 //FUNCTIONS
 const randomizer = (n) => Math.floor(Math.random()*n)
 const createArray = (length) => {
@@ -36,12 +32,12 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
     }
 
     const checkIfNeedDisable = () => {
-        //if local inputs
+        //If local inputs
         if(className === 'local-inputs'){
             if(syncMode) return true;
             else return false
         }
-        //if sync input
+        //If sync input
         else {
             if(isRunningSync === 'run') return true
             if(isRunningSync === 'pause') return true
@@ -49,10 +45,9 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
         }
     }
 
-    //reset array onClick RESET
+    //generate new array onClick RESET
         useEffect(() => {
-            if(isRunningSync !== 'reset') return; 
-            dispatch({type: 'changeArray'})
+            if(isRunningSync === 'reset') dispatch({type: 'changeArray'})
         }, [isRunningSync])
 
 
@@ -60,57 +55,41 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
         <div className={className}>
             <div className='input-content'>
                 <div className="length-input-container">
-                    <label>
-                        <div className="number-input-container">
-                            <h3>Length: {length} </h3>  
-                            <span>   </span>
-                            
-                            {/* <input 
-                                disabled={checkIfNeedDisable()} 
-                                className="number-input" 
-                                type="number" 
-                                // value={ syncMode ? '' : inputState.length} 
-                                value={inputState.array.length} 
-                                onChange={ e => 
-                                    syncMode && className=='local-inputs' ?  ()=>{} :
-                                    dispatch({type: 'changeLength', playload: e.target.value})
-                                } 
-                            /> */}
-                        </div>
+                        <h3>Length: {length} </h3>  
                         <div className="range-input-container">
                             <input 
-                                disabled={checkIfNeedDisable()}  //implement additional checkihng
+                                disabled={checkIfNeedDisable()}
                                 type="range" 
                                 className="slider" 
                                 step="1" 
-                                min={20} max={300} 
+                                min={20} max={200} 
                                 value={length} 
-                                onChange={ e => handleLengthChange(e.target.value)
-                                    // dispatch({type: 'changeLength', playload: e.target.value})
-                                }
+                                onChange={ e => handleLengthChange(e.target.value) }
                             />
                         </div>
-                    </label>
                     <button
                         disabled={checkIfNeedDisable()} 
                         // className="create-btn" 
                         id="draw" 
-                        onClick={()=>dispatch({type: 'changeArray'})}
-                        >CREATE
+                        onClick={()=>{
+                                handleLengthChange(length)
+                                dispatch({type: 'changeArray'})}
+                        }>CREATE
                     </button>
+
                     <div>or</div>
+
                     <button
                         disabled={checkIfNeedDisable()}
                         // className="create-btn" 
                         id="draw" 
-                        onClick={()=>dispatch({type: 'changeArrayRandom'})}>
-                        RANDOM
+                        onClick={ ()=> dispatch({type: 'changeArrayRandom'})
+                        }>RANDOM
                     </button>
                 </div>
 
             </div>
             <div className="speed-input-container">
-            
                 <h3>Speed: {speed}  ms</h3> 
                 <div className="range-input-container">
                     <input 
@@ -124,8 +103,7 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
                         onChange={ e => handleSpeedChange(e.target.value)}
                     />
                 </div>
-            
-        </div>
+            </div>
         </div>
     )
 

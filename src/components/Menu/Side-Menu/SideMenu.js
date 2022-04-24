@@ -6,19 +6,19 @@ import './side-menu.css'
 const sortList = [
     {
         name:"Bubble",
-        path:'/bubblesort',
+        path:'/bubble-sort',
     },
     {
         name:"Quick",
-        path:"/quicksort" 
+        path:"/quick-sort" 
     },
     {
         name:"Merge",
-        path:"/mergesort"
+        path:"/merge-sort"
     },
     {
         name:"Selection",
-        path:"/selectionsort"
+        path:"/selection-sort"
     }
 ]
 const searchList = [

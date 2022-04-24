@@ -55,15 +55,6 @@
     padding-top: .5rem;
     padding-bottom: .5rem;
 }
-.speed-slider{
-    /* transform:rotate(180deg) */
-}
-
-
-
-
-
-
 
 .number-input-container{
     display: flex;
@@ -98,13 +89,7 @@
     margin: 0;
 }
 .create-btn{
-    /* margin: .3rem; */
-    border-radius: 10px;
-    background-color: var(--color-accent-light);
-    color:var(--color-light);
-    border:none;
-    
-    /* padding: .9rem;  */
+
 }
 
 .range-input-container{

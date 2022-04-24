@@ -3,14 +3,44 @@ import * as d3 from 'd3'
 import useD3 from '../useD3'
 import './chart.css'
 
-function Chart({data, comparingIdx, sorted, local, type}) {
-    // console.log(data)
-    useEffect(() => {
-        console.log('mounted')
-        return () => {
-            console.log('unmounted')
+function Chart({data, pivots, local, type}) {
+
+
+    const pivotPoints = (plotArea) => {
+        let leftBar = plotArea.selectAll('rect'); 
+        let rightBar = plotArea.selectAll('rect'); 
+        let sortedBars = plotArea.selectAll('rect'); 
+        let pivot = plotArea.selectAll('rect');
+        switch(type){
+            case 'Bubble' :
+                leftBar 
+                    .filter((d,i)=> i===pivots.compareIdx)
+                    .attr('fill', 'red')
+                rightBar 
+                    .filter((d,i)=> i===pivots.compareIdx+1)
+                    .attr('fill', 'red')
+
+                sortedBars 
+                    .filter((d, i)=> i>=data.length-pivots.sorted)
+                    .attr('fill', 'green')
+                return leftBar, rightBar, sortedBars
+            case 'Quick':
+                let area = plotArea.selectAll('rect')
+                    .filter((d,i)=> i>=pivots.leftIdx && i<=pivots.rightIdx)
+                    .attr('fill', '#47cf73')
+                    leftBar 
+                        .filter((d,i)=> i===pivots.leftIdx)
+                        .attr('fill', 'white')
+                    rightBar 
+                        .filter((d,i)=> i===pivots.rightIdx)
+                        .attr('fill', 'firebrick')
+                    pivot  
+                        .filter((d,i)=> i===pivots.pivotIdx)
+                        .attr('fill', 'orange')
+
+                return  leftBar, rightBar, pivot, area
         }
-    }, [])
+    }
 
     
     const ref = useD3(
@@ -71,7 +101,7 @@ function Chart({data, comparingIdx, sorted, local, type}) {
                     (update) => update.transition(),
                     (exit) => exit.remove()
                 )
-                .attr('fill', 'steelblue')
+                .attr('fill', 'dodgerblue')
                 // .transition()
                 .attr('width', xScale.bandwidth())
                 .attr('height', height)
@@ -85,24 +115,11 @@ function Chart({data, comparingIdx, sorted, local, type}) {
                     .text(`${type} sort`)
                     .style('font-size', '18px')
                     
-            let leftBar
-            let rightBar
-            let sortedBars
+            //Dynamically render pivot points
+            pivotPoints(plotArea)
 
-            //if target data is array then ...  
-            //else ...  
-            leftBar = plotArea.selectAll('rect')
-                .filter((d,i)=> i===comparingIdx)
-                .attr('fill', 'red')
-            rightBar = plotArea.selectAll('rect')
-                .filter((d,i)=> i===comparingIdx+1)
-                .attr('fill', 'red')
-
-            sortedBars = plotArea.selectAll('rect')
-                .filter((d, i)=> i>=data.length-sorted)
-                .attr('fill', 'green')
         },
-        [data]
+        [data, pivots]
     )
 
     return (
@@ -121,7 +138,3 @@ function Chart({data, comparingIdx, sorted, local, type}) {
 }
 
 export default Chart
-
-// <g className="plot-area"/> 
-// <g className="x-axis"/> 
-// <g className="y-axis"/> 
