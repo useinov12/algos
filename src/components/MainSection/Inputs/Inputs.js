@@ -62,7 +62,7 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
                                 type="range" 
                                 className="slider" 
                                 step="1" 
-                                min={20} max={200} 
+                                min={20} max={100} 
                                 value={length} 
                                 onChange={ e => handleLengthChange(e.target.value) }
                             />

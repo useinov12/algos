@@ -51,111 +51,116 @@ function quickSort(state){
     
     // console.log(listOfSubArrays)
     switch(nextMove){
-        
-        case 'checkCollection': //1
-            // console.log('been in checkCollection')
-            console.log(listOfSubArrays)
+        case 'sorted': {
+            console.log('DONE', listOfSubArrays)
+            // console.log(array)
+            return state;
+        }
+        case 'Fake case':
+            console.log('In fake case', listOfSubArrays)
+            return {...state, nextMove:'checkCollection'}
+
+        case  'checkCollection': //1
+            console.log('Checking Collection...')
+            console.log('incoming collection: ', listOfSubArrays)
+            console.log('incoming sorted range: ', listOfSubArrays[listOfSubArrays.length-1])
+            console.log('incoming pivots: ', pivots)
+            
             //exit condition
-            if(!listOfSubArrays[0])return {...state, isSorted:true, nextMove:'sorted' } 
+            if(!listOfSubArrays[0])return {...state, isSorted:true, nextMove:'sorted' };
             else {
-                let prevRange = listOfSubArrays.pop()
-                // let prevRange = listOfSubArrays.shift()
-                // let prevRange = listOfSubArrays[listOfSubArrays.length-1]
-                
-                console.log(prevRange, pivotIdx)
+                let copy = [...listOfSubArrays]
+                let prevRange = copy.pop()
                 let leftEdge = prevRange[0]
                 let rightEdge = prevRange[1]
-                if(rightEdge-leftEdge<=1) return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
-                //if at the bottom
-                if(pivotIdx<=leftEdge){ //change this condition 
-                    console.log('left hit')
-                    if(pivotIdx>=rightEdge)return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
+                let newPivots
+                if(leftEdge>0 && pivotIdx<=5)newPivots = { leftIdx:leftEdge-1, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)};
+                else newPivots = { leftIdx:leftEdge, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)};
+
+                
+                //check if need to go lower
+                if(rightEdge-leftEdge <=2){
+                    console.log('bottom condition hit, start eliminating subArrayList:', copy)
                     
-                    else {
-                        // listOfSubArrays.push([leftEdge, pivotIdx])
-                        if(rightEdge-leftEdge>=1)listOfSubArrays.push([pivotIdx, rightEdge]);
-                        return {...state, 
-                            pivots:{leftIdx:pivotIdx, pivotIdx:Math.floor((rightEdge+pivotIdx)/2), rightIdx:rightEdge}, 
-                            listOfSubArrays:listOfSubArrays,
-                            nextMove:'sort'
-                        }
+                    return {...state, listOfSubArrays:copy, nextMove:'checkCollection'}
+                } else {
+                    let updatedList = [...copy]
+                    console.log('Continuation settings...')
+                    
+                    //prepare next subArrays if any
+                    if(rightEdge-rightIdx>2){
+                        console.log('adding range on right side: ', [rightIdx, rightEdge])
+                        // updatedList.push([rightIdx, rightEdge])
+                        if(rightEdge<array.length)updatedList = [ ...updatedList, [rightIdx, rightEdge+1]];
+                        else updatedList = [...updatedList, [rightIdx, rightEdge]]
+                    }
+                    if(leftIdx-leftEdge>2){
+                        console.log('adding range on left side: ', [leftEdge, leftIdx])
+                        // updatedList.push([leftEdge, leftIdx])
+                        if(leftEdge>0 && pivotIdx<=5)updatedList = [...updatedList, [leftEdge-1, leftIdx]];
+                        else updatedList = [...updatedList, [leftEdge, leftIdx]]; 
+                         
+                        
                     }
                     
-                } 
-                //if not at the bottom yet
-                else {
-                    console.log('right hit')
-                    if(pivotIdx>=rightEdge){
-                        listOfSubArrays.push([leftEdge, pivotIdx])
-                        return {...state, 
-                            pivots:{ leftIdx:leftEdge, pivotIdx:Math.floor((leftEdge+pivotIdx)/2), rightIdx:pivotIdx}, 
-                            listOfSubArrays:listOfSubArrays,
-                            nextMove:'sort'};
+                    if(updatedList[0]){
+                        let nextRange = updatedList[updatedList.length-1]
+    
+                        if(nextRange[1]-nextRange[0]>2){
+                            console.log('going to sort range:', updatedList[updatedList.length-1])
+                            let updatedPivots = {leftIdx:nextRange[0], rightIdx:nextRange[1]-1, pivotIdx:Math.floor((nextRange[0]+nextRange[1])/2)}
+                            // console.log('Bottom reached')
+                            console.log('Updated pivots')
+                            console.log(updatedPivots)
+                            return {...state, pivots:updatedPivots, listOfSubArrays:updatedList, nextMove:'sort'}
+                        } 
                     }
-                    else {
-                        if(rightEdge-leftEdge>=1)listOfSubArrays.push([pivotIdx, rightEdge]);
-                        listOfSubArrays.push([leftEdge, pivotIdx])
-                        return {...state, 
-                            pivots:{ leftIdx:leftEdge, pivotIdx:Math.floor((leftEdge+pivotIdx/2)), rightIdx:pivotIdx}, 
-                            listOfSubArrays:listOfSubArrays,
-                            nextMove:'sort'}; 
-                    }
+                    else 
+                    return {...state, pivots:newPivots, listOfSubArrays:updatedList, nextMove:'checkCollection'} 
                 }
             } 
-    
+
         case 'sort': 
-            // console.log('been in SORT')
+            // console.log(nextMove)
+            
             // exit condition
-            if(leftIdx>=rightIdx) return {...state, nextMove:'pivotSwap'}; //Final swap -  Pivot  
+            if(leftIdx>rightIdx){
+                console.log('Hit Sort exit condition')
+                return {...state, nextMove:'checkCollection'}
+            }
             else
             //swap
-            if( array[leftIdx]>array[pivotIdx] && array[pivotIdx]>array[rightIdx]) 
+            if(array[leftIdx]>=array[pivotIdx] && array[rightIdx]<=array[pivotIdx] )
                 return {...state, nextMove:'swap'};
-            else 
+
+            else
             //leftIdx++
-            if(array[leftIdx]<=array[pivotIdx] /* && leftIdx<=rightIdx */) 
+            if(array[leftIdx]<=array[pivotIdx] ) 
                 return {...state, pivots:{leftIdx:leftIdx+1, rightIdx:rightIdx, pivotIdx:pivotIdx}, nextMove:'sort'};
             else
             //rightIdx++
-            if(array[rightIdx]>=array[pivotIdx] /* && rightIdx>=leftIdx */) 
+            if(array[rightIdx]>=array[pivotIdx] ) 
                 return {...state, pivots:{leftIdx:leftIdx, rightIdx:rightIdx-1, pivotIdx:pivotIdx}, nextMove:'sort'};
-        
-        case 'pivotSwap':
-            let arrHolder = [...array] 
-            console.log('SWAPIN PIVOT')
-
-
-            if(rightIdx>pivotIdx && array[pivotIdx]>array[rightIdx]){
-                swap(arrHolder, pivotIdx, rightIdx )
-                let updatedPivots = {leftIdx:leftIdx, pivotIdx:rightIdx, rightIdx:rightIdx}
-
-
-                return { ...state, array:[...arrHolder], pivots:updatedPivots, nextMove:'checkCollection' };
-            }
-
-
-            else if(leftIdx<pivotIdx && array[pivotIdx]<array[leftIdx]){
-                swap(arrHolder, leftIdx, pivotIdx )
-                let updatedPivots = {leftIdx:leftIdx, pivotIdx:leftIdx, rightIdx:rightIdx}
-                // let updatedListOfSubArrays = [...listOfSubArrays, [leftIdx, pivotIdx]]
-
-                return { ...state, array:[...arrHolder], pivots:updatedPivots, nextMove:'checkCollection' };
-            }
-
-            
-            else return { ...state, nextMove:'checkCollection' };
 
         case 'swap': 
             // console.log('EVEN SWAPED')
             let arrCopy = [...array] 
-            swap(arrCopy, leftIdx, rightIdx )
-            return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:pivotIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+            if(leftIdx===pivotIdx || rightIdx === pivotIdx){
+                if(leftIdx===pivotIdx){
+                    swap(arrCopy, leftIdx, rightIdx )
+                    return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:rightIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+                }
+                else
+                if(rightIdx===pivotIdx){
+                    swap(arrCopy, leftIdx, rightIdx )
+                    return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:leftIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+                }
+            } 
+            else {
+                swap(arrCopy, leftIdx, rightIdx )
+                return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:pivotIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+            }
             
-        case 'sorted': {
-            console.log('DONE', listOfSubArrays)
-            console.log(array)
-            return state;
-        }
 
     }
 }
@@ -188,6 +193,10 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
         }
         const [ algoState, dispatchAlgo ] = useReducer(reducerAlgo, {isSorted:false, array:[], pivots:{}})
 
+        // useEffect(()=>{
+        //     console.log(algoState.nextMove)
+        // }, [algoState.nextMove])
+
 
     //Update/format data on InputData Change according to algo format
         useEffect(() => {  
@@ -214,6 +223,7 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
             if(isRunningLocal){
                 let id = window.setInterval( ()=>
                 dispatchAlgo( {type:{algo:typeOfAlgo, command:'run'}}), inputData.speed )
+                // console.log(algoState.nextMove)
                 return () => window.clearInterval(id)
             }
         }, [isRunningLocal, algoState]) //re-run when (isRunningLocal === true) && algoState is changing
@@ -252,6 +262,7 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
             <Chart                       
                 data={algoState.array}
                 pivots={algoState.pivots}
+                isSorted = {algoState.isSorted}
                 local={true}
                 type={typeOfAlgo}
             />
@@ -261,3 +272,149 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
 }
 
 export default AlgoComp
+
+
+
+// let prevRange = listOfSubArrays.pop()
+// // let prevRange = listOfSubArrays.shift()
+// // let prevRange = listOfSubArrays[listOfSubArrays.length-1]
+
+// console.log(prevRange, pivotIdx)
+// let leftEdge = prevRange[0]
+// let rightEdge = prevRange[1]
+// if(rightEdge-leftEdge<=1) return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
+// //if at the bottom
+// if(pivotIdx<=leftEdge){ //change this condition 
+//     console.log('left hit')
+//     if(pivotIdx>=rightEdge)return {...state, listOfSubArrays:listOfSubArrays, nextMove:'checkCollection'};
+    
+//     else {
+//         // listOfSubArrays.push([leftEdge, pivotIdx])
+//         if(rightEdge-leftEdge>=1)listOfSubArrays.push([pivotIdx, rightEdge]);
+//         return {...state, 
+//             pivots:{leftIdx:pivotIdx, pivotIdx:Math.floor((rightEdge+pivotIdx)/2), rightIdx:rightEdge}, 
+//             listOfSubArrays:listOfSubArrays,
+//             nextMove:'sort'
+//         }
+//     }
+    
+// } 
+// //if not at the bottom yet
+// else {
+//     console.log('right hit')
+//     if(pivotIdx>=rightEdge){
+//         listOfSubArrays.push([leftEdge, pivotIdx])
+//         return {...state, 
+//             pivots:{ leftIdx:leftEdge, pivotIdx:Math.floor((leftEdge+pivotIdx)/2), rightIdx:pivotIdx}, 
+//             listOfSubArrays:listOfSubArrays,
+//             nextMove:'sort'};
+//     }
+//     else {
+//         if(rightEdge-leftEdge>=1)listOfSubArrays.push([pivotIdx, rightEdge]);
+//         listOfSubArrays.push([leftEdge, pivotIdx])
+//         return {...state, 
+//             pivots:{ leftIdx:leftEdge, pivotIdx:Math.floor((leftEdge+pivotIdx/2)), rightIdx:pivotIdx}, 
+//             listOfSubArrays:listOfSubArrays,
+//             nextMove:'sort'}; 
+//     }
+// }
+
+
+
+            // // exit condition
+            // if(leftIdx>=rightIdx) return {...state, nextMove:'pivotSwap'}; //Final swap -  Pivot  
+            // else
+            // //swap
+            // if( array[leftIdx]>array[pivotIdx] && array[pivotIdx]>array[rightIdx]) 
+            //     return {...state, nextMove:'swap'};
+            // else 
+            // //leftIdx++
+            // if(array[leftIdx]<=array[pivotIdx] /* && leftIdx<=rightIdx */) 
+            //     return {...state, pivots:{leftIdx:leftIdx+1, rightIdx:rightIdx, pivotIdx:pivotIdx}, nextMove:'sort'};
+            // else
+            // //rightIdx++
+            // if(array[rightIdx]>=array[pivotIdx] /* && rightIdx>=leftIdx */) 
+            //     return {...state, pivots:{leftIdx:leftIdx, rightIdx:rightIdx-1, pivotIdx:pivotIdx}, nextMove:'sort'};
+
+
+
+
+
+            // case 'pivotSwap':
+            //     let arrHolder = [...array] 
+            //     console.log('SWAPIN PIVOT')
+    
+    
+            //     if(rightIdx>pivotIdx && array[pivotIdx]>array[rightIdx]){
+            //         swap(arrHolder, pivotIdx, rightIdx )
+            //         let updatedPivots = {leftIdx:leftIdx, pivotIdx:rightIdx, rightIdx:rightIdx}
+    
+    
+            //         return { ...state, array:[...arrHolder], pivots:updatedPivots, nextMove:'checkCollection' };
+            //     }
+    
+    
+            //     else if(leftIdx<pivotIdx && array[pivotIdx]<array[leftIdx]){
+            //         swap(arrHolder, leftIdx, pivotIdx )
+            //         let updatedPivots = {leftIdx:leftIdx, pivotIdx:leftIdx, rightIdx:rightIdx}
+            //         // let updatedListOfSubArrays = [...listOfSubArrays, [leftIdx, pivotIdx]]
+    
+            //         return { ...state, array:[...arrHolder], pivots:updatedPivots, nextMove:'checkCollection' };
+            //     }
+    
+                
+            //     else return { ...state, nextMove:'checkCollection' };
+    
+
+            // case 'swap': 
+            // // console.log('EVEN SWAPED')
+            // let arrCopy = [...array] 
+            // swap(arrCopy, leftIdx, rightIdx )
+            // return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:pivotIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+
+
+
+
+            // if(leftIdx>=pivotIdx){
+            //     console.log('side-swap')
+            //     if(leftIdx>=rightIdx){
+            //         swap(arrCopy, leftIdx, rightIdx )
+            //         return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:rightIdx, rightIdx:rightIdx-1}, nextMove:'checkCollection' };
+            //     } 
+            //     else 
+            //     swap(arrCopy, leftIdx, rightIdx )
+            //     return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:rightIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+            // }
+            // else
+            // if(rightIdx <= pivotIdx){
+            //     console.log('side-swap')
+            //     if(leftIdx>=rightIdx){
+            //         swap(arrCopy, leftIdx, rightIdx )
+            //         return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:leftIdx, rightIdx:rightIdx-1}, nextMove:'checkCollection' };
+            //     } 
+            //     else
+            //     swap(arrCopy, leftIdx, rightIdx )
+            //     return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:leftIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
+            // }
+            // else 
+
+
+
+
+                        // //exit condition
+                        // if(!listOfSubArrays[0])return {...state, isSorted:true, nextMove:'sorted' };
+                        // else {
+                        //     let prevRange = listOfSubArrays.pop()
+                        //     let leftEdge = prevRange[0]
+                        //     let rightEdge = prevRange[1]
+                        //     console.log(prevRange)
+                        //     if(leftEdge <= leftIdx){    
+                        //         console.log(true)
+                        //         let updatedList = [...listOfSubArrays, [leftIdx, rightEdge]]
+                        //         let newPivots = {leftIdx:leftEdge, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)}
+                        //         console.log(updatedList)
+                        //         console.log(newPivots)
+                        //         return {...state, pivots:{leftIdx:leftEdge, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)}, listOfSubArrays:updatedList, nextMove:'sort'}
+                        //     }
+                        //     else return {...state,  nextMove:'checkCollection'}
+                        // } 

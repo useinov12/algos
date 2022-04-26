@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import * as d3 from 'd3'
 import useD3 from '../useD3'
 import './chart.css'
-
-function Chart({data, pivots, local, type}) {
+// dodgerblue
+function Chart({data, pivots, local, type, isSorted}) {
 
 
     const pivotPoints = (plotArea) => {
@@ -27,7 +27,7 @@ function Chart({data, pivots, local, type}) {
             case 'Quick':
                 let area = plotArea.selectAll('rect')
                     .filter((d,i)=> i>=pivots.leftIdx && i<=pivots.rightIdx)
-                    .attr('fill', '#47cf73')
+                    .attr('fill', 'grey')
                     leftBar 
                         .filter((d,i)=> i===pivots.leftIdx)
                         .attr('fill', 'firebrick')
@@ -37,8 +37,9 @@ function Chart({data, pivots, local, type}) {
                     pivot  
                         .filter((d,i)=> i===pivots.pivotIdx)
                         .attr('fill', 'orange')
+                    // if(isSorted)sortedBars.filter((d, i)=> i>=data.length).attr('fill', 'green');
 
-                return  leftBar, rightBar, pivot, area
+                return  leftBar, rightBar, pivot, area, sortedBars
         }
     }
 
@@ -101,7 +102,7 @@ function Chart({data, pivots, local, type}) {
                     (update) => update.transition(),
                     (exit) => exit.remove()
                 )
-                .attr('fill', 'dodgerblue')
+                .attr('fill', 'white')
                 // .transition()
                 .attr('width', xScale.bandwidth())
                 .attr('height', height)

@@ -52,7 +52,7 @@ function AlgoSection(props) {
                     let array = createArray(input.length)
                     return { ...input, array:array }
                 case 'changeArrayRandom':
-                    let randomLength =  randomizer(200)
+                    let randomLength =  randomizer(100)
                     let randomArr = createArray(randomLength)
                     return { ...input, length : randomLength, array : randomArr }
                 default : console.log('Throw Error from reducerInput')
