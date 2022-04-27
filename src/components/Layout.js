@@ -4,6 +4,8 @@ import SideMenu from './Menu/Side-Menu/SideMenu'
 import MainSection from './MainSection/MainSection'
 import './layout.css'
 
+
+
 const sortList = [
     {
         name:"Bubble",
@@ -51,7 +53,7 @@ function Layout({theme, handleThemeSwitch}) {
     const [compareList, setCompareList] = useState([])
 
     //HANDLERS CONNECTED WITH SIDE-MENU
-    const handleChangeMode = () => setCompareMode((prev)=>!prev)
+    const handleChangeCompareMode = () => setCompareMode( prev => !prev )
     const handleAddToCompareList = (compareList, item) =>{
         if(compareList.find((d)=>d === item))return  //check if exsist
         let updated = [...compareList]
@@ -67,9 +69,38 @@ function Layout({theme, handleThemeSwitch}) {
       setMenuList(holder)
     }
 
+    //STATES CONNECTED WITH MAIN MENU 
+    const [ syncMode, setSyncMode ] = useState(false)
+    const [isRunningSync, setIsRunningSync ] = useState('initial')
+
+
+    //HANDLERS CONNECTED WITH SIDE-MENU
+        const handleSyncModeChange = (state) =>{
+            if(state) setSyncMode(state);
+            else setSyncMode(prev => !prev);
+        }
+        const handleisRunningSyncChange = (state)=>{
+            setIsRunningSync(state)
+        }
+
+    //Turn Off SyncMode if CompareMode is Off
+    useEffect(() => {
+        if(!compareMode)setSyncMode(false)
+    }, [compareMode])
+
     return (
         <div className="layout">
-            <Menu theme={theme} handleThemeSwitch={handleThemeSwitch} />
+            <Menu
+                syncMode={syncMode}
+                theme={theme} 
+                isRunningSync={isRunningSync}
+                compareMode={compareMode}
+                compareList={compareList}
+                handleThemeSwitch={handleThemeSwitch} 
+                handleisRunningSyncChange={handleisRunningSyncChange}
+                handleSyncModeChange={handleSyncModeChange}
+                handleChangeCompareMode={handleChangeCompareMode}
+            />
             <SideMenu 
                 list={menuList} 
                 handleChangeList={handleChangeList}
@@ -78,8 +109,10 @@ function Layout({theme, handleThemeSwitch}) {
                 compareList={compareList}
             />
             <MainSection 
-                handleChangeMode={handleChangeMode}
+                isRunningSync={isRunningSync}
+                syncMode={syncMode}
                 compareMode={compareMode}
+                handleSyncModeChange={handleSyncModeChange}
                 handleAddToCompareList={handleAddToCompareList}
                 handleRemoveFromCompareList={handleRemoveFromCompareList}
                 compareList={compareList}

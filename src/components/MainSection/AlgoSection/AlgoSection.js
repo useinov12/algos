@@ -36,7 +36,7 @@ function AlgoSection(props) {
             handleRemoveFromCompareList
         } = props 
 
-    // LOCAL INPUTS
+    //LOCAL INPUTS
         let arrInit = createArray(20)
         let initInputState = {
             speed:5,
@@ -79,7 +79,7 @@ function AlgoSection(props) {
         <div className="compare-mode-block">
 
             <button 
-                className="remove-compare-block-btn btn-regular"
+                className="remove-block-btn"
                 onClick={ ()=> handleRemoveFromCompareList( compareList, typeOfAlgo ) }> 
                 X
             </button>

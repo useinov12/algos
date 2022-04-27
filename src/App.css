@@ -1,34 +1,42 @@
 :root{    
   /* transition: all 1s ease; */
 }
-
 .theme-dark{
-  --bg-dark:rgb(22, 24, 31);
-  /* --bg-dark:rgb(0, 62, 218); */
-  --color-accent-light:rgb(108,108,108);
-  --color-accent-light-2:rgb(54,58,66);
-  --color-light:#dededf;
-  --color-primary:#0084ff;
-  --color-primary-2:mediumpurple;  --color-danger:rgb(220, 0, 22);
-  --color-green:#47cf73;
+  --bg-color:#1d1e22;
+  --bg-color-2:#393f4d;
 
-  --shadow-outer-dark:rgba(0, 0, 0, 0.7);
-  --shadow-outer-light:rgba(100, 100, 100, 0.2);
+  --text-color:#F6E9E9;
+  --text-color-2:#d4d4dc;
+  --green:#51c726;
+  --green-glow:#5c9e44;
 
-  --shadow-inner-dark:rgba(0, 0, 0, 0.7);
-  --shadow-inner-light:rgba(100, 100, 100, 0.3);
+  --color-primary-1:#393f4d;
+  --color-primary-2:#007CC7;
+  --color-primary-3:#4DA8DA;
+  --color-primary-4:#EEFBFB;
+  --color-danger:#c1432e;
+  --color-warning:#feda6a;
+  --color-disabled:#bdbcbc;
 
-  /* text-shadow: 1px 1px 3px #ccd0d4, 0 0 0 rgba(0,0,0,0.8), 1px 1px 4px #fff; */ /* GLOW */
+  --shadow-outer-dark:rgba(0, 0, 0, 1);
+  --shadow-outer-light:rgba(100, 100, 100, 0.3);
+  --shadow-inner-dark:rgba(0, 0, 0, 0.9);
+  --shadow-inner-light:rgba(100, 100, 100, 0.4);
+
+  
   /* transition: all 1s ease; */
 }
 
+
+
 .theme-light{
-  --bg-dark:rgb(238, 238, 238);
-  --color-accent-light:#ccd0d4;
-  --color-accent-light-2:rgb(109, 109, 109);
-  --color-light:#3a3a3b;
-  --color-primary:#0084ff;
+  --bg-color:#F3F3F3;
+  --text-color:#283747;
+  --color-primary:#932432;
+  --color-primary-2:#3C1874;
   --color-danger:rgb(220, 0, 22);
+  --color-warning:#F1D00A;
+  --color-disabled:#FF6D6D;
 
   --shadow-outer-dark:rgba(0, 0, 0, 0.4);
   --shadow-outer-light:rgba(100, 100, 100, 0.3);
@@ -44,7 +52,7 @@
 
 
 body{
-  background-color: rgb(219, 219, 219);
+  /* background-color: rgb(219, 219, 219); */
 }
 
 input::-webkit-outer-spin-button,
@@ -58,19 +66,5 @@ input[type=number] {
   }
 
 .App{
-    background-color: var(--bg-dark);
-}
-
-.btn-regular{
-  background: linear-gradient(-45deg, var(--color-accent-light-2), var(--color-accent-light));
-  border: none;
-  color: var(--color-light);
-  border-radius: 10px;
-  box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.7),
-  -2px -2px 3px 0 rgba(70, 70, 70, 0.2); 
-}
-.btn-regular:hover{
-  background: linear-gradient(45deg, var(--color-accent-light), var(--color-accent-light-2));
-  box-shadow: inset 3px 3px 7px 0 rgba(0, 0, 0, 0.6),
-  inset -2px -2px 2px 0 rgba(108,108,108, 0.6);
+    background-color: var(--bg-color);
 }

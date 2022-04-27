@@ -59,14 +59,14 @@ function SideMenu({list, handleChangeList, compareMode, handleAddToCompareList, 
                             handleChangeList(sortList)
                             setState(false)
                         }}>
-                        <h3>SORT</h3>
+                        <p>SORT</p>
                     </span>
                     <span className={state ? "list-option search-list" : "list-option search-option" } 
                         onClick={()=>{
                             handleChangeList(searchList)
                             setState(true)
                         }}>
-                        <h3>SEARCH</h3>
+                        <p>SEARCH</p>
                     </span>
                 </div>
             </div>

@@ -15,10 +15,10 @@ function Chart({data, pivots, local, type, isSorted}) {
             case 'Bubble' :
                 leftBar 
                     .filter((d,i)=> i===pivots.compareIdx)
-                    .attr('fill', 'red')
+                    .attr('fill', 'firebrick')
                 rightBar 
                     .filter((d,i)=> i===pivots.compareIdx+1)
-                    .attr('fill', 'red')
+                    .attr('fill', 'firebrick')
 
                 sortedBars 
                     .filter((d, i)=> i>=data.length-pivots.sorted)
@@ -51,11 +51,11 @@ function Chart({data, pivots, local, type, isSorted}) {
             let height 
             let margin
             if(local){
-                width = 650
+                width = 750
                 height = 135
                 margin = 10
             } else {
-                width = 750
+                width = 650
                 height = 200
                 margin = 30
             }
@@ -79,13 +79,12 @@ function Chart({data, pivots, local, type, isSorted}) {
             const plotArea = svg.select('.plot-area')
                 .attr('height', height-(margin*2))
                 .attr('width', width-margin*2)
-                // .attr('y', height-margin*2)
 
             //Scales
             const xScale = d3.scaleBand()
                 .domain(X)
                 .rangeRound([0, width])
-                .padding(0.2) //scaleBand only
+                .padding(0.1) //scaleBand only
             const yScale = d3.scaleLinear()
                 .domain([0, d3.max(Y)])
                 .range([height-margin, 0])
@@ -97,13 +96,16 @@ function Chart({data, pivots, local, type, isSorted}) {
                 .join(
                     (enter)=> enter.append('rect')
                         .attr('width', xScale.bandwidth())
-                        .attr('height', height)
-                        .transition(),
-                    (update) => update.transition(),
+                        .attr('height', height),
+                        // .transition()
+                        // .duration(5),
+                    // (update) => update.transition(),
+                    (update) => update,
                     (exit) => exit.remove()
                 )
                 .attr('fill', 'white')
-                // .transition()
+                .transition()
+                .duration(25)
                 .attr('width', xScale.bandwidth())
                 .attr('height', height)
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))

@@ -32,10 +32,7 @@ const createArray = (length) => {
 
 
 
-function MainSection({handleChangeMode, compareMode, handleAddToCompareList, handleRemoveFromCompareList, compareList}) {
-    //SyncMode switch
-        const [ syncMode, setSyncMode ] = useState(false)
-        const handleSyncModeChange = () => setSyncMode(prev => !prev)
+function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange, handleRemoveFromCompareList, compareList}) {
         
 
     //SyncInput states
@@ -50,7 +47,6 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
                 case 'update':  return { ...input, ...action.playload }
                 case 'changeSpeed': return {...input, speed : action.playload}
                 case 'changeLength': return {...input, length : action.playload}
-                
                 case 'changeArray':
                     let array = createArray(input.length)
                     return { ...input,  array : array }
@@ -62,111 +58,36 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
             }
         }
         const [ inputState, dispatchArray ] = useReducer(reducerInputSync, InitSyncInputState)
-        //Reset SyncArray if SyncMode is on
+        //Reset SyncArray if SyncMode is On
         useEffect(() => {
             if(syncMode)return dispatchArray({type:'changeArray'});
         }, [syncMode])
 
-
-    //isRunningSync State
-        const [isRunningSync, setIsRunningSync ] = useState('initial')
-
+        //Reset SyncArray if Reset clicked
         useEffect(() => {
             if(isRunningSync === 'reset') return dispatchArray( {type:'changeArray'} );
         }, [isRunningSync])
 
-
-    //Buttons disable handlers
-        const handleDisableCompareBtn = () => {
-            if(isRunningSync === 'run' ) return true;
-            if(isRunningSync === 'pause' ) return true;
-            else return false;
-        }
-        const handleDisableSyncBtn = () =>{
-            if(!compareMode) return true;
-            if(isRunningSync === 'run' ) return true;
-            if(isRunningSync === 'pause' ) return true;
-            else return false;
-        }
-        const handleDisableRunSyncBtn = () =>{
-            if(!syncMode || !compareMode) return true;
-            if(isRunningSync === 'run' ) return true;
-            else return false;
-        }
-        const handleDisablePauseBtn = () =>{
-            if(!syncMode || !compareMode) return true;
-            if(isRunningSync !== 'run') return true;
-            else return false;
-        }
-        const handleDisableResetBtn = () =>{
-            if(!syncMode || !compareMode) return true;
-            if(isRunningSync !== 'pause') return true;
-            else return false;
-        }
-
-    useEffect(() => {
-        if(!compareMode)setSyncMode(false)
-    }, [compareMode])
-
-
+        // style={syncMode ? {display:'flex'}: {display:'unset'}}
     return (
-        <div className="content-section content-grid grid" style={syncMode ? {display:'flex'} : {display:'unset'}}>
-            <div className='sync-menu'>
-                <span>Compare Mode</span> 
-                <NavLink to={compareMode ? "/bubblesort" : "/compare-mode"}>
-                    <button 
-                        disabled={handleDisableCompareBtn()} 
-                        onClick={()=>handleChangeMode()}>
-                        {compareMode ? 'on' : 'off'}
-                    </button>
-                </NavLink>
+        <div className={syncMode ? 'main-section-sync-mode-on main-grid grid' : "main-section-sync-mode-off main-grid grid"}  >
 
-                <span>SYNC Mode</span>
-                <button 
-                    disabled={handleDisableSyncBtn()} 
-                    onClick={()=>handleSyncModeChange()}>
-                    {syncMode ? 'on' : 'off'}
-                </button>
-                
-                {
-                    syncMode && 
-                    (<>
-                        <Inputs
-                            syncMode={syncMode}
-                            inputState={inputState}
-                            dispatch={dispatchArray}
-                            isRunningSync={isRunningSync}
-                            className={'inputs-container'}
-                        />
-                    
-                        <div>
-                            <button
-                                disabled={handleDisableRunSyncBtn()} 
-                                onClick={()=>{
-                                    if(compareList.length===0) return prompt(' Add Algo before compare ');
-                                    else setIsRunningSync('run');
-                                }}>
-                                {isRunningSync === 'pause' ? 'CONTINUE' : 'RUN SYNC'}
-                            </button> 
-                            <button
-                                disabled={handleDisablePauseBtn()}
-                                onClick={()=>setIsRunningSync('pause')}>
-                                PAUSE
-                            </button> 
-                            <button
-                                disabled={handleDisableResetBtn()}
-                                onClick={()=>setIsRunningSync('reset')}>
-                                RESET
-                            </button> 
-                        </div>
-                    </>)
-                }
-                
-            </div>
+            {
+                syncMode && 
+                (<>
+                    <Inputs
+                        syncMode={syncMode}
+                        inputState={inputState}
+                        dispatch={dispatchArray}
+                        isRunningSync={isRunningSync}
+                        className={'inputs-container'}
+                    />
+                </>)
+            }
             
 
             {/* ALL ROUTES */}
-            <div>
+            <div className='content-section'>
                 <Routes>
                     <Route path="/compare-mode" exact element={
                         compareList.map((algo, i) =>
@@ -229,17 +150,3 @@ function MainSection({handleChangeMode, compareMode, handleAddToCompareList, han
 }
 
 export default MainSection
-
-/* <Route path="/bubblesort" exact element={
-    
-/>
-<Route path="/quicksort" exact element={
-    <QuickSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-/>
-<Route path="/mergesort" exact element={
-    <MergeSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-/>
-<Route path="/selectionsort" exact element={
-    <SelectionSort array={array} handleChangeArray={handleChangeArray} length={length} />}
-/>
- */
