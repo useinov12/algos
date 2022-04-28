@@ -5,12 +5,11 @@
     align-items: center;
     justify-content: space-between;
 }
-
 .sync-menu{
     display: flex;
+    align-items: center;
 }
-
-
+.sync-menu button{ border-radius: 10px}
 /* MODES MENU */
 .sync-modes{
     margin: 0 1rem;
@@ -19,122 +18,81 @@
     align-items: center;
     padding: .2rem;
     border-radius: 8px;
-    box-shadow: 3px 3px 4px 0 var(--shadow-outer-dark),
-    -2px -2px 3px 0 var(--shadow-outer-light); 
 }
+.sync-modes[disabled]{
+    border-radius: 8px;
+    border-radius: 1px solid var(--color-disabled);
+    color:var(--color-disabled);
+}
+.sync-modes :nth-child(1){ border-radius:  10px 0 0 10px }
+.sync-modes :nth-child(2){ border-radius:  0 10px 10px 0 }
 
 .mode-active{
-    height: 100%;
-    border: none;
-    border:1px solid var(--color-primary-2);
+    transition: all .2s ease;
+    cursor: pointer;
     color:var(--text-color);
     background-color: var(--bg-color);
-    transition: all .2s ease;
-    border-radius: 10px;
+    border:1px solid var(--color-primary-2);
     padding: .4rem .3rem .3rem .5rem;
     box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
     inset -2px -2px 2px 0 var(--shadow-inner-light);
 }
 .mode-passive{
+    cursor: pointer;
     padding: .4rem; 
-    height: 100%;
-    /* border:none; */
     border:1px solid var(--color-primary-1);
     color:var(--text-color);
     background-color: var(--bg-color);
-    border-radius: 10px;
-    transition: all .2s ease;
 }
-
-.sync-modes button[disabled]{
-    /* border:none; */
-    color:var(--color-disabled);
-}
-
-
-
 /* PLAY MENU */
-.sync-play-menu-on{
-    padding: .1rem;
+.sync-play-menu{
+    transition: all .2s ease;
+    /* padding: .1rem; */
     display: flex;
     justify-content: space-evenly;
-    transition: all .2s ease;
-    border-radius: 10px;
-    box-shadow: 3px 3px 4px 0 var(--shadow-outer-dark),
-    -2px -2px 3px 0 var(--shadow-outer-light); 
-}
-.sync-play-menu-off{
-    transition: all .2s ease;
-    display: flex;
-    padding: .1rem;
     border-radius: 10px;
 }
+.sync-play-menu__active{ border: 1px solid var(--color-primary-2) }
+.sync-play-menu__passive{ border: 1px solid var(--color-disabled) }
 
-.sync-play-active{
+.sync-play-btn{
     display: flex;
-    text-align: center;
     align-items: center;
-    padding: .5rem 1rem;
-    border:none;
-    border:1px solid var(--color-primary-2);
+    padding: .6rem 1rem;
+    transition: all .2s ease;
     color:var(--text-color);
     background-color: var(--bg-color);
     border-radius: 10px;
-    transition: all .2s ease;
+}
+.sync-play-btn__active{
+    border:1px solid var(--color-primary-2);
     box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
     inset -2px -2px 2px 0 var(--shadow-inner-light);
 }
+.sync-play-btn__passive{border:none}
+.sync-play-btn[disabled]{ color:var(--color-disabled) }
 
-.sync-play-passive{
-    display: flex;
-    align-items: center;
-    padding: .5rem 1rem;
-    text-align: center;
-    border:none;
-    color:var(--text-color);
-    background-color: var(--bg-color);
-    border-radius: 10px;
-    transition: all .2s ease;
-}
-.sync-play-menu-on button[disabled]{
-    border:none;
-    color:var(--color-disabled);
-}
-.sync-play-menu-off button[disabled]{
-    border:none;
-    color:var(--color-disabled);
-}
-
-
-.theme-toggle-container{
-    border-radius: 10px;
-    box-shadow: 3px 3px 4px 0 var(--shadow-outer-dark),
-    -2px -2px 3px 0 var(--shadow-outer-light); 
-}
 .theme-switch{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width:8rem;
-    cursor: pointer;
-    padding: .2rem;
-    border-radius:10px;
 }
+.theme-switch :nth-child(1){border-radius:  10px 0 0 10px }
+.theme-switch :nth-child(2){border-radius:  0 10px 10px 0 }
+
 .theme-option{
-    width:50%;
-    height: 100%;
     display: flex;
     align-items: center;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s ease;
-    padding: .6rem;
-}
-
-.theme-active{
-    border:1px solid var(--color-primary-2);
+    padding: .5rem 1rem;
+    color:var(--text-color);
+    background-color: var(--bg-color);
     border-radius: 10px;
+    transition: all .2s ease;
+    cursor: pointer;
+}
+.theme-option__passive{ border: 1px solid var(--color-disabled) }
+.theme-option__active{
+    border:1px solid var(--color-primary-2);
     box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
     inset -2px -2px 2px 0 var(--shadow-inner-light);
-    padding-left: .9rem;
 }

@@ -8,7 +8,6 @@ const randomizer = (n) => Math.floor(Math.random()*n)
 const randomizeArray = (array) =>{
     let n = array.length
     let t; let i;
-
     while(n){
         i = Math.floor(Math.random()* n--);
         t = array[n]
@@ -29,6 +28,7 @@ const createArray = (length) => {
 function AlgoSection(props) {
         const {
             syncMode, 
+            compareMode,
             typeOfAlgo,
             inputStateSync, //global input data
             isRunningSync,
@@ -77,15 +77,12 @@ function AlgoSection(props) {
 
     return (
         <div className="compare-mode-block">
-
             <button 
                 className="remove-block-btn"
                 onClick={ ()=> handleRemoveFromCompareList( compareList, typeOfAlgo ) }> 
                 X
             </button>
-            
-            { 
-                !syncMode && 
+            { !syncMode && 
                 <Inputs
                     syncMode={syncMode}
                     inputState={inputState}
@@ -95,6 +92,7 @@ function AlgoSection(props) {
             }
 
             <AlgoComp
+                compareMode={compareMode}
                 syncMode={syncMode}
                 typeOfAlgo={typeOfAlgo}
                 inputData={inputState}

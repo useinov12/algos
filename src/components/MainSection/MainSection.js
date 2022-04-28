@@ -32,8 +32,13 @@ const createArray = (length) => {
 
 
 
-function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange, handleRemoveFromCompareList, compareList}) {
-        
+function MainSection(props) {
+        const { isRunningSync, 
+            syncMode, 
+            compareMode, 
+            handleRemoveFromCompareList, 
+            compareList
+        } = props
 
     //SyncInput states
         let initArr = createArray(20)
@@ -95,6 +100,7 @@ function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange
                                 key={i}
                                 typeOfAlgo={algo}
                                 syncMode={syncMode}
+                                compareMode={compareMode}
                                 inputStateSync={inputState}
                                 isRunningSync={isRunningSync}
                                 compareList={compareList}
@@ -107,6 +113,7 @@ function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange
                         <AlgoSection
                             typeOfAlgo={'Bubble'}
                             syncMode={null}
+                            compareMode={compareMode}
                             inputStateSync={null}
                             isRunningSync={null}
                             compareList={compareList}
@@ -116,6 +123,7 @@ function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange
                     <Route path="/quick-sort" exact element={
                         <AlgoSection
                             typeOfAlgo={'Quick'}
+                            compareMode={compareMode}
                             syncMode={null}
                             inputStateSync={null}
                             isRunningSync={null}
@@ -126,6 +134,7 @@ function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange
                     <Route path="/merge-sort" exact element={
                         <AlgoSection
                             typeOfAlgo={'Merge'}
+                            compareMode={compareMode}
                             syncMode={null}
                             inputStateSync={null}
                             isRunningSync={null}
@@ -136,6 +145,7 @@ function MainSection({isRunningSync, syncMode, compareMode, handleSyncModeChange
                     <Route path="/selection-sort" exact element={
                         <AlgoSection
                             typeOfAlgo={'Selection'}
+                            compareMode={compareMode}
                             syncMode={null}
                             inputStateSync={null}
                             isRunningSync={null}

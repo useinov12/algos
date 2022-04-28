@@ -73,7 +73,6 @@ function Layout({theme, handleThemeSwitch}) {
     const [ syncMode, setSyncMode ] = useState(false)
     const [isRunningSync, setIsRunningSync ] = useState('initial')
 
-
     //HANDLERS CONNECTED WITH SIDE-MENU
         const handleSyncModeChange = (state) =>{
             if(state) setSyncMode(state);

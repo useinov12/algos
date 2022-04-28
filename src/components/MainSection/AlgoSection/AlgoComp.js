@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
+import { FaPlay, FaPause } from "react-icons/fa";
 import Chart from '../../Chart/Chart'
 
 const swap = (arr, i, j) => {
@@ -138,7 +139,7 @@ function quickSort(state){
     }
 }
 
-function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
+function AlgoComp( {compareMode, syncMode, typeOfAlgo, inputData, isRunningSync} ) {
     const [ isRunningLocal, setIsRunningLocal ] = useState(false)
 
     //Algo Section
@@ -197,24 +198,33 @@ function AlgoComp( {syncMode, typeOfAlgo, inputData, isRunningSync} ) {
             }
         }, [isRunningLocal, algoState]) //re-run when (isRunningLocal === true) && watch when algoState is changing
  
+    const dynamicClassSwitch = ()=>{
+        if(compareMode && !syncMode ) return 'algo-comp-individ-mode'
+        if(compareMode && syncMode ) return 'algo-comp-sync-mode'
+        if(!compareMode) return 'algo-comp-single-mode'
+    }
     return (
-        <div className="algo-compnent" style={{padding:'1rem'}}>
+        <div className={dynamicClassSwitch()} style={{padding:'1rem'}}>
 
-            <div className="local-buttons__algo-component">
+            <div className='local-buttons__algo-comp'>
+                <div className={syncMode ? 'local-play-menu-off' : 'local-play-menu-on'}>
+                    <button className={isRunningLocal ? 'local-play-button-active' :  'local-play-button-passive' }
+                        disabled={syncMode ? true : false} 
+                        onClick={()=>setIsRunningLocal(true)}> 
+                            <FaPlay/>
+                    </button>
+                    <button className={isRunningLocal ? 'local-play-button-passive' :  'local-play-button-active' }
+                        disabled={syncMode ? true : false} 
+                        onClick={()=>setIsRunningLocal(false)}> 
+                        <FaPause/>
+                    </button>
+                </div>
+
                 <button 
-                    disabled={syncMode ? true : false} 
-                    onClick={()=>setIsRunningLocal(true)}> 
-                        sort
-                </button>
-                <button 
-                    disabled={syncMode ? true : false} 
-                    onClick={()=>setIsRunningLocal(false)}> 
-                    stop
-                </button>
-                <button 
+                    className='local-next-step'
                     disabled={isRunningLocal}
                     onClick={()=>dispatchAlgo({type: {algo:typeOfAlgo, command:'run'} })}>
-                    next
+                    next step
                 </button>
             </div>
 

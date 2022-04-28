@@ -1,9 +1,7 @@
-:root{    
-  /* transition: all 1s ease; */
-}
 .theme-dark{
   --bg-color:#1d1e22;
-  --bg-color-2:#393f4d;
+  --bg-color-shade:#222429;
+  --bg-color-2:#23272e;
 
   --text-color:#F6E9E9;
   --text-color-2:#d4d4dc;
@@ -16,18 +14,13 @@
   --color-primary-4:#EEFBFB;
   --color-danger:#c1432e;
   --color-warning:#feda6a;
-  --color-disabled:#bdbcbc;
+  --color-disabled:#5c5b5b;
 
   --shadow-outer-dark:rgba(0, 0, 0, 1);
   --shadow-outer-light:rgba(100, 100, 100, 0.3);
   --shadow-inner-dark:rgba(0, 0, 0, 0.9);
   --shadow-inner-light:rgba(100, 100, 100, 0.4);
-
-  
-  /* transition: all 1s ease; */
 }
-
-
 
 .theme-light{
   --bg-color:#F3F3F3;
@@ -43,28 +36,15 @@
 
   --shadow-inner-dark:rgba(0, 0, 0, 0.2);
   --shadow-inner-light:rgba(205, 209, 213, 0.4);
-  /* text-shadow: 1px 1px 3px #ccd0d4, 0 0 0 rgba(0,0,0,0.8), 1px 1px 4px #fff; */
-  /* transition: all 1s ease; */
 }
-
-
-
-
-
-body{
-  /* background-color: rgb(219, 219, 219); */
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 input[type=number] {
-    -moz-appearance: textfield;
-  }
-
+  -moz-appearance: textfield;
+}
 .App{
-    background-color: var(--bg-color);
+  background-color: var(--bg-color);
 }
