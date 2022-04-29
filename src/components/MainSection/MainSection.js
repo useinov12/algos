@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from './Inputs/Inputs'
 import AlgoSection from './AlgoSection/AlgoSection'
+import { Routes, Route } from "react-router-dom";
+import useDelayUnmount from '../CustomHooks/useDelayUnmount'
 import './main-section.css'
-import {
-    Routes,
-    Route,
-    NavLink
-} from "react-router-dom";
 
 
 const randomizer = (n) => Math.floor(Math.random()*n)
@@ -31,9 +28,11 @@ const createArray = (length) => {
 }
 
 
-
 function MainSection(props) {
-        const { isRunningSync, 
+        const { 
+            sortList, 
+            searchList, 
+            isRunningSync, 
             syncMode, 
             compareMode, 
             handleRemoveFromCompareList, 
@@ -73,26 +72,49 @@ function MainSection(props) {
             if(isRunningSync === 'reset') return dispatchArray( {type:'changeArray'} );
         }, [isRunningSync])
 
-        // style={syncMode ? {display:'flex'}: {display:'unset'}}
-    return (
-        <div className={syncMode ? 'main-section-sync-mode-on main-grid grid' : "main-section-sync-mode-off main-grid grid"}  >
 
-            {
-                syncMode && 
-                (<>
-                    <Inputs
+
+        const [contract, setContract ] = useState(false)
+        const [collapseWidth, setCollapseWidth ] = useState(false)
+
+        useEffect(()=>{
+            let timer
+            if(syncMode) timer = setTimeout(()=>setContract(false), 200)
+            else  timer = setTimeout(()=>setContract(true), 5)
+            return ()=> clearTimeout(timer)
+            
+        }, [syncMode])
+
+        useEffect(()=>{
+            let timer
+            if(contract)timer = setTimeout(()=> setCollapseWidth(true), 200)
+            else timer = setTimeout(()=> setCollapseWidth(false), 0)
+            return ()=> clearTimeout(timer)
+        },[contract])
+
+
+    return (
+        <div className={syncMode ? 'main-section sync-mode-on main-grid grid' : "main-section sync-mode-off main-grid grid"}>
+
+
+
+            <div className={collapseWidth ? `collapse-container collapse-width` : `collapse-container`}>
+                <div className={contract ? `collapse-section` : 'collapse-section expanded'  }>
+                    {<Inputs
                         syncMode={syncMode}
                         inputState={inputState}
                         dispatch={dispatchArray}
                         isRunningSync={isRunningSync}
-                        className={'inputs-container'}
-                    />
-                </>)
-            }
+                        className={'inputs-sync'}
+                    />}
+                </div>
+            </div>
+            
             
 
-            {/* ALL ROUTES */}
-            <div className='content-section'>
+            
+              
+            <div className={syncMode ? 'content-section sync-mode' : 'content-section individ-mode'}>
                 <Routes>
                     <Route path="/compare-mode" exact element={
                         compareList.map((algo, i) =>
@@ -109,50 +131,22 @@ function MainSection(props) {
                             </AlgoSection>
                         )
                     }/>
-                    <Route path="/bubble-sort" exact element={
-                        <AlgoSection
-                            typeOfAlgo={'Bubble'}
-                            syncMode={null}
-                            compareMode={compareMode}
-                            inputStateSync={null}
-                            isRunningSync={null}
-                            compareList={compareList}
-                            handleRemoveFromCompareList={null}
-                        />
-                    }/>
-                    <Route path="/quick-sort" exact element={
-                        <AlgoSection
-                            typeOfAlgo={'Quick'}
-                            compareMode={compareMode}
-                            syncMode={null}
-                            inputStateSync={null}
-                            isRunningSync={null}
-                            compareList={compareList}
-                            handleRemoveFromCompareList={null}
-                        />
-                    }/>
-                    <Route path="/merge-sort" exact element={
-                        <AlgoSection
-                            typeOfAlgo={'Merge'}
-                            compareMode={compareMode}
-                            syncMode={null}
-                            inputStateSync={null}
-                            isRunningSync={null}
-                            compareList={compareList}
-                            handleRemoveFromCompareList={null}
-                        />
-                    }/>
-                    <Route path="/selection-sort" exact element={
-                        <AlgoSection
-                            typeOfAlgo={'Selection'}
-                            compareMode={compareMode}
-                            syncMode={null}
-                            inputStateSync={null}
-                            isRunningSync={null}
-                            compareList={compareList}
-                            handleRemoveFromCompareList={null}
-                        />
-                    }/>
+                    { 
+                        [...sortList, ...searchList].map( (algo, i)=> {
+                            return <Route key={i} path={algo.path} exact element={
+                                    <AlgoSection
+                                        typeOfAlgo={algo.name}
+                                        syncMode={null}
+                                        compareMode={compareMode}
+                                        inputStateSync={null}
+                                        isRunningSync={null}
+                                        compareList={compareList}
+                                        handleRemoveFromCompareList={null}
+                                    />
+                                }
+                            />
+                        })
+                    }
                 </Routes>
             </div>
         </div>

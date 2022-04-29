@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import * as d3 from 'd3'
-import useD3 from '../useD3'
+import useD3 from '../CustomHooks/useD3'
 import './chart.css'
 // dodgerblue
 function Chart({data, pivots, local, type, isSorted}) {
@@ -50,15 +50,15 @@ function Chart({data, pivots, local, type, isSorted}) {
             let width 
             let height 
             let margin
-            if(local){
-                width = 750
+            // if(local){
+                width = 600
                 height = 135
                 margin = 10
-            } else {
-                width = 650
-                height = 200
-                margin = 30
-            }
+            // } else {
+            //     width = 650
+            //     height = 200
+            //     margin = 30
+            // }
 
             //Accesors
             const xAccesor = (d, i) => i //accessing index
@@ -72,6 +72,7 @@ function Chart({data, pivots, local, type, isSorted}) {
             svg
                 .attr('height', height)
                 .attr('width', width)
+                // .attr('viewBox', `0 0 ${width} ${height}`)
             
             svg.selectAll('text').remove()
             let title = svg.append('text')
@@ -84,7 +85,7 @@ function Chart({data, pivots, local, type, isSorted}) {
             const xScale = d3.scaleBand()
                 .domain(X)
                 .rangeRound([0, width])
-                .padding(0.1) //scaleBand only
+                .padding(0.2) //scaleBand only
             const yScale = d3.scaleLinear()
                 .domain([0, d3.max(Y)])
                 .range([height-margin, 0])
@@ -96,16 +97,15 @@ function Chart({data, pivots, local, type, isSorted}) {
                 .join(
                     (enter)=> enter.append('rect')
                         .attr('width', xScale.bandwidth())
-                        .attr('height', height),
-                        // .transition()
-                        // .duration(5),
+                        .attr('height', height)
+                        .transition(),
                     // (update) => update.transition(),
                     (update) => update,
                     (exit) => exit.remove()
                 )
                 .attr('fill', 'white')
                 .transition()
-                .duration(25)
+                .duration(45)
                 .attr('width', xScale.bandwidth())
                 .attr('height', height)
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))

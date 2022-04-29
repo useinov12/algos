@@ -1,7 +1,8 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import Inputs from '../Inputs/Inputs'
 import './algo-section.css'
 import AlgoComp from './AlgoComp'
+import useDelayUnmount from '../../CustomHooks/useDelayUnmount'
 
 const randomizer = (n) => Math.floor(Math.random()*n)
 
@@ -25,6 +26,7 @@ const createArray = (length) => {
     return array
 }
 
+
 function AlgoSection(props) {
         const {
             syncMode, 
@@ -43,7 +45,7 @@ function AlgoSection(props) {
             length:20,
             array:[ ...arrInit ]
         }
-        function reducerInput(input, action){
+        function reducerLocalInput(input, action){
             switch (action.type){
                 case 'update': return { ...input, ...action.playload }
                 case 'changeSpeed': return {...input, speed:action.playload}
@@ -58,22 +60,39 @@ function AlgoSection(props) {
                 default : console.log('Throw Error from reducerInput')
             }
         }
-        const [ inputState, dispatchInput ] = useReducer(reducerInput, initInputState)
+        const [ inputState, dispatchLocalInput ] = useReducer(reducerLocalInput, initInputState)
 
 
     //DATA STREAM SWITCH: Sync/Local
         //Assign initial data stream 
         useEffect(() => {
-            if(syncMode) return dispatchInput({ type:'update', playload:inputStateSync });
-            else return dispatchInput( {type:'update', playload:inputState} )
+            if(syncMode) return dispatchLocalInput({ type:'update', playload:inputStateSync });
+            else return dispatchLocalInput( {type:'update', playload:inputState} )
         }, [])
 
         //Update InputState on input data change:  sync/local
         useEffect( () => {
-            if(syncMode)return dispatchInput({type:'update', playload:inputStateSync});
-            else return dispatchInput( {type:'update', playload:inputState} )
+            if(syncMode)return dispatchLocalInput({type:'update', playload:inputStateSync});
+            else return dispatchLocalInput( {type:'update', playload:inputState} )
         }, [ inputStateSync ])
 
+
+
+        const [contract, setContract ] = useState(false)
+        const [collapseWidth, setCollapseWidth ] = useState(false)
+        useEffect(()=>{
+            let timer
+            if(syncMode)timer = setTimeout(()=> setContract(true), 0)
+            else timer = setTimeout(()=> setContract(false), 200)
+            return ()=> clearTimeout(timer)
+        }, [syncMode])
+
+        useEffect(()=>{
+            let timer
+            if(contract)timer = setTimeout(()=> setCollapseWidth(true), 0)
+            else timer = setTimeout(()=> setCollapseWidth(false), 200)
+            return ()=> clearTimeout(timer)
+        },[contract])
 
     return (
         <div className="compare-mode-block">
@@ -82,22 +101,30 @@ function AlgoSection(props) {
                 onClick={ ()=> handleRemoveFromCompareList( compareList, typeOfAlgo ) }> 
                 X
             </button>
-            { !syncMode && 
-                <Inputs
-                    syncMode={syncMode}
-                    inputState={inputState}
-                    dispatch={dispatchInput}
-                    className={'local-inputs'}
-                />
-            }
+            <div className='lower-level__compare-block'>
 
-            <AlgoComp
-                compareMode={compareMode}
-                syncMode={syncMode}
-                typeOfAlgo={typeOfAlgo}
-                inputData={inputState}
-                isRunningSync={isRunningSync}
-            />
+
+                <div className={collapseWidth ? `collapse-container collapse-width` : `collapse-container`}>
+                    <div className={ contract ? `collapse-section` : 'collapse-section expanded' }>
+                        {<Inputs  
+                            syncMode={syncMode}
+                            inputState={inputState}
+                            dispatch={dispatchLocalInput}
+                            className={`local-inputs`}
+                        />}
+                    </div>
+                </div>
+                
+                <AlgoComp
+                    dispatchLocalInput={dispatchLocalInput}
+                    compareMode={compareMode}
+                    syncMode={syncMode}
+                    typeOfAlgo={typeOfAlgo}
+                    inputData={inputState}
+                    isRunningSync={isRunningSync}
+                />
+            
+            </div>
         </div>
     )
 }

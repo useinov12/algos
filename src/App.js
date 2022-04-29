@@ -8,9 +8,8 @@ function App() {
 
   console.log('App rerendered')
   const [theme, setTheme ] = useState('dark')
-  const handleThemeSwitch = ( theme )=>{
-    setTheme(theme)
-  }
+  const handleThemeSwitch =  theme  => setTheme(theme)
+  
   return (
     <div className={`App theme-${theme}`} >
       <BrowserRouter>

@@ -34,7 +34,7 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
     return(
         <div className={className}>
             <div className='input-content'>
-                <div className="length-input-container">
+                <div className="input-container">
                         <p>Length: {length} </p>  
                         <div className="range-input-container">
                             <input 
@@ -48,8 +48,8 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
                             />
                         </div>
                     <button
+                        className='input-btn'
                         disabled={checkIfNeedDisable()} 
-                        id="draw" 
                         onClick={()=>{
                                 handleLengthChange(length)
                                 dispatch({type: 'changeArray'})}
@@ -57,14 +57,14 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
                     </button>
 
                     <button
+                        className='input-btn'
                         disabled={checkIfNeedDisable()}
-                        id="draw" 
-                        onClick={ ()=> dispatch({type: 'changeArrayRandom'})
-                        }>RANDOM
+                        onClick={ ()=> dispatch({type: 'changeArrayRandom'})}>
+                        RANDOM
                     </button>
                 </div>
             </div>
-            <div className="speed-input-container">
+            <div className="input-container">
                 <p>Speed: {speed}  ms</p> 
                 <div className="range-input-container">
                     <input 

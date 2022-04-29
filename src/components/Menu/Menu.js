@@ -40,7 +40,9 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
 
     return (
         <div className="menu menu-grid grid">
+
             <div className='sync-menu'>
+
                 <NavLink to={ handleDisableCompareBtn() ? " " : compareMode ? "/bubble-sort" : "/compare-mode"}>
                     <button 
                         className={compareMode ? 'mode-active' : 'mode-passive'}
@@ -49,6 +51,7 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
                         <span>Compare Mode</span>
                     </button>
                 </NavLink>
+
                 <div className='sync-modes'>
                     <button 
                         className={compareMode && !syncMode  ? 'mode-active' : 'mode-passive'}
@@ -69,7 +72,7 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
                     <button
                         className={isRunningSync === 'reset' && syncMode ? 'sync-play-btn sync-play-btn__active' : 'sync-play-btn sync-play-btn__passive'}
                         disabled={handleDisableResetBtn()}
-                        onClick={()=>handleisRunningSyncChange('reset')}>
+                        onClick={()=>handleisRunningSyncChange('reset')}> 
                         <FaStop/>
                     </button> 
                     <button
@@ -77,18 +80,17 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
                         disabled={handleDisableRunSyncBtn()} 
                         onClick={()=>{
                             if(compareList.length===0) return prompt(' Add Algo before compare ');
-                            else handleisRunningSyncChange('run')}}>
+                            else handleisRunningSyncChange('run')}}> 
                         <FaPlay/>
                     </button>
 
                     <button
                         className={isRunningSync === 'pause' ? 'sync-play-btn sync-play-btn__active' : 'sync-play-btn sync-play-btn__passive'}
                         disabled={handleDisablePauseBtn()}
-                        onClick={()=>handleisRunningSyncChange('pause')}>
+                        onClick={()=>handleisRunningSyncChange('pause')}> 
                         <FaPause/>
                     </button> 
-                 </div>
-
+                </div>
 
             </div>
 

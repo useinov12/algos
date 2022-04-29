@@ -1,40 +1,53 @@
-.inputs-container{
-    transition: all .3s ease;
-    height: 100%;
-    margin-right: .3rem;
-    
+.inputs-sync{  
+    width:fit-content;
+    margin-right: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all .3s linear;
+ }
+
+.collapse-container{
+    width: 10%;
+    /* border: 1px solid red; */
+    overflow: hidden;
+    transition: all .3s linear;
+}
+.collapse-section{
+    opacity:0;
+    width:min-content;
+    /* margin-left:-100%; */
+    transition: all .5s linear;
+}
+.collapse-section.expanded{
+    /* margin-left: 0; */
+    opacity:1;
+}
+
+.collapse-container.collapse-width{
+    /* overflow: hidden; */
+    width: 0;
 }
 .local-inputs{
+    /* border: 1px solid red; */
     font-size: .9rem;
     display: flex;
     flex-direction: column;
-    padding: 0 .25rem;
-    transition: all .3s ease;
+    align-items: center;
+    width: min-content;
+    padding:.45rem;
+    transition: all .5s linear;
 }
 .input-content{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: .9rem;
-
 }
-.input-content label {
+.input-container{
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-}
-.length-input-container{
-    padding-top: .1rem;
-    padding-bottom: .3rem;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
-.speed-input-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: flex-start;
     text-align: center;
 }
 .number-input-container{
@@ -43,7 +56,6 @@
 }
 .number-input{
     flex:0;
-    width:5rem;
     background: none;
     border: none;
     color:var(--color-text);
@@ -51,22 +63,29 @@
     box-shadow: inset 3px 3px 7px 0 rgba(0, 0, 0, 0.6),
     inset -2px -2px 2px 0 rgba(108,108,108, 0.6);
 }
-.number-input:focus{
-    outline: none;
-}
-.create-btn-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-}
+.number-input:focus{ outline: none }
 
 .range-input-container{
     position: relative;
     width:fit-content;
     flex: 1;
 }
-
+.input-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: .1rem;
+    color:var(--text-color);
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    border:1px solid var(--color-primary-1);
+    transition: all .1s ease;
+}
+.input-btn:active{
+    border:1px solid var(--color-primary-2);
+    box-shadow: inset 3px 3px 4px 0 var(--shadow-inner-dark),
+    inset -2px -2px 2px 0 var(--shadow-inner-light);
+}
 input[type=range]{
     -webkit-appearance: none;
     width:100%; /* specific width for FireFox */
@@ -79,7 +98,7 @@ input[type=range]:focus{
     outline:none;
 }
 input[type=range]::-ms-track{
-    width:100%;
+    width:90%;
     cursor:pointer;
     /* hides the slider so custom styles ca be added */
     background: transparent;
@@ -88,28 +107,28 @@ input[type=range]::-ms-track{
 }
 input[type=range]::-webkit-slider-thumb{
     -webkit-appearance: none;
-    margin-top: -6px; /* specify margin for chrom */
+    margin-top: -7px; /* specify margin for chrom */
     cursor: pointer;
-    height: 15px;
-    width: 7px;
+    height: 1rem;
+    width: .45rem;
     background: var(--text-color);
-    border: 1px solid #555;
+    border: 1px solid var(--color-primary-2);
     border-radius: .3rem;
 }
 input[type=range]::-moz-range-thumb{
-    height: 15px;
-    width: 7px;
+    height: 1rem;
+    width: .45rem;
     background: var(--text-color);
-    border: 1px solid #555;
+    border: 1px solid var(--color-primary-2);
 }
 input[type=range]::-ms-thumb{
-    height: 15px;
-    width: 7px;
+    height: 1rem;
+    width: .45rem;
     background: var(--text-color);
-    border: 1px solid #555;
+    border: 1px solid var(--color-primary-2);
 }
 input[type=range]::-webkit-slider-runnable-track{
-    width:100%;
+    width:90%;
     height: .19rem;
     cursor: pointer;
     background: var(--text-color);
@@ -119,14 +138,14 @@ input[type=range]:focus ::-webkit-slider-runnable-track{
     background: var(--text-color); /* ??? */
 }
 input[type=range]::-moz-range-track{
-    width:100%;
+    width:90%;
     height: .19rem;
     cursor: pointer;
     background: var(--text-color);
     border-radius: .5rem;
 }
 input[type=range]::-ms-track{
-    width:100%;
+    width:90%;
     height: .19rem;
     cursor: pointer;
     background: transparent;

@@ -4,8 +4,6 @@ import SideMenu from './Menu/Side-Menu/SideMenu'
 import MainSection from './MainSection/MainSection'
 import './layout.css'
 
-
-
 const sortList = [
     {
         name:"Bubble",
@@ -58,7 +56,7 @@ function Layout({theme, handleThemeSwitch}) {
         if(compareList.find((d)=>d === item))return  //check if exsist
         let updated = [...compareList]
         updated.push(item)
-        setCompareList(updated)
+        setCompareList(updated) 
     }
     const handleRemoveFromCompareList = (compareList, item) =>{
         let updated = compareList.filter((d)=>d !== item)
@@ -101,6 +99,8 @@ function Layout({theme, handleThemeSwitch}) {
                 handleChangeCompareMode={handleChangeCompareMode}
             />
             <SideMenu 
+                searchList={searchList}
+                sortList={sortList}
                 list={menuList} 
                 handleChangeList={handleChangeList}
                 compareMode={compareMode}
@@ -108,6 +108,8 @@ function Layout({theme, handleThemeSwitch}) {
                 compareList={compareList}
             />
             <MainSection 
+                searchList={searchList}
+                sortList={sortList}
                 isRunningSync={isRunningSync}
                 syncMode={syncMode}
                 compareMode={compareMode}

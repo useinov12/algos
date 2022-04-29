@@ -47,7 +47,6 @@
 /* PLAY MENU */
 .sync-play-menu{
     transition: all .2s ease;
-    /* padding: .1rem; */
     display: flex;
     justify-content: space-evenly;
     border-radius: 10px;

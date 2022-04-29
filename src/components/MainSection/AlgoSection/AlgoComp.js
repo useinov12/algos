@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay, FaPause, FaStop } from "react-icons/fa";
 import Chart from '../../Chart/Chart'
 
 const swap = (arr, i, j) => {
@@ -32,7 +32,12 @@ function bubbleSort(state){
     switch(nextMove){
         case 'compare' : return bubbleCompare()
         case 'swap' : return bubbleSwap(array, compareIdx, compareIdx+1);
-        case 'sorted': return state;
+        case 'sorted': 
+            console.log('DONE')
+            return {...state, nextMove:'eject'};
+        case 'eject':
+            console.log('EJECT')
+            return state
     }
 }
 
@@ -48,13 +53,13 @@ function quickSort(state){
         case 'eject':
             console.log('EJECT')
             return state
-        case  'checkCollection': //1
+        case  'checkCollection': 
             console.log('Checking Collection...')
             console.log('incoming collection: ', listOfSubArrays)
             console.log('incoming sorted range: ', listOfSubArrays[listOfSubArrays.length-1])
             console.log('incoming pivots: ', pivots)
             
-            //exit condition
+            //Exit condition
             if(!listOfSubArrays[0])return {...state, isSorted:true, nextMove:'sorted' };
             else {
                 let copy = [...listOfSubArrays]
@@ -65,17 +70,15 @@ function quickSort(state){
                 if(leftEdge>0 && pivotIdx<=5)newPivots = { leftIdx:leftEdge-1, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)};
                 else newPivots = { leftIdx:leftEdge, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)};
 
-                
                 //check if need to go lower
                 if(rightEdge-leftEdge <=2){
                     console.log('bottom condition hit, start eliminating subArrayList:', copy)
-                    
                     return {...state, listOfSubArrays:copy, nextMove:'checkCollection'}
                 } else {
                     let updatedList = [...copy]
                     console.log('Continuation settings...')
                     
-                    //prepare next subArrays if any
+                    //Prepare next subArrays if any
                     if(rightEdge-rightIdx>2){
                         console.log('adding range on right side: ', [rightIdx, rightEdge])
                         if(rightEdge<array.length)updatedList = [ ...updatedList, [rightIdx, rightEdge+1]];
@@ -86,7 +89,6 @@ function quickSort(state){
                         if(leftEdge>0 && pivotIdx<=5)updatedList = [...updatedList, [leftEdge-1, leftIdx]];
                         else updatedList = [...updatedList, [leftEdge, leftIdx]]; 
                     }
-                    
                     if(updatedList[0]){
                         let nextRange = updatedList[updatedList.length-1]
                         if(nextRange[1]-nextRange[0]>2){
@@ -96,8 +98,7 @@ function quickSort(state){
                             console.log(updatedPivots)
                             return {...state, pivots:updatedPivots, listOfSubArrays:updatedList, nextMove:'sort'}
                         } 
-                    }
-                    else 
+                    } else 
                     return {...state, pivots:newPivots, listOfSubArrays:updatedList, nextMove:'checkCollection'} 
                 }
             } 
@@ -119,53 +120,55 @@ function quickSort(state){
                 return {...state, pivots:{leftIdx:leftIdx, rightIdx:rightIdx-1, pivotIdx:pivotIdx}, nextMove:'sort'};
 
         case 'swap': 
-            // console.log('EVEN SWAPED')
             let arrCopy = [...array] 
             if(leftIdx===pivotIdx || rightIdx === pivotIdx){
                 if(leftIdx===pivotIdx){
                     swap(arrCopy, leftIdx, rightIdx )
                     return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:rightIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
-                }
-                else
+                } else
                 if(rightIdx===pivotIdx){
                     swap(arrCopy, leftIdx, rightIdx )
                     return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:leftIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
                 }
-            } 
-            else {
+            } else {
                 swap(arrCopy, leftIdx, rightIdx )
                 return { ...state, array:[...arrCopy], pivots:{leftIdx:leftIdx+1, pivotIdx:pivotIdx, rightIdx:rightIdx-1}, nextMove:'sort' };
             }
     }
 }
 
-function AlgoComp( {compareMode, syncMode, typeOfAlgo, inputData, isRunningSync} ) {
-    const [ isRunningLocal, setIsRunningLocal ] = useState(false)
+function AlgoComp( { dispatchLocalInput, compareMode, syncMode, typeOfAlgo, inputData, isRunningSync} ) {
+    const [ isRunningLocal, setIsRunningLocal ] = useState('initial')
 
-    //Algo Section
-        function reducerAlgo(state, action){
-            //Formating Data for choosen Algorithm
-            if(action.type.command === 'format'){
-                switch(action.type.algo){
-                    case 'Bubble' :
+    //Algo Section: Choosing and formating or running chosen algorithm
+    function reducerAlgo(state, action){
+        //Formating Data for choosen Algorithm
+        if(action.type.command === 'format'){
+            switch(action.type.algo){
+                case 'Bubble' :
                     return {  isSorted:false, array:[...inputData.array], pivots:{compareIdx:0, sorted:0}, nextMove: 'compare' }
-                    case 'Quick' :
-                        let left = 0
-                        let right = inputData.array.length-1
-                        let piv = Math.floor((left+right)/2)
+                case 'Quick' :
+                    let left = 0
+                    let right = inputData.array.length-1
+                    let piv = Math.floor((left+right)/2)
                     return {  isSorted:false, array:[...inputData.array], pivots:{leftIdx:left, rightIdx:right, pivotIdx:piv}, listOfSubArrays:[[left,right]], nextMove: 'sort' }
-                }
-            } 
-            else 
-            //Running choosen Algorithm
-            if(action.type.command === 'run'){
-                switch(action.type.algo){
-                    case 'Bubble': return   bubbleSort(state)
-                    case 'Quick': return   quickSort(state)
-                }
+                case 'Merge' :
+                    return {isSorted:false, array:[...inputData.array], nextMove:'none'}
+                case 'Selection' :
+                    return {isSorted:false, array:[...inputData.array], nextMove:'none'}
+            }
+        } else 
+        //Running choosen Algorithm
+        if(action.type.command === 'run'){
+            switch(action.type.algo){
+                case 'Bubble': return  bubbleSort(state)
+                case 'Quick': return  quickSort(state)
+                case 'Merge': return  state
+                case 'Selection': return  state
             }
         }
-        const [ algoState, dispatchAlgo ] = useReducer(reducerAlgo, {isSorted:false, array:[], pivots:{}})
+    }
+    const [ algoState, dispatchAlgo ] = useReducer(reducerAlgo, {isSorted:false, array:[], pivots:{}})
 
     //Update/format data on InputData Change according to algo format
         useEffect(() => {  
@@ -179,57 +182,59 @@ function AlgoComp( {compareMode, syncMode, typeOfAlgo, inputData, isRunningSync}
 
     //Sync state switches localRunning state
         useEffect(() => {
-            if(isRunningSync === 'run')return setIsRunningLocal(true)
-            if(isRunningSync === 'pause')return setIsRunningLocal(false)
+            if(isRunningSync === 'run')return setIsRunningLocal('run')
+            if(isRunningSync === 'pause')return setIsRunningLocal('pause')
         }, [isRunningSync])
+ 
+    //Reset local input
+        useEffect(()=>{
+            if(isRunningLocal === 'reset')dispatchLocalInput({type:'changeArray'})
+        }, [ isRunningLocal])
 
-        //Turn of running algo if switched from local to sync
+        //Turn off running algo if switched from local to sync
         useEffect(() => {
-            if(syncMode)return setIsRunningLocal(false) 
+            if(syncMode)return setIsRunningLocal('initial') 
         }, [syncMode])
 
-        //Algo running locally with Interval
+        //Algo is running locally with Interval
         useEffect(() => {
-            if(isRunningLocal){
+            if(isRunningLocal === 'run'){
                 let id = window.setInterval( ()=>
                 dispatchAlgo( {type:{algo:typeOfAlgo, command:'run'}}), inputData.speed )
-                if(algoState.nextMove === 'eject')setIsRunningLocal(false)
+                if(algoState.nextMove === 'eject')setIsRunningLocal('pause')
                 return () => window.clearInterval(id)
             }
         }, [isRunningLocal, algoState]) //re-run when (isRunningLocal === true) && watch when algoState is changing
- 
-    const dynamicClassSwitch = ()=>{
-        if(compareMode && !syncMode ) return 'algo-comp-individ-mode'
-        if(compareMode && syncMode ) return 'algo-comp-sync-mode'
-        if(!compareMode) return 'algo-comp-single-mode'
-    }
-    return (
-        <div className={dynamicClassSwitch()} style={{padding:'1rem'}}>
 
-            <div className='local-buttons__algo-comp'>
-                <div className={syncMode ? 'local-play-menu-off' : 'local-play-menu-on'}>
-                    <button className={isRunningLocal ? 'local-play-button-active' :  'local-play-button-passive' }
+    return (
+        <div className={'algo-comp'}>
+
+            <div className='local-algo-buttons'>
+                <div className={ syncMode ? 'local-play-menu-off' : 'local-play-menu-on'}>
+                    <button className={isRunningLocal === 'reset' ? 'local-play-btn local-play-btn__active' :  'local-play-btn local-play__passive' }
+                        disabled={isRunningLocal === 'run' || syncMode ? true : false} 
+                        onClick={()=>setIsRunningLocal('reset')}> 
+                            <FaStop/>
+                    </button>
+                    <button className={isRunningLocal  === 'run' ? 'local-play-btn local-play-btn__active' :  'local-play-btn local-play__passive' }
                         disabled={syncMode ? true : false} 
-                        onClick={()=>setIsRunningLocal(true)}> 
+                        onClick={()=>setIsRunningLocal('run')}> 
                             <FaPlay/>
                     </button>
-                    <button className={isRunningLocal ? 'local-play-button-passive' :  'local-play-button-active' }
+                    <button className={isRunningLocal === 'pause' ? 'local-play-btn local-play-btn__active' :  'local-play-btn local-play__passive' }
                         disabled={syncMode ? true : false} 
-                        onClick={()=>setIsRunningLocal(false)}> 
+                        onClick={()=>setIsRunningLocal('pause')}> 
                         <FaPause/>
                     </button>
                 </div>
 
                 <button 
                     className='local-next-step'
-                    disabled={isRunningLocal}
+                    disabled={isRunningLocal === 'run' ? true : false}
                     onClick={()=>dispatchAlgo({type: {algo:typeOfAlgo, command:'run'} })}>
                     next step
                 </button>
             </div>
-
-                
-        
 
             <Chart                       
                 data={algoState.array}
@@ -237,10 +242,10 @@ function AlgoComp( {compareMode, syncMode, typeOfAlgo, inputData, isRunningSync}
                 isSorted = {algoState.isSorted}
                 local={true}
                 type={typeOfAlgo}
-            />
+            /> 
+            
         </div>
     )
-
 }
 
 export default AlgoComp

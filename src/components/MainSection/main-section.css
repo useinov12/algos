@@ -1,10 +1,28 @@
-.main-section-sync-mode-on{
+.main-section{
     display: flex;
     padding:1rem;
     margin: .3rem;
-    border-radius: 15px;
-    border:1px solid var(--color-primary-1);
+    border-radius: 10px;
+    /* transition: all .5s ease; */
+    /* background-color: thistle; */
 }
-.main-section-sync-mode-off{
-    border-radius: 9px;
+.main-section.sync-mode-on{ border:1px solid var(--color-primary-1);}
+.main-section.sync-mode-off{ border:1px solid var(--color-primary-2);}
+
+.content-section{
+    /* display: flex; */
+    width:100%;
+    /* background-color: cadetblue; */
+    /* overflow: scroll; */
+    /* transition: all .5s linear; */
+}
+
+.content-section.sync-mode{
+    /* width:90%; */
+}
+.content-section.individ-mode{
+    /* width:100%; */
+}
+.content-section.single-mode{
+
 }

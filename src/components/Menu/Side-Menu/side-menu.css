@@ -84,6 +84,6 @@ ul.algorithm-list {
 
 .list-link button:active{
     border:1px solid var(--color-primary-2);
-    box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
+    box-shadow: inset 3px 3px 4px 0 var(--shadow-inner-dark),
     inset -2px -2px 2px 0 var(--shadow-inner-light);
 }
