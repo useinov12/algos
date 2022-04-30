@@ -4,20 +4,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: all .3s linear;
+    transition: all .3s ease-in-out;
  }
 
 .collapse-container{
     width: 10%;
     /* border: 1px solid red; */
     overflow: hidden;
-    transition: all .3s linear;
+    transition: all .3s ease-in-out;
 }
 .collapse-section{
     opacity:0;
     width:min-content;
     /* margin-left:-100%; */
-    transition: all .5s linear;
+    transition: all .5s ease-in-out;
 }
 .collapse-section.expanded{
     /* margin-left: 0; */

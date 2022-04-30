@@ -2,30 +2,9 @@ import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from './Inputs/Inputs'
 import AlgoSection from './AlgoSection/AlgoSection'
 import { Routes, Route } from "react-router-dom";
-import useDelayUnmount from '../CustomHooks/useDelayUnmount'
+import { createArray, createRandomArray } from '../../functions/functions'
 import './main-section.css'
 
-
-const randomizer = (n) => Math.floor(Math.random()*n)
-const randomizeArray = (array) =>{
-    let n = array.length
-    let t; let i;
-    while(n){
-        i = Math.floor(Math.random()* n--);
-        t = array[n]
-        array[n] = array[i]
-        array[i] = t
-    }
-    return array
-}
-const createArray = (length) => {
-    let array = []
-    for(let i=0; i<length; i++){
-        array.push(i)
-    }
-    randomizeArray(array)
-    return array
-}
 
 
 function MainSection(props) {
@@ -34,13 +13,12 @@ function MainSection(props) {
             searchList, 
             isRunningSync, 
             syncMode, 
-            compareMode, 
             handleRemoveFromCompareList, 
             compareList
         } = props
 
     //SyncInput states
-        let initArr = createArray(20)
+        let initArr = createRandomArray()
         let InitSyncInputState = {
             speed:5,
             length:20,
@@ -55,9 +33,8 @@ function MainSection(props) {
                     let array = createArray(input.length)
                     return { ...input,  array : array }
                 case 'changeArrayRandom':
-                    let randomLength =  randomizer(100)
-                    let randomArr = createArray(randomLength)
-                    return {...input, length : randomLength, array : randomArr}
+                    let randomArr = createRandomArray()
+                    return {...input, length : randomArr.length, array : randomArr}
                 default : console.log('Throw Error from reducerInputSync')
             }
         }
@@ -79,7 +56,7 @@ function MainSection(props) {
 
         useEffect(()=>{
             let timer
-            if(syncMode) timer = setTimeout(()=>setContract(false), 200)
+            if(syncMode) timer = setTimeout(()=>setContract(false), 400)
             else  timer = setTimeout(()=>setContract(true), 5)
             return ()=> clearTimeout(timer)
             
@@ -96,55 +73,47 @@ function MainSection(props) {
     return (
         <div className={syncMode ? 'main-section sync-mode-on main-grid grid' : "main-section sync-mode-off main-grid grid"}>
 
-
-
             <div className={collapseWidth ? `collapse-container collapse-width` : `collapse-container`}>
                 <div className={contract ? `collapse-section` : 'collapse-section expanded'  }>
-                    {<Inputs
+                    <Inputs
                         syncMode={syncMode}
                         inputState={inputState}
                         dispatch={dispatchArray}
                         isRunningSync={isRunningSync}
                         className={'inputs-sync'}
-                    />}
+                    />
                 </div>
             </div>
             
-            
-
-            
-              
             <div className={syncMode ? 'content-section sync-mode' : 'content-section individ-mode'}>
                 <Routes>
                     <Route path="/compare-mode" exact element={
-                        compareList.map((algo, i) =>
+                        compareList.map( (algo, i) =>
                             <AlgoSection
                                 key={i}
                                 typeOfAlgo={algo}
                                 syncMode={syncMode}
-                                compareMode={compareMode}
                                 inputStateSync={inputState}
                                 isRunningSync={isRunningSync}
                                 compareList={compareList}
                                 handleRemoveFromCompareList={handleRemoveFromCompareList}
-                            >
-                            </AlgoSection>
-                        )
-                    }/>
-                    { 
-                        [...sortList, ...searchList].map( (algo, i)=> {
-                            return <Route key={i} path={algo.path} exact element={
+                            />
+                        )}
+                    />
+
+                    { [...sortList, ...searchList].map( (algo, i) => {
+                            return (
+                                <Route key={i} path={algo.path} exact element={
                                     <AlgoSection
                                         typeOfAlgo={algo.name}
                                         syncMode={null}
-                                        compareMode={compareMode}
                                         inputStateSync={null}
                                         isRunningSync={null}
                                         compareList={compareList}
                                         handleRemoveFromCompareList={null}
                                     />
-                                }
-                            />
+                                }/>
+                            ) 
                         })
                     }
                 </Routes>

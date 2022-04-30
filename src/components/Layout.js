@@ -112,9 +112,6 @@ function Layout({theme, handleThemeSwitch}) {
                 sortList={sortList}
                 isRunningSync={isRunningSync}
                 syncMode={syncMode}
-                compareMode={compareMode}
-                handleSyncModeChange={handleSyncModeChange}
-                handleAddToCompareList={handleAddToCompareList}
                 handleRemoveFromCompareList={handleRemoveFromCompareList}
                 compareList={compareList}
             />

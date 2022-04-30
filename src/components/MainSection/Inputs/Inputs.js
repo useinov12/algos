@@ -27,9 +27,9 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
     }
 
     //Generate new array when RESET clicked
-        useEffect(() => {
-            if(isRunningSync === 'reset') dispatch({type: 'changeArray'})
-        }, [isRunningSync])
+    useEffect(() => {
+        if(isRunningSync === 'reset') dispatch({type: 'changeArray'})
+    }, [isRunningSync])
 
     return(
         <div className={className}>
