@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as d3 from 'd3'
 import useD3 from '../CustomHooks/useD3'
 import './chart.css'
+import { svg } from 'd3'
 // dodgerblue
-function Chart({data, pivots, local, type, isSorted}) {
 
+const height = 140
+const width = 550
+
+
+function Chart({data, pivots, local, type, isSorted}) {
 
     const pivotPoints = (plotArea) => {
         let leftBar = plotArea.selectAll('rect'); 
@@ -42,23 +47,11 @@ function Chart({data, pivots, local, type, isSorted}) {
                 return  leftBar, rightBar, pivot, area, sortedBars
         }
     }
-
-    
     const ref = useD3(
         (svg)=>{
+
             //Dimensions
-            let width 
-            let height 
-            let margin
-            // if(local){
-                width = 600
-                height = 135
-                margin = 10
-            // } else {
-            //     width = 650
-            //     height = 200
-            //     margin = 30
-            // }
+            let margin = 10
 
             //Accesors
             const xAccesor = (d, i) => i //accessing index
@@ -77,20 +70,19 @@ function Chart({data, pivots, local, type, isSorted}) {
             svg.selectAll('text').remove()
             let title = svg.append('text')
 
-            const plotArea = svg.select('.plot-area')
-                .attr('height', height-(margin*2))
-                .attr('width', width-margin*2)
-
             //Scales
-            const xScale = d3.scaleBand()
+            let xScale = d3.scaleBand()
                 .domain(X)
-                .rangeRound([0, width])
+                .rangeRound([margin, width])
                 .padding(0.2) //scaleBand only
-            const yScale = d3.scaleLinear()
+            let yScale = d3.scaleLinear()
                 .domain([0, d3.max(Y)])
-                .range([height-margin, 0])
+                .range([height-margin, margin])
 
             //Data points
+
+            const plotArea = svg.select('.plot-area')
+
             plotArea
                 .selectAll('rect')
                 .data(data)
@@ -98,6 +90,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                     (enter)=> enter.append('rect')
                         .attr('width', xScale.bandwidth())
                         .attr('height', height)
+                        // .attr('height', d => d)
                         .transition(),
                     // (update) => update.transition(),
                     (update) => update,
@@ -107,7 +100,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                 .transition()
                 .duration(45)
                 .attr('width', xScale.bandwidth())
-                .attr('height', height)
+                .attr('height',d => yScale(-margin)- yScale(d))
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))
                 .attr('y', d => yScale(yAccesor(d)))
 
@@ -117,6 +110,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                     .attr('fill', 'white')
                     .text(`${type} sort`)
                     .style('font-size', '18px')
+
                     
             //Dynamically render pivot points
             pivotPoints(plotArea)
@@ -125,15 +119,20 @@ function Chart({data, pivots, local, type, isSorted}) {
         [data, pivots]
     )
 
+    // let currentWidth = parseInt(d3.select('#chart-div').style('width'), 10)
+
     return (
-        <div className='chart'>
+        <div className='chart' id='chart-div'>
             {
                 data &&
-                    <svg 
-                        ref={ref}
-                        style={{padding:"3px",}}
-                    >
-                    <g className="plot-area"/> /*  */
+                    <svg ref={ref}
+                    viewBox={`0 0 ${width} ${height}`}
+                    style={{
+                      height: "100%",
+                      marginRight: "0px",
+                      marginLeft: "0px",
+                    }}>
+                    <g className="plot-area"/> 
                 </svg>
             }
         </div>

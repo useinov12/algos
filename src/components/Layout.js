@@ -8,37 +8,44 @@ const sortList = [
     {
         name:"Bubble",
         path:'/bubble-sort',
-
+        isReady:true
     },
     {
         name:"Quick",
-        path:"/quick-sort"
+        path:"/quick-sort",
+        isReady:true
     },
     {
         name:"Merge",
-        path:"/merge-sort"
+        path:"/merge-sort",
+        isReady:false
     },
     {
         name:"Selection",
-        path:"/selection-sort"
+        path:"/selection-sort",
+        isReady:false
     }
 ]
 const searchList = [
     {
         name:"Linear",
-        path:"/linear-search"
+        path:"/linear-search",
+        isReady:false
     },
     {
         name:"Binary",
-        path:"/binary-search"
+        path:"/binary-search",
+        isReady:false
     },
     {
         name:"Jump",
-        path:"/jump-search"
+        path:"/jump-search",
+        isReady:false
     },
     {
         name:"Interpolation",
-        path:"/Interpolation-search"
+        path:"/Interpolation-search",
+        isReady:false
     }
 ]
 
@@ -114,6 +121,8 @@ function Layout({theme, handleThemeSwitch}) {
                 syncMode={syncMode}
                 handleRemoveFromCompareList={handleRemoveFromCompareList}
                 compareList={compareList}
+                compareMode={compareMode}
+                handleChangeCompareMode={handleChangeCompareMode}
             />
         </div>
     )

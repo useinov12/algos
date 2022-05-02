@@ -1,4 +1,4 @@
-//INPUT CREATION FUNCTIONS
+//GENERATE ARRAY FUNCTIONS
 const swap = (arr, i, j) => {
     let holder = arr[i]
     arr[i] = arr[j]
@@ -65,8 +65,7 @@ export const quickSort = (state) =>  {
     let { leftIdx, rightIdx, pivotIdx } = pivots
     
     switch(nextMove){
-        case 'sorted':  return {...state, nextMove:'eject'};
-        
+        case 'sorted':  return {...state, nextMove:'eject'}
         case 'eject': return state
         case  'checkCollection': 
             // console.log('Checking Collection...')

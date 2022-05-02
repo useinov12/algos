@@ -7,6 +7,7 @@
     grid-template-columns: repeat(18, 1fr);
     gap:0;
     grid-template-rows: repeat(18, 1fr);
+    padding: 1rem;
 }
 /* GRIDS STRUCTURE */
 .menu-grid{

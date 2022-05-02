@@ -4,15 +4,15 @@ import './algo-section.css'
 import AlgoComp from './AlgoComp'
 import { createArray, createRandomArray } from '../../../functions/functions'
 
-function AlgoSection(props) {
-        const {
-            syncMode, 
-            typeOfAlgo,
-            inputStateSync, 
-            isRunningSync,
-            compareList,
-            handleRemoveFromCompareList
-        } = props 
+function AlgoSection(props, children) {
+    const {
+        syncMode, 
+        typeOfAlgo,
+        inputStateSync, 
+        isRunningSync,
+        compareList,
+        handleRemoveFromCompareList
+    } = props 
 
     //LOCAL INPUT STATE
     let arrInit = createRandomArray()
@@ -53,6 +53,7 @@ function AlgoSection(props) {
     }, [ inputStateSync ])
 
 
+
     //Animation for Input sync/individual switch 
     const [contract, setContract ] = useState(false)
     const [collapseWidth, setCollapseWidth ] = useState(false)
@@ -72,6 +73,7 @@ function AlgoSection(props) {
 
     return (
         <div className="compare-mode-block">
+        
             <button 
                 className="remove-block-btn"
                 onClick={ ()=> handleRemoveFromCompareList( compareList, typeOfAlgo ) }> 
@@ -91,6 +93,7 @@ function AlgoSection(props) {
                     </div>
                 </div>
                 
+
                 <AlgoComp
                     dispatchLocalInput={dispatchLocalInput}
                     syncMode={syncMode}
@@ -98,7 +101,6 @@ function AlgoSection(props) {
                     inputData={inputState}
                     isRunningSync={isRunningSync}
                 />
-            
             </div>
         </div>
     )

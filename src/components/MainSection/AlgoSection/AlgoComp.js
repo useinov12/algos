@@ -101,13 +101,15 @@ function AlgoComp( { dispatchLocalInput,  syncMode, typeOfAlgo, inputData, isRun
                 </button>
             </div>
 
-            <Chart                       
-                data={algoState.array}
-                pivots={algoState.pivots}
-                isSorted = {algoState.isSorted}
-                local={true}
-                type={typeOfAlgo}
-            /> 
+            <div className='chart-container'>
+                <Chart                       
+                    data={algoState.array}
+                    pivots={algoState.pivots}
+                    isSorted = {algoState.isSorted}
+                    local={true}
+                    type={typeOfAlgo}
+                /> 
+            </div>
             
         </div>
     )

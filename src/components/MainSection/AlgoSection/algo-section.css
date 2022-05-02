@@ -1,16 +1,22 @@
 .compare-mode-block{
-    height:145px;
+    height:155px;
     display: flex;
     align-items: center;
-    overflow: hidden;
-    width:100%;
+    /* overflow: hidden; */
+    /* width:100%; */
     background-color: transparent;
-    padding: .15rem .15rem .15rem .15rem;
+    /* padding: .15rem .15rem .15rem .15rem; */
+    padding: .15rem;
     margin-bottom: .25rem;
     border-radius: 10px;
     box-shadow: inset 2px 2px 3px 0 var(--shadow-inner-dark),
     inset -2px -1px 1px 0 var(--shadow-inner-light);
     position: relative;
+}
+
+.chart-container{
+    /* flex-grow: 1; */
+    flex-shrink: 1;
 }
 
 .lower-level__compare-block{
@@ -21,23 +27,25 @@
     height: 100%;
     border-radius: 10px;
     background-color: var(--bg-color);
-    padding: .15rem .15rem .15rem 2.5rem;
+    padding: .15rem .15rem .1rem 2.5rem;
 }
-
-
 
 
 
 .algo-comp{
     display:flex;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    /* justify-content: space-around; */
+    /* padding-left: 3rem; */
+    /* padding-right: 3rem; */
     /* width: 100%; */
+    /* background-color: darkgrey; */
 }
 
 .local-algo-buttons{
     display: flex;
     flex-direction: column;
+    align-self: flex-end;
+    flex-grow: 0;
     /* background-color: coral; */
 }
 

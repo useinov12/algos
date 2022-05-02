@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from './Inputs/Inputs'
 import AlgoSection from './AlgoSection/AlgoSection'
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { createArray, createRandomArray } from '../../functions/functions'
 import './main-section.css'
 
@@ -14,8 +14,14 @@ function MainSection(props) {
             isRunningSync, 
             syncMode, 
             handleRemoveFromCompareList, 
-            compareList
+            handleChangeCompareMode,
+            compareList,
+            compareMode
         } = props
+
+    const list = [...sortList, ...searchList]
+    const location = useLocation()
+
 
     //SyncInput states
         let initArr = createRandomArray()
@@ -49,8 +55,13 @@ function MainSection(props) {
             if(isRunningSync === 'reset') return dispatchArray( {type:'changeArray'} );
         }, [isRunningSync])
 
+    //Turn On CompareMode if page refreshed/or  visit strait to CompareMode page
+    useEffect(()=>{
+        if(location.pathname === '/compare-mode' &&  !compareMode) handleChangeCompareMode()
+    }, [location])
 
 
+    //Input switch animation
         const [contract, setContract ] = useState(false)
         const [collapseWidth, setCollapseWidth ] = useState(false)
 
@@ -88,7 +99,7 @@ function MainSection(props) {
             <div className={syncMode ? 'content-section sync-mode' : 'content-section individ-mode'}>
                 <Routes>
                     <Route path="/compare-mode" exact element={
-                        compareList.map( (algo, i) =>
+                        compareList.map( (algo, i) =>   
                             <AlgoSection
                                 key={i}
                                 typeOfAlgo={algo}
@@ -101,7 +112,7 @@ function MainSection(props) {
                         )}
                     />
 
-                    { [...sortList, ...searchList].map( (algo, i) => {
+                    { list.map( (algo, i) => {
                             return (
                                 <Route key={i} path={algo.path} exact element={
                                     <AlgoSection
