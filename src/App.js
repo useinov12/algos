@@ -5,7 +5,6 @@ import './App.css'
 import './reset.css'
 
 function App() {
-
   console.log('App rerendered')
   const [theme, setTheme ] = useState('dark')
   const handleThemeSwitch =  theme  => setTheme(theme)

@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import * as d3 from 'd3'
 import useD3 from '../CustomHooks/useD3'
 import './chart.css'
-import { svg } from 'd3'
-// dodgerblue
 
 const height = 140
 const width = 550
@@ -42,9 +40,8 @@ function Chart({data, pivots, local, type, isSorted}) {
                     pivot  
                         .filter((d,i)=> i===pivots.pivotIdx)
                         .attr('fill', 'orange')
-                    // if(isSorted)sortedBars.filter((d, i)=> i>=data.length).attr('fill', 'green');
 
-                return  leftBar, rightBar, pivot, area, sortedBars
+                return  leftBar, rightBar, pivot, area
         }
     }
     const ref = useD3(
@@ -65,7 +62,6 @@ function Chart({data, pivots, local, type, isSorted}) {
             svg
                 .attr('height', height)
                 .attr('width', width)
-                // .attr('viewBox', `0 0 ${width} ${height}`)
             
             svg.selectAll('text').remove()
             let title = svg.append('text')
@@ -80,9 +76,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                 .range([height-margin, margin])
 
             //Data points
-
             const plotArea = svg.select('.plot-area')
-
             plotArea
                 .selectAll('rect')
                 .data(data)
@@ -103,6 +97,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                 .attr('height',d => yScale(-margin)- yScale(d))
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))
                 .attr('y', d => yScale(yAccesor(d)))
+                //add class
 
                 title
                     .attr('x', 10)
@@ -110,7 +105,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                     .attr('fill', 'white')
                     .text(`${type} sort`)
                     .style('font-size', '18px')
-
+                    //add class
                     
             //Dynamically render pivot points
             pivotPoints(plotArea)
@@ -118,8 +113,6 @@ function Chart({data, pivots, local, type, isSorted}) {
         },
         [data, pivots]
     )
-
-    // let currentWidth = parseInt(d3.select('#chart-div').style('width'), 10)
 
     return (
         <div className='chart' id='chart-div'>
@@ -129,6 +122,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                     viewBox={`0 0 ${width} ${height}`}
                     style={{
                       height: "100%",
+                      width:'100%',
                       marginRight: "0px",
                       marginLeft: "0px",
                     }}>

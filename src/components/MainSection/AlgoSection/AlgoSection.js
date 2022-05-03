@@ -4,14 +4,16 @@ import './algo-section.css'
 import AlgoComp from './AlgoComp'
 import { createArray, createRandomArray } from '../../../functions/functions'
 
-function AlgoSection(props, children) {
+function AlgoSection(props) {
     const {
         syncMode, 
+        compareMode,
         typeOfAlgo,
         inputStateSync, 
         isRunningSync,
         compareList,
-        handleRemoveFromCompareList
+        handleRemoveFromCompareList, 
+        children
     } = props 
 
     //LOCAL INPUT STATE
@@ -39,7 +41,6 @@ function AlgoSection(props, children) {
 
 
     //DATA STREAM SWITCH: Sync/Local
-
     //Assign initial data stream 
     useEffect(() => {
         if(syncMode) return dispatchLocalInput({ type:'update', playload:inputStateSync });
@@ -51,8 +52,6 @@ function AlgoSection(props, children) {
         if(syncMode)return dispatchLocalInput({type:'update', playload:inputStateSync});
         else return dispatchLocalInput( {type:'update', playload:inputState} )
     }, [ inputStateSync ])
-
-
 
     //Animation for Input sync/individual switch 
     const [contract, setContract ] = useState(false)
@@ -71,37 +70,51 @@ function AlgoSection(props, children) {
         return ()=> clearTimeout(timer)
     },[contract])
 
-    return (
-        <div className="compare-mode-block">
-        
-            <button 
-                className="remove-block-btn"
-                onClick={ ()=> handleRemoveFromCompareList( compareList, typeOfAlgo ) }> 
-                X
-            </button>
-
-            <div className='lower-level__compare-block'>
-
+    const renderAlgo = () => {
+        return (<> 
+            { compareMode && 
                 <div className={collapseWidth ? `collapse-container collapse-width` : `collapse-container`}>
                     <div className={ contract ? `collapse-section` : 'collapse-section expanded' }>
                         <Inputs  
                             syncMode={syncMode}
                             inputState={inputState}
                             dispatch={dispatchLocalInput}
-                            className={`local-inputs`}
+                            className={`local-inputs compare-mode`}
                         />
                     </div>
-                </div>
-                
+                </div>}
 
-                <AlgoComp
-                    dispatchLocalInput={dispatchLocalInput}
-                    syncMode={syncMode}
-                    typeOfAlgo={typeOfAlgo}
-                    inputData={inputState}
-                    isRunningSync={isRunningSync}
-                />
-            </div>
+            <AlgoComp
+                dispatchLocalInput={dispatchLocalInput}
+                compareMode={compareMode}
+                syncMode={syncMode}
+                typeOfAlgo={typeOfAlgo}
+                inputData={inputState}
+                isRunningSync={isRunningSync}
+            >
+                {!compareMode && 
+                    <Inputs  
+                        syncMode={syncMode}
+                        inputState={inputState}
+                        dispatch={dispatchLocalInput}
+                        className={`local-inputs single-mode`}
+                    />}
+            </AlgoComp>
+        </>)
+    }
+
+    return (
+        <div className={ compareMode ? 'algo-section-block compare-block' : 'algo-section-block single-block'}>
+
+            { compareMode && 
+                <button 
+                    className="remove-block-btn"
+                    onClick={ ()=> handleRemoveFromCompareList( compareList, typeOfAlgo ) }> 
+                    X
+                </button> }
+            
+            { children ? children : renderAlgo() }
+
         </div>
     )
 }

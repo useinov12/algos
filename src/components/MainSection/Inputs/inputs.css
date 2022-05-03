@@ -1,36 +1,25 @@
-.inputs-sync{  
-    width:fit-content;
-    /* padding: .15rem; */
-    /* margin-right: .5rem; */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: all .3s ease-in-out;
- }
-
 .collapse-container{
     width: 10%;
-    /* border: 1px solid red; */
     overflow: hidden;
     transition: all .3s ease-in-out;
 }
 .collapse-section{
     opacity:0;
     width:min-content;
-    /* margin-left:-100%; */
     transition: all .5s ease-in-out;
 }
-.collapse-section.expanded{
-    /* margin-left: 0; */
-    opacity:1;
+.collapse-section.expanded{ opacity:1; }
+.collapse-container.collapse-width{ width: 0; }
+
+.inputs-sync{  
+    width:fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all .3s ease-in-out;
 }
 
-.collapse-container.collapse-width{
-    /* overflow: hidden; */
-    width: 0;
-}
 .local-inputs{
-    /* border: 1px solid red; */
     font-size: .9rem;
     display: flex;
     flex-direction: column;
@@ -38,6 +27,9 @@
     width: min-content;
     padding:.45rem;
     transition: all .5s linear;
+}
+.local-inputs.single-mode{
+    width:100%;
 }
 .input-content{
     display: flex;
@@ -98,11 +90,10 @@ input[type=range]::-webkit-slider-thumb{
 input[type=range]:focus{
     outline:none;
 }
-input[type=range]::-ms-track{
+input[type=range]::-ms-track{/* hides the slider so custom styles ca be added */
     width:90%;
     cursor:pointer;
-    /* hides the slider so custom styles ca be added */
-    background: transparent;
+    background: transparent;     
     border-color: transparent;
     color:transparent;
 }

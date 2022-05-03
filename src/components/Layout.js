@@ -3,6 +3,7 @@ import Menu from './Menu/Menu'
 import SideMenu from './Menu/Side-Menu/SideMenu'
 import MainSection from './MainSection/MainSection'
 import './layout.css'
+import { sort } from 'd3-array'
 
 const sortList = [
     {
@@ -49,6 +50,7 @@ const searchList = [
     }
 ]
 
+const list = [...sortList, ...searchList]
 
 function Layout({theme, handleThemeSwitch}) {
 
@@ -115,6 +117,7 @@ function Layout({theme, handleThemeSwitch}) {
                 compareList={compareList}
             />
             <MainSection 
+            
                 searchList={searchList}
                 sortList={sortList}
                 isRunningSync={isRunningSync}
