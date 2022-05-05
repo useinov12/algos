@@ -23,15 +23,15 @@
 }
 
 .theme-light{
-  --bg-color:#ffffff;
-  --text-color:#2f532a;
-  --color-primary-1:#697a62;
-  --color-primary-2:#28c202;
+  --bg-color:#dbd7d7;
+  --text-color:#131412;
+  --color-primary-1:#848a82;
+  --color-primary-2:#0255c2;
   --color-primary-3:#3C1874;
   --color-primary-4:#3C1874;
   --color-danger:rgb(220, 0, 22);
   --color-warning:#F1D00A;
-  --color-disabled:#C2B8A3;
+  --color-disabled:#5c5b5b;
 
   --shadow-outer-dark:rgba(7, 6, 6, 0.5);
   --shadow-outer-light:rgba(100, 100, 100, 0.3);

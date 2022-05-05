@@ -5,13 +5,13 @@ import './inputs.css'
 
 function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
 
-    const [length, setLength ] = useState(20)
+    const [length, setLength ] = useState(60)
     const handleLengthChange = (l) =>{
         dispatch({type: 'changeLength', playload: l})
         dispatch({type: 'changeArray', playload: l})
         return setLength(l)
     }
-    const [speed, setSpeed ] = useState(5)
+    const [speed, setSpeed ] = useState(45)
     const handleSpeedChange = (s) =>{
         dispatch({type: 'changeSpeed', playload: s})
         return setSpeed(s)

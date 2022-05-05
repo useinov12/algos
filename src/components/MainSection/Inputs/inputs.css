@@ -1,11 +1,10 @@
 .collapse-container{
-    width: 10%;
+    width: 15%;
     overflow: hidden;
     transition: all .3s ease-in-out;
 }
 .collapse-section{
     opacity:0;
-    width:min-content;
     transition: all .5s ease-in-out;
 }
 .collapse-section.expanded{ opacity:1; }
@@ -13,6 +12,7 @@
 
 .inputs-sync{  
     width:fit-content;
+    margin-right: .5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,8 +24,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: min-content;
-    padding:.45rem;
+    width:fit-content;
+    padding:.2rem;
     transition: all .5s linear;
 }
 .local-inputs.single-mode{

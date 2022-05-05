@@ -3,42 +3,56 @@
     flex-direction: column;
     align-content: center;
     text-align: center;
-    padding: 1rem;
+    padding-top: 2rem;
+    margin-right: .5rem;
 }
-.side-menu-header{ padding: 1rem }
-.list-switch{
+.side-menu-header{ 
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1rem 
+}
+.list-switch{
+    display: flex;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 1rem;
+    border-radius:  10px;
 }
 .list-switch :nth-child(1){ border-radius:  10px 0 0 10px }
 .list-switch :nth-child(2){ border-radius:  0 10px 10px 0 }
 .list-option{
     width: 50%;
-    display: flex;
-    align-items: center;
+    height: 100%;;
     color:var(--text-color);
     background-color: var(--bg-color);
-    border-radius: 10px;
+    padding: .7rem;
     cursor: pointer;
     transition: all .2s ease;
 }
 .active-selection{
     border:1px solid var(--color-primary-2);
-    padding: .7rem 1rem;
     box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
     inset -2px -2px 2px 0 var(--shadow-inner-light);
 }
-.passive-selection{
-    padding: .7rem .9rem;
-    border: 1px solid var(--color-disabled);
+.passive-selection{ border: 1px solid var(--color-disabled);}
+
+.side-menu-icon{display: none;}
+@media only screen and (max-width: 950px){
+    .list-option span{ display: none; }
+    .side-menu-icon{
+        height: 100%;
+        width:100%;
+        font-size: 1rem;
+        display: unset;
+    }
 }
+
 ul.algorithm-list {
     list-style-type: none;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
 }
 .active{
     width:100%;
@@ -50,7 +64,8 @@ ul.algorithm-list {
 }
 .active span{
     transition: all .2s ease;
-    margin-left: .6rem;
+    margin-left: .3rem;
+    padding-left: .3rem;
 }
 .list-item {
     height: 3rem;
@@ -65,14 +80,13 @@ ul.algorithm-list {
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
-    font-size: 1.2rem;
     text-decoration: none;
     color:var(--text-color);
 }
 .list-link button{
     display: flex;
     align-items: center;
-    padding: .5rem 1rem;
+    /* padding: .5rem 1rem; */
     transition: all .2s ease;
     color:var(--text-color);
     background-color: var(--bg-color);

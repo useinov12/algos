@@ -19,8 +19,8 @@ function AlgoSection(props) {
     //LOCAL INPUT STATE
     let arrInit = createRandomArray()
     let initInputState = {
-        speed:5,
-        length:20,
+        speed:45,
+        length:60,
         array:[ ...arrInit ]
     }
     function reducerLocalInput(input, action){
@@ -71,7 +71,7 @@ function AlgoSection(props) {
     },[contract])
 
     const renderAlgo = () => {
-        return (<> 
+        return (<div className='compare-block-content'> 
             { compareMode && 
                 <div className={collapseWidth ? `collapse-container collapse-width` : `collapse-container`}>
                     <div className={ contract ? `collapse-section` : 'collapse-section expanded' }>
@@ -100,7 +100,7 @@ function AlgoSection(props) {
                         className={`local-inputs single-mode`}
                     />}
             </AlgoComp>
-        </>)
+        </div>)
     }
 
     return (

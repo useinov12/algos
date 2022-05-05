@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import AlgoList from './AlgoList';
 import './side-menu.css'
+import { FaSortAmountDownAlt, FaSearch } from 'react-icons/fa';
 
 
 function SideMenu({searchList, sortList, list, handleChangeList, compareMode, handleAddToCompareList, compareList}) {
@@ -20,14 +21,14 @@ function SideMenu({searchList, sortList, list, handleChangeList, compareMode, ha
                     onClick={()=>{
                         handleChangeList(sortList)
                         setClicked(false)
-                    }}> <p>SORT</p>
+                    }}>  <span>SORT</span><FaSortAmountDownAlt className='side-menu-icon sort-icon'/>
                 </button>
                 <button 
                     className={clicked ? "list-option active-selection" : "list-option passive-selection"} 
                     onClick={()=>{
                         handleChangeList(searchList)
                         setClicked(true)
-                    }}> <p>SEARCH</p>
+                    }}> <span>SEARCH</span><FaSearch className='side-menu-icon search-icon'/>
                 </button>
             </div>
             

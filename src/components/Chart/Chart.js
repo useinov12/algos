@@ -10,7 +10,11 @@ const width = 550
 function Chart({data, pivots, local, type, isSorted}) {
 
     const pivotPoints = (plotArea) => {
-        let leftBar = plotArea.selectAll('rect'); 
+
+        let allBars = plotArea.selectAll('rect')
+            .attr('fill', 'var(--text-color')
+        let leftBar = plotArea.selectAll('rect')
+        
         let rightBar = plotArea.selectAll('rect'); 
         let sortedBars = plotArea.selectAll('rect'); 
         let pivot = plotArea.selectAll('rect');
@@ -26,11 +30,11 @@ function Chart({data, pivots, local, type, isSorted}) {
                 sortedBars 
                     .filter((d, i)=> i>=data.length-pivots.sorted)
                     .attr('fill', 'green')
-                return leftBar, rightBar, sortedBars
+                return leftBar, rightBar, sortedBars, allBars
             case 'Quick':
                 let area = plotArea.selectAll('rect')
                     .filter((d,i)=> i>=pivots.leftIdx && i<=pivots.rightIdx)
-                    .attr('fill', 'grey')
+                    // .attr('fill', 'var(--color-primary-3')
                     leftBar 
                         .filter((d,i)=> i===pivots.leftIdx)
                         .attr('fill', 'firebrick')
@@ -41,7 +45,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                         .filter((d,i)=> i===pivots.pivotIdx)
                         .attr('fill', 'orange')
 
-                return  leftBar, rightBar, pivot, area
+                return  leftBar, rightBar, pivot, area, allBars
         }
     }
     const ref = useD3(
@@ -97,6 +101,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                 .attr('height',d => yScale(-margin)- yScale(d))
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))
                 .attr('y', d => yScale(yAccesor(d)))
+                // .attr('class', 'bars')
                 //add class
 
                 title
@@ -105,6 +110,7 @@ function Chart({data, pivots, local, type, isSorted}) {
                     .attr('fill', 'white')
                     .text(`${type} sort`)
                     .style('font-size', '18px')
+                    .classed('algo-title', true)
                     //add class
                     
             //Dynamically render pivot points

@@ -3,7 +3,10 @@
     padding:1rem;
     border-radius: 10px;
 }
-.main-section.sync-mode-on{ border:1px solid var(--color-primary-1);}
+.main-section.sync-mode-on{ 
+    border:1px solid var(--color-primary-1);
+
+}
 .main-section.sync-mode-off{ border:1px solid var(--color-primary-2);}
 
 .content-section{

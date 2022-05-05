@@ -4,6 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .sync-menu{
     display: flex;
@@ -68,7 +69,10 @@
     box-shadow: inset 4px 3px 7px 0 var(--shadow-inner-dark),
     inset -2px -2px 2px 0 var(--shadow-inner-light);
 }
-.sync-play-btn__passive{border:none}
+.sync-play-btn__passive{
+    border:none;
+    cursor: pointer;
+}
 .sync-play-btn[disabled]{ color:var(--color-disabled) }
 
 .theme-switch{

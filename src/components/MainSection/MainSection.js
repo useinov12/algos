@@ -25,8 +25,8 @@ function MainSection(props) {
     //SyncInput states
     let initArr = createRandomArray()
     let InitSyncInputState = {
-        speed:5,
-        length:20,
+        speed:45,
+        length:60,
         array:[...initArr]
     }
     function  reducerInputSync(input, action){

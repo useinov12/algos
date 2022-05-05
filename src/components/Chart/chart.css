@@ -7,3 +7,15 @@
     height: 100%;
     display: flex;
 }
+.algo-title{
+    fill:var(--text-color);
+}
+.bars{
+    fill: var(--text-color)
+}
+
+.target-bar{
+    fill:darkslateblue;
+    background-color: darkslateblue;
+    color: darkslateblue;
+}

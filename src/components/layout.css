@@ -4,6 +4,7 @@
     height: 100vh;
     width:100vw;
     display: grid;
+    /* justify-content: center; */
     grid-template-columns: repeat(18, 1fr);
     gap:0;
     grid-template-rows: repeat(18, 1fr);
@@ -21,4 +22,47 @@
 .main-grid{
     grid-column: 4/19;
     grid-row: 2/19;
+}
+
+@media only screen and (min-width: 1800px) {
+    .layout{
+        width:60%;
+        margin: 0 20%;
+        font-size: 1.2rem;
+    }
+}
+
+@media only screen and (min-width: 1600px) {
+    .layout{
+        width:80%;
+        margin: 0 10%;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .menu-grid{
+        grid-column: 4/19;
+        grid-row: 1/2;
+    }
+    .side-menu-grid{
+        grid-column: 1/4;
+        grid-row: 1/19;
+    }
+    .main-grid{
+        grid-column: 4/19;
+        grid-row: 2/19;
+    }
+}
+@media only screen and (max-width: 1200px) {
+    .menu-grid{
+        grid-column: 1/19;
+        grid-row: 1/2;
+    }
+    .side-menu-grid{
+        grid-column: 1/4;
+        grid-row: 2/19;
+    }
+    .main-grid{
+        grid-column: 4/19;
+        grid-row: 2/19;
+    }
 }
