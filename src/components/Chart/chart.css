@@ -1,21 +1,6 @@
-.target{
-    background-color: red;
-}
-
 .chart{
     width:100%;
     height: 100%;
-    display: flex;
 }
-.algo-title{
-    fill:var(--text-color);
-}
-.bars{
-    fill: var(--text-color)
-}
-
-.target-bar{
-    fill:darkslateblue;
-    background-color: darkslateblue;
-    color: darkslateblue;
-}
+.algo-title{ fill:var(--text-color);}
+.bars{ fill: var(--text-color)}
