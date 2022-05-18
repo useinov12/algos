@@ -7,7 +7,10 @@ const height = 140
 const width = 550
 
 
-function Chart({data, pivots, local, type, isSorted}) {
+function Chart({inputSpeed, data, pivots, local, type, isSorted}) {
+
+    let duration = 45
+    if(inputSpeed<45)duration=25
 
     const pivotPoints = (plotArea) => {
 
@@ -52,7 +55,7 @@ function Chart({data, pivots, local, type, isSorted}) {
         (svg)=>{
 
             //Dimensions
-            let margin = 10
+            // let margin = 10
 
             //Accesors
             const xAccesor = (d, i) => i //accessing index
@@ -73,11 +76,11 @@ function Chart({data, pivots, local, type, isSorted}) {
             //Scales
             let xScale = d3.scaleBand()
                 .domain(X)
-                .rangeRound([margin, width])
+                .rangeRound([0, width])
                 .padding(0.2) //scaleBand only
             let yScale = d3.scaleLinear()
                 .domain([0, d3.max(Y)])
-                .range([height-margin, margin])
+                .range([height-20, 20])
 
             //Data points
             const plotArea = svg.select('.plot-area')
@@ -88,17 +91,17 @@ function Chart({data, pivots, local, type, isSorted}) {
                     (enter)=> enter.append('rect')
                         .attr('width', xScale.bandwidth())
                         .attr('height', height)
-                        // .attr('height', d => d)
                         .transition(),
-                    // (update) => update.transition(),
-                    (update) => update,
+                    (update) => update.transition(),
+                    // (update) => update,
                     (exit) => exit.remove()
                 )
                 .attr('fill', 'white')
                 .transition()
-                .duration(45)
+                .duration(duration)
                 .attr('width', xScale.bandwidth())
-                .attr('height',d => yScale(-margin)- yScale(d))
+                .attr('height',d => yScale(-20)- yScale(d)) // margin-bottom: -10 
+                // .attr('height',d =>  yScale(d))
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))
                 .attr('y', d => yScale(yAccesor(d)))
                 // .attr('class', 'bars')
@@ -106,7 +109,7 @@ function Chart({data, pivots, local, type, isSorted}) {
 
                 title
                     .attr('x', 10)
-                    .attr('y', margin*2-5)
+                    .attr('y', 10*2-5)
                     .attr('fill', 'white')
                     .text(`${type} sort`)
                     .style('font-size', '18px')
@@ -115,16 +118,14 @@ function Chart({data, pivots, local, type, isSorted}) {
                     
             //Dynamically render pivot points
             pivotPoints(plotArea)
-
         },
         [data, pivots]
     )
 
     return (
         <div className='chart' id='chart-div'>
-            {
-                data &&
-                    <svg ref={ref}
+            { data &&
+                <svg ref={ref}
                     viewBox={`0 0 ${width} ${height}`}
                     style={{
                       height: "100%",

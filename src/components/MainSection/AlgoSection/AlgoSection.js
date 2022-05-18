@@ -53,6 +53,7 @@ function AlgoSection(props) {
         else return dispatchLocalInput( {type:'update', playload:inputState} )
     }, [ inputStateSync ])
 
+
     //Animation for Input sync/individual switch 
     const [contract, setContract ] = useState(false)
     const [collapseWidth, setCollapseWidth ] = useState(false)

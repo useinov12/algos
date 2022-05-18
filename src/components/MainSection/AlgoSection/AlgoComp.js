@@ -78,6 +78,7 @@ function AlgoComp( props) {
             <div className='local-algo-menu'>
                 { children }
                 <div className='local-menu-buttons'>
+                
                     <div className={ syncMode ? 'local-play-menu-off' : 'local-play-menu-on'}>
                         <button className={isRunningLocal === 'reset' ? 'local-play-btn local-play-btn__active' :  'local-play-btn local-play__passive' }
                             disabled={isRunningLocal === 'run' || syncMode ? true : false} 
@@ -95,6 +96,7 @@ function AlgoComp( props) {
                             <FaPause/>
                         </button>
                     </div>
+
                     <button 
                         className='local-next-step'
                         disabled={isRunningLocal === 'run' ? true : false}
@@ -105,7 +107,8 @@ function AlgoComp( props) {
             </div>
 
             <div className='chart-container'>
-                <Chart                       
+                <Chart
+                    inputSpeed={inputData.speed}                       
                     data={algoState.array}
                     pivots={algoState.pivots}
                     isSorted = {algoState.isSorted}

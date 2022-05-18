@@ -21,7 +21,7 @@ function Inputs({syncMode, inputState, isRunningSync, dispatch, className}) {
             if(syncMode) return true;
             else return false;
         } else {
-            if(isRunningSync === 'run'||isRunningSync === 'pause' ) return true
+            if(isRunningSync === 'run' || isRunningSync === 'pause' ) return true
             else return false;
         }
     }
