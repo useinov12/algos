@@ -6,8 +6,6 @@ const useD3 = (renderChartFn, dependencies) =>  {
 
     useEffect(() => {
         renderChartFn(d3.select(ref.current))
-        // console.log('useD3 Hook used')
-        // console.log(`useD3 Hook ${ref.current}`)
         return () => {}
     }, [dependencies])
 

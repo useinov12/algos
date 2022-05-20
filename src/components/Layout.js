@@ -62,7 +62,7 @@ function Layout({theme, handleThemeSwitch}) {
     //HANDLERS CONNECTED WITH SIDE-MENU
     const handleChangeCompareMode = () => setCompareMode( prev => !prev )
     const handleAddToCompareList = (compareList, item) =>{
-        if(compareList.find((d)=>d === item))return  //check if exsist
+        // if(compareList.find((d)=>d === item))return  //check if exsist
         let updated = [...compareList]
         updated.push(item)
         setCompareList(updated) 
@@ -85,7 +85,7 @@ function Layout({theme, handleThemeSwitch}) {
             if(state) setSyncMode(state);
             else setSyncMode(prev => !prev);
         }
-        const handleisRunningSyncChange = (state)=>{
+        const handleIsRunningSyncChange = (state)=>{
             setIsRunningSync(state)
         }
 
@@ -103,7 +103,7 @@ function Layout({theme, handleThemeSwitch}) {
                 compareMode={compareMode}
                 compareList={compareList}
                 handleThemeSwitch={handleThemeSwitch} 
-                handleisRunningSyncChange={handleisRunningSyncChange}
+                handleIsRunningSyncChange={handleIsRunningSyncChange}
                 handleSyncModeChange={handleSyncModeChange}
                 handleChangeCompareMode={handleChangeCompareMode}
             />
@@ -122,6 +122,7 @@ function Layout({theme, handleThemeSwitch}) {
                 sortList={sortList}
                 isRunningSync={isRunningSync}
                 syncMode={syncMode}
+                handleIsRunningSyncChange={handleIsRunningSyncChange}
                 handleRemoveFromCompareList={handleRemoveFromCompareList}
                 compareList={compareList}
                 compareMode={compareMode}

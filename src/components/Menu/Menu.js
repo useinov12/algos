@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import PlayMenu from '../MainSection/PlayMenu/PlayMenu'
 import './menu.css'
 import { FaPlay, FaPause, FaStop, FaSun, FaMoon } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
-export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, handleSyncModeChange, handleChangeCompareMode, isRunningSync, handleisRunningSyncChange, compareList}) {
+export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, handleSyncModeChange, handleChangeCompareMode, isRunningSync, handleIsRunningSyncChange, compareList}) {
 
     //BUTTON DISABLE HANDLERS
     const handleDisableCompareBtn = () => {
@@ -24,19 +25,8 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
         if(isRunningSync === 'run' || isRunningSync === 'pause' ) return true;
         else return false;
     }
-    const handleDisableRunSyncBtn = () =>{
-        if(!syncMode || !compareMode) return true;
-        else return false;
-    }
-    const handleDisablePauseBtn = () =>{
-        if(!syncMode || !compareMode) return true;
-        else return false;
-    }
-    const handleDisableResetBtn = () =>{
-        if(!syncMode || !compareMode) return true;
-        if(isRunningSync !== 'pause') return true;
-        else return false;
-    }
+
+
 
     return (
         <div className="menu menu-grid grid">
@@ -65,31 +55,6 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
                         onClick={()=>handleSyncModeChange()}>
                         <span>SYNC Mode</span>
                     </button>
-                </div>
-
-
-                <div className={syncMode ? 'sync-play-menu sync-play-menu__active' : 'sync-play-menu sync-play-menu__passive'}>
-                    <button
-                        className={isRunningSync === 'reset' && syncMode ? 'sync-play-btn sync-play-btn__active' : 'sync-play-btn sync-play-btn__passive'}
-                        disabled={handleDisableResetBtn()}
-                        onClick={()=>handleisRunningSyncChange('reset')}> 
-                        <FaStop/>
-                    </button> 
-                    <button
-                        className={isRunningSync === 'run' ? 'sync-play-btn sync-play-btn__active' : 'sync-play-btn sync-play-btn__passive'}
-                        disabled={handleDisableRunSyncBtn()} 
-                        onClick={()=>{
-                            if(compareList.length===0) return prompt(' Add Algo before compare ');
-                            else handleisRunningSyncChange('run')}}> 
-                        <FaPlay/>
-                    </button>
-
-                    <button
-                        className={isRunningSync === 'pause' ? 'sync-play-btn sync-play-btn__active' : 'sync-play-btn sync-play-btn__passive'}
-                        disabled={handleDisablePauseBtn()}
-                        onClick={()=>handleisRunningSyncChange('pause')}> 
-                        <FaPause/>
-                    </button> 
                 </div>
 
             </div>

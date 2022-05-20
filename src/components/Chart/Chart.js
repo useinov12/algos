@@ -1,18 +1,23 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import * as d3 from 'd3'
 import useD3 from '../CustomHooks/useD3'
 import './chart.css'
 
-const height = 140
-const width = 550
+
+
+//make them dynamic depends on screenSize
+const height = 150
+const width = 750
+
 
 
 function Chart({inputSpeed, data, pivots, local, type, isSorted}) {
 
+
     let duration = 45
     if(inputSpeed<45)duration=25
 
-    const pivotPoints = (plotArea) => {
+    const pivotPoints = ( plotArea) => {
 
         let allBars = plotArea.selectAll('rect')
             .attr('fill', 'var(--text-color')
@@ -84,28 +89,30 @@ function Chart({inputSpeed, data, pivots, local, type, isSorted}) {
 
             //Data points
             const plotArea = svg.select('.plot-area')
+
+            //store animations chain
+            //creating a sequence:
+            //old bars removed -> next bars added
+            const exitTransition = d3.transition().duration(500) //incapsulating 
+
             plotArea
                 .selectAll('rect')
                 .data(data)
                 .join(
                     (enter)=> enter.append('rect')
-                        .attr('width', xScale.bandwidth())
-                        .attr('height', height)
-                        .transition(),
-                    (update) => update.transition(),
-                    // (update) => update,
+                        .attr('width', xScale.bandwidth(width))
+                        .attr('height', 0)
+                        .attr('y', height)
+                        .attr('x', xScale.bandwidth(width))
+                        .transition().duration(duration/2),
+                    (update) => update.transition().duration(duration),
                     (exit) => exit.remove()
                 )
-                .attr('fill', 'white')
-                .transition()
-                .duration(duration)
+                .transition().duration(duration)
                 .attr('width', xScale.bandwidth())
                 .attr('height',d => yScale(-20)- yScale(d)) // margin-bottom: -10 
-                // .attr('height',d =>  yScale(d))
                 .attr('x', (d,i) => xScale(xAccesor(d,i)))
                 .attr('y', d => yScale(yAccesor(d)))
-                // .attr('class', 'bars')
-                //add class
 
                 title
                     .attr('x', 10)
@@ -117,7 +124,7 @@ function Chart({inputSpeed, data, pivots, local, type, isSorted}) {
                     //add class
                     
             //Dynamically render pivot points
-            pivotPoints(plotArea)
+            if(pivots)pivotPoints(plotArea);
         },
         [data, pivots]
     )

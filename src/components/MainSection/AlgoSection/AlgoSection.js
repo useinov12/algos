@@ -2,7 +2,9 @@ import React, { useEffect, useReducer, useState } from 'react'
 import Inputs from '../Inputs/Inputs'
 import './algo-section.css'
 import AlgoComp from './AlgoComp'
+import PlayMenu from '../PlayMenu/PlayMenu'
 import { createArray, createRandomArray } from '../../../functions/functions'
+import { bubbleSort, quickSort } from '../../../functions/functions'
 
 function AlgoSection(props) {
     const {
@@ -71,41 +73,129 @@ function AlgoSection(props) {
         return ()=> clearTimeout(timer)
     },[contract])
 
+
+
+    //ALGOCOMP STATE
+    const [ isRunningLocal, setIsRunningLocal ] = useState('initial')
+    const handleIsRunningLocalChange = (state) => setIsRunningLocal(state)
+    //Algo Section: Choosing and formating or running chosen algorithm
+    function reducerAlgo(state, action){
+        //Formating Data for choosen Algorithm
+        if(action.type.command === 'format'){
+            switch(action.type.algo){
+                case 'Bubble' :
+                    return {  isSorted:false, array:[...inputState.array], pivots:{compareIdx:0, sorted:0}, nextMove: 'compare' }
+                case 'Quick' :
+                    let left = 0
+                    let right = inputState.array.length-1
+                    let piv = Math.floor((left+right)/2)
+                    return {  isSorted:false, array:[...inputState.array], pivots:{leftIdx:left, rightIdx:right, pivotIdx:piv}, listOfSubArrays:[[left,right]], nextMove: 'sort' }
+                case 'Merge' :
+                    return {isSorted:false, array:[...inputState.array], nextMove:'none'}
+                case 'Selection' :
+                    return {isSorted:false, array:[...inputState.array], nextMove:'none'}
+            }
+        } else 
+        //Running choosen Algorithm
+        if(action.type.command === 'run'){
+            switch(action.type.algo){
+                case 'Bubble': return  bubbleSort(state)
+                case 'Quick': return  quickSort(state)
+                case 'Merge': return  state
+                case 'Selection': return  state
+            }
+        }
+    }
+    const [ algoState, dispatchAlgo ] = useReducer(reducerAlgo, {isSorted:false, array:[], pivots:{}})
+
+    //Update/format data on InputData Change according to algo format
+        useEffect(() => {  
+            dispatchAlgo( {type:{algo:typeOfAlgo, command:'format'}} )
+        }, [  ])
+        
+        useEffect(() => {  
+            dispatchAlgo({type:{algo:typeOfAlgo, command:'format'}})
+        }, [ inputState, typeOfAlgo ])
+
+    //Sync state switches localRunning state
+        useEffect(() => {
+            if(isRunningSync === 'run')return setIsRunningLocal('run')
+            if(isRunningSync === 'pause')return setIsRunningLocal('pause')
+        }, [isRunningSync])
+ 
+    //Reset local input
+        useEffect(()=>{
+            if(isRunningLocal === 'reset')dispatchLocalInput({type:'changeArray'})
+        }, [ isRunningLocal])
+
+        //Turn off running algo if switched from local to sync
+        useEffect(() => {
+            if(syncMode)return setIsRunningLocal('initial') 
+        }, [syncMode])
+
+        //Algo is running locally with Interval
+        useEffect(() => {
+            if(isRunningLocal === 'run'){
+                let id = window.setInterval( ()=>
+                dispatchAlgo( {type:{algo:typeOfAlgo, command:'run'}}), inputState.speed )
+                if(algoState.nextMove === 'eject')setIsRunningLocal('pause')
+                return () => window.clearInterval(id)
+            }
+        }, [isRunningLocal, algoState]) //re-run when (isRunningLocal === true) && watch when algoState is changing
+
+
+
     const renderAlgo = () => {
         return (<div className='compare-block-content'> 
             { compareMode && 
                 <div className={collapseWidth ? `collapse-container collapse-width` : `collapse-container`}>
-                    <div className={ contract ? `collapse-section` : 'collapse-section expanded' }>
+                    <div className={ contract ? `collapse-section local` : 'collapse-section expanded local' }>
                         <Inputs  
                             syncMode={syncMode}
                             inputState={inputState}
                             dispatch={dispatchLocalInput}
                             className={`local-inputs compare-mode`}
                         />
+                        <PlayMenu 
+                            type={'local'}
+                            syncMode={syncMode}
+                            isRunningLocal={isRunningLocal}
+                            handleIsRunningLocalChange={handleIsRunningLocalChange}
+                        />
                     </div>
                 </div>}
 
+            
             <AlgoComp
+                isRunningLocal={isRunningLocal}
+                handleIsRunningLocalChange={handleIsRunningLocalChange}
+                algoState={algoState}
                 dispatchLocalInput={dispatchLocalInput}
                 compareMode={compareMode}
                 syncMode={syncMode}
                 typeOfAlgo={typeOfAlgo}
                 inputData={inputState}
                 isRunningSync={isRunningSync}
-            >
-                {!compareMode && 
-                    <Inputs  
-                        syncMode={syncMode}
-                        inputState={inputState}
-                        dispatch={dispatchLocalInput}
-                        className={`local-inputs single-mode`}
-                    />}
+            > {!compareMode && <>
+                <Inputs  
+                    syncMode={syncMode}
+                    inputState={inputState}
+                    dispatch={dispatchLocalInput}
+                    className={`local-inputs single-mode`}
+                />
+                <PlayMenu 
+                    type={'local'}
+                    syncMode={syncMode}
+                    isRunningLocal={isRunningLocal}
+                    handleIsRunningLocalChange={handleIsRunningLocalChange}
+                /></>}
             </AlgoComp>
         </div>)
     }
 
+    
     return (
-        <div className={ compareMode ? 'algo-section-block compare-block' : 'algo-section-block single-block'}>
+        <div id='compareBlock' className={ compareMode ? 'algo-section-block compare-block' : 'algo-section-block single-block'}>
 
             { compareMode && 
                 <button 

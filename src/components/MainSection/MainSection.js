@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import Inputs from './Inputs/Inputs'
 import AlgoSection from './AlgoSection/AlgoSection'
+import PlayMenu from './PlayMenu/PlayMenu'
 import { Routes, Route, useLocation } from "react-router-dom";
 import { createArray, createRandomArray } from '../../functions/functions'
 import './main-section.css'
 
 
 function MainSection(props) {
-        const { 
-            sortList, 
-            searchList, 
-            isRunningSync, 
-            syncMode, 
-            handleRemoveFromCompareList, 
-            handleChangeCompareMode,
-            compareList,
-            compareMode
-        } = props
+    const { 
+        sortList, 
+        searchList, 
+        isRunningSync, 
+        syncMode, 
+        handleRemoveFromCompareList, 
+        handleChangeCompareMode,
+        handleIsRunningSyncChange,
+        compareList,
+        compareMode
+    } = props
 
     const list = [...sortList, ...searchList]
     const location = useLocation()
@@ -92,6 +94,14 @@ function MainSection(props) {
                         dispatch={dispatchArray}
                         isRunningSync={isRunningSync}
                         className={'inputs-sync'}
+                    />
+                    <PlayMenu
+                        type={'sync'}
+                        syncMode={syncMode}
+                        isRunningSync={isRunningSync}
+                        compareMode={compareMode}
+                        compareList={compareList}
+                        handleIsRunningSyncChange={handleIsRunningSyncChange}
                     />
                 </div>
             </div>
