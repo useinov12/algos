@@ -81,7 +81,10 @@ export const quickSort = (state) =>  {
                 let leftEdge = prevRange[0]
                 let rightEdge = prevRange[1]
                 let newPivots
-                if(leftEdge>0 && pivotIdx<=5)newPivots = { leftIdx:leftEdge-1, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)};
+                
+                if(leftEdge>0 && pivotIdx<=5){
+                    newPivots = { leftIdx:leftEdge-1, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)}
+                }
                 else newPivots = { leftIdx:leftEdge, rightIdx:leftIdx, pivotIdx: Math.floor((leftEdge+leftIdx)/2)};
 
                 //check if need to go lower

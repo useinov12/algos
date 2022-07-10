@@ -21,12 +21,10 @@ function AlgoList({list, compareMode, handleAddToCompareList, compareList}) {
        return  <li className="list-item" key={idx} >                  
             <NavLink to={ compareMode ? false : algo.path} className="list-link" >
                 <span>{algo.name}</span>
-                {
-                    compareMode &&
+                { compareMode &&
                     <button onClick={()=>handleAddToCompareList(compareList, algo.name)}>
                         Add
-                    </button> 
-                }
+                    </button> }
             </NavLink>
         </li>
     }

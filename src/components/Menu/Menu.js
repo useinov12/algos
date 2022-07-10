@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import PlayMenu from '../MainSection/PlayMenu/PlayMenu'
+import { FaSun, FaMoon } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import './menu.css'
-import { FaPlay, FaPause, FaStop, FaSun, FaMoon } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
 
-export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, handleSyncModeChange, handleChangeCompareMode, isRunningSync, handleIsRunningSyncChange, compareList}) {
+export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, handleSyncModeChange, handleChangeCompareMode, isRunningSync, handleIsRunningSyncChange}) {
+
+    let navigate = useNavigate()
 
     //BUTTON DISABLE HANDLERS
     const handleDisableCompareBtn = () => {
@@ -19,35 +20,43 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
         if(isRunningSync === 'pause' ) return true;
         else return false;
     }
-    const handleDisableIndividBtn = () =>{
+    const handleDisableASYNCBtn = () =>{
         if(!syncMode) return true;
         if(!compareMode) return true;
         if(isRunningSync === 'run' || isRunningSync === 'pause' ) return true;
         else return false;
     }
 
-
+    useEffect(() => {
+        if(!compareMode)navigate('/bubble-sort')
+        else navigate('/compare-mode')
+    }, [compareMode])
 
     return (
         <div className="menu menu-grid grid">
 
             <div className='sync-menu'>
-
-                <NavLink to={ handleDisableCompareBtn() ? " " : compareMode ? "/bubble-sort" : "/compare-mode"}>
+                <div className='mode-menu' >
+                    <button 
+                        className={compareMode ? 'mode-passive' : 'mode-active' }
+                        disabled={handleDisableCompareBtn()} 
+                        onClick={()=>handleChangeCompareMode()}>
+                        <span>Single Mode</span>
+                    </button>
                     <button 
                         className={compareMode ? 'mode-active' : 'mode-passive'}
                         disabled={handleDisableCompareBtn()} 
                         onClick={()=>handleChangeCompareMode()}>
                         <span>Compare Mode</span>
                     </button>
-                </NavLink>
+                </div>
 
                 <div className='sync-modes'>
                     <button 
                         className={compareMode && !syncMode  ? 'mode-active' : 'mode-passive'}
-                        disabled={handleDisableIndividBtn()} 
+                        disabled={handleDisableASYNCBtn()} 
                         onClick={()=>handleSyncModeChange()}>
-                        <span>Individual mode</span>
+                        <span>ASYNC mode</span>
                     </button>
                     <button 
                         className={ syncMode ? 'mode-active' : 'mode-passive'}
@@ -71,6 +80,7 @@ export default function Menu({theme, handleThemeSwitch, compareMode, syncMode, h
                     <FaMoon/>
                 </button>
             </div>
+
         </div>
     )
 }

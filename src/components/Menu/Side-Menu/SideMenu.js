@@ -3,6 +3,8 @@ import AlgoList from './AlgoList';
 import './side-menu.css'
 import { FaSortAmountDownAlt, FaSearch } from 'react-icons/fa';
 
+import {useSelector} from 'rect-redux'
+
 
 function SideMenu({searchList, sortList, list, handleChangeList, compareMode, handleAddToCompareList, compareList}) {
     const [ clicked, setClicked ] = useState(false)
@@ -43,3 +45,7 @@ function SideMenu({searchList, sortList, list, handleChangeList, compareMode, ha
 }
 
 export default SideMenu
+
+
+
+// npm install --save react-redux @redux/toolkit

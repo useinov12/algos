@@ -3,7 +3,6 @@ import Menu from './Menu/Menu'
 import SideMenu from './Menu/Side-Menu/SideMenu'
 import MainSection from './MainSection/MainSection'
 import './layout.css'
-import { sort } from 'd3-array'
 
 const sortList = [
     {
@@ -52,7 +51,15 @@ const searchList = [
 
 const list = [...sortList, ...searchList]
 
+
+
+
+
+
+
+
 function Layout({theme, handleThemeSwitch}) {
+
 
     //STATES CONNECTED WITH SIDE-MENU
     const [compareMode, setCompareMode] = useState(false)
@@ -61,12 +68,16 @@ function Layout({theme, handleThemeSwitch}) {
 
     //HANDLERS CONNECTED WITH SIDE-MENU
     const handleChangeCompareMode = () => setCompareMode( prev => !prev )
+
+    
     const handleAddToCompareList = (compareList, item) =>{
         // if(compareList.find((d)=>d === item))return  //check if exsist
         let updated = [...compareList]
         updated.push(item)
         setCompareList(updated) 
     }
+
+
     const handleRemoveFromCompareList = (compareList, item) =>{
         let updated = compareList.filter((d)=>d !== item)
         setCompareList(updated)
@@ -101,7 +112,6 @@ function Layout({theme, handleThemeSwitch}) {
                 theme={theme} 
                 isRunningSync={isRunningSync}
                 compareMode={compareMode}
-                compareList={compareList}
                 handleThemeSwitch={handleThemeSwitch} 
                 handleIsRunningSyncChange={handleIsRunningSyncChange}
                 handleSyncModeChange={handleSyncModeChange}

@@ -56,6 +56,16 @@ function AlgoSection(props) {
     }, [ inputStateSync ])
 
 
+
+
+
+
+
+
+
+
+
+    
     //Animation for Input sync/individual switch 
     const [contract, setContract ] = useState(false)
     const [collapseWidth, setCollapseWidth ] = useState(false)
@@ -65,7 +75,6 @@ function AlgoSection(props) {
         else timer = setTimeout(()=> setContract(false), 200)
         return ()=> clearTimeout(timer)
     }, [syncMode])
-
     useEffect(()=>{
         let timer
         if(contract)timer = setTimeout(()=> setCollapseWidth(true), 0)
@@ -109,39 +118,39 @@ function AlgoSection(props) {
     const [ algoState, dispatchAlgo ] = useReducer(reducerAlgo, {isSorted:false, array:[], pivots:{}})
 
     //Update/format data on InputData Change according to algo format
-        useEffect(() => {  
-            dispatchAlgo( {type:{algo:typeOfAlgo, command:'format'}} )
-        }, [  ])
-        
-        useEffect(() => {  
-            dispatchAlgo({type:{algo:typeOfAlgo, command:'format'}})
-        }, [ inputState, typeOfAlgo ])
+    useEffect(() => {  
+        dispatchAlgo( { type:{algo:typeOfAlgo, command:'format'} } )
+    }, [  ])
+    
+    useEffect(() => {  
+        dispatchAlgo({type:{algo:typeOfAlgo, command:'format'}})
+    }, [ inputState, typeOfAlgo ])
 
     //Sync state switches localRunning state
-        useEffect(() => {
-            if(isRunningSync === 'run')return setIsRunningLocal('run')
-            if(isRunningSync === 'pause')return setIsRunningLocal('pause')
-        }, [isRunningSync])
+    useEffect(() => {
+        if(isRunningSync === 'run')return setIsRunningLocal('run')
+        if(isRunningSync === 'pause')return setIsRunningLocal('pause')
+    }, [isRunningSync])
  
     //Reset local input
-        useEffect(()=>{
-            if(isRunningLocal === 'reset')dispatchLocalInput({type:'changeArray'})
-        }, [ isRunningLocal])
+    useEffect(()=>{
+        if(isRunningLocal === 'reset')dispatchLocalInput({type:'changeArray'})
+    }, [ isRunningLocal])
 
-        //Turn off running algo if switched from local to sync
-        useEffect(() => {
-            if(syncMode)return setIsRunningLocal('initial') 
-        }, [syncMode])
+    //Turn off running algo if switched from local to sync
+    useEffect(() => {
+        if(syncMode)return setIsRunningLocal('initial') 
+    }, [syncMode])
 
-        //Algo is running locally with Interval
-        useEffect(() => {
-            if(isRunningLocal === 'run'){
-                let id = window.setInterval( ()=>
-                dispatchAlgo( {type:{algo:typeOfAlgo, command:'run'}}), inputState.speed )
-                if(algoState.nextMove === 'eject')setIsRunningLocal('pause')
-                return () => window.clearInterval(id)
-            }
-        }, [isRunningLocal, algoState]) //re-run when (isRunningLocal === true) && watch when algoState is changing
+    //Algo is running locally with Interval
+    useEffect(() => {
+        if(isRunningLocal === 'run'){
+            let id = window.setInterval( ()=>
+            dispatchAlgo( {type:{algo:typeOfAlgo, command:'run'}}), inputState.speed );
+            if(algoState.nextMove === 'eject')setIsRunningLocal('pause')
+            return () => window.clearInterval(id)
+        }
+    }, [isRunningLocal, algoState]) //re-run when (isRunningLocal === true) && watch when algoState is changing
 
 
 
